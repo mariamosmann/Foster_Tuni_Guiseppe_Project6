@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 // import axios from 'axios';
 // import Qs from 'qs';
+// import activitiesArray from './activitiesArray.js'
 
 class TripDetails extends Component {
     constructor(props) {
