@@ -5,6 +5,7 @@ import './App.css';
 import LandingPage from './LandingPage.js';
 import TripDashboard from './TripDashboard.js';
 import TripDetails from './TripDetails.js';
+// import activitiesArray from './activitiesArray.js'
 
 class App extends Component {
   

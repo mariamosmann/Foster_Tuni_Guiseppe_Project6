@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 import Qs from 'qs';
+// import activitiesArray from './activitiesArray.js'
+
 
 class LandingPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            
+            userInput: ""
         }
     }
     componentDidMount() {
@@ -32,7 +34,10 @@ class LandingPage extends Component {
                 xmlToJSON: false
             }
         }).then((response) => {
-            console.log(response.data.results);
+            console.log(response.data.results[0].locations);
+            this.setState({
+                userInput
+            })
         })
     }
     render() {
