@@ -57,6 +57,13 @@ popUp = event => {
     }
 }
 
+addFriend = event => {
+    event.preventDefault();
+
+    this.setState ({
+        
+    })
+}
 class TripDetails extends Component {
     constructor() {
         super();
@@ -106,8 +113,13 @@ class TripDetails extends Component {
                             <h3 className="popUp__heading">Add a Friend</h3>
 
                             <form className="popUp__form" action="">
-                                <label htmlFor="addFriend" className="popUp__label">Your friend's email</label>
+                                <label htmlFor="addFriend" className="popUp__label">Add your friend's email</label>
                                 <input type="email" id="addFriend" className="popUp__input" onChange={this.props.handleChange}required/>
+
+                                {/* make prop for addFriend function */}
+                                <input type="submit" value="Send invite" className="popUp__submit" onClick={this.props.addFriend}/>
+
+                                //CHECK HOW TO PUSH THINGS TO AN ARRAY IN firebase
                             </form>
                         </div>
                     )
