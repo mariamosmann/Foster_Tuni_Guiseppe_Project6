@@ -13,12 +13,9 @@ class BuildTripForm extends Component {
         this.state = {
             //COUNTRY STATES
             selectedCountry: "",
-            countryInput: "",
-            countryData: "",
-            //CITY STATES
-            selectedCity: "",
-            cityInput: "",
-            cityData: [],
+            userInput: "",
+            country: "",
+            city: "",
             //TYPE STATES
             typeChoices: activitiesArray,
             selectedType: "",
@@ -26,7 +23,7 @@ class BuildTripForm extends Component {
             //DATE STATES
             selectedStartDate: "",
             startDate: "",
-            selectedStartDate: "",
+            selectedEndDate: "",
             endDate: "",
         }
     }
@@ -37,80 +34,70 @@ class BuildTripForm extends Component {
             [e.target.name]: e.target.value
         })
     }
-    selectCountryInput = (e) => {
+    selectInput = (e) => {
 
-        e.preventDefault();
-        //This gives us a state value when the user clicks submit that we will use to pass on to the API and return with feedback.
-        const countryInput = this.state.selectedCountry;
-        const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
-        //STOPS EMPTY INPUTS
-        if (countryInput !== '') {
-            this.setState({
-                countryInput,
-                selectedCountry: '',
-            })
-            //IF THE INPUT ISNT EMPTY FETCH THE API
-            axios({
-                method: 'GET',
-                url: "http://proxy.hackeryou.com",
-                dataResponse: JSON,
-                paramsSerializer: function (params) {
-                    return Qs.stringify(params, { arrayFormat: 'brackets' })
-                },
-                params: {
-                    reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
-                    params: {
-                        key: apiKey,
-                        location: `${countryInput}`,
-                        outFormat: JSON,
-                        thumbMaps: true,
-                    },
-                    xmlToJSON: false
-                }
-            }).then((response) => {
+            e.preventDefault();
+
+            const apiKey = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
+            const userInput = this.state.selectedCountry;
+            let globalID = new Date().getTime();
+            if (userInput !== '') {
                 this.setState({
-                    countryData: response.data.results[0].locations[0].adminArea1
-                });
-            })
-        }
-    }
-    selectCityInput = (e) => {
-        
-        e.preventDefault();
-        //This gives us a state value when the user clicks submit that we will use to pass on to the API and return with feedback.
-        const cityInput = this.state.selectedCity;
-        const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
-        //STOPS EMPTY INPUTS
-        if (cityInput !== '') {
-            this.setState({
-                cityInput,
-                selectedCity: '',
-            })
-            //IF THE INPUT ISNT EMPTY FETCH THE API
-            axios({
-                method: 'GET',
-                url: "http://proxy.hackeryou.com",
-                dataResponse: JSON,
-                paramsSerializer: function (params) {
-                    return Qs.stringify(params, { arrayFormat: 'brackets' })
-                },
-                params: {
-                    reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
-                    params: {
-                        key: apiKey,
-                        location: `${cityInput}`,
-                        outFormat: JSON,
-                        thumbMaps: true,
+                    userInput,
+                    selectedCountry: '',
+                })
+
+                axios({
+                    method: 'GET',
+                    url: "http://proxy.hackeryou.com",
+                    dataResponse: JSON,
+                    paramsSerializer: function (params) {
+                        return Qs.stringify(params, { arrayFormat: 'brackets' })
                     },
-                    xmlToJSON: false
-                }
-            }).then((response) => {
-                this.setState({
-                    cityData: response.data.results[0].locations
-                });
-            })
+                    params: {
+                        reqUrl: "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+                        params: {
+                            input: userInput,
+                            key: apiKey,
+                            sessiontoken: globalID
+                        },
+                        xmlToJSON: false
+                    }
+                }).then((response) => {
+                    const placeID = response.data.predictions[0].place_id
+                    //SPECIFIES OUR DATA TO THE AREA WE NEED
+
+                    axios({
+                        method: 'GET',
+                        url: "http://proxy.hackeryou.com",
+                        dataResponse: JSON,
+                        paramsSerializer: function (params) {
+                            return Qs.stringify(params, { arrayFormat: 'brackets' })
+                        },
+                        params: {
+                            reqUrl: "https://maps.googleapis.com/maps/api/place/details/json",
+                            params: {
+                                place_id: placeID,
+                                key: apiKey,
+                                inputtype: "textquery",
+                                fields: "address_components,formatted_address,types,name,photos"
+                            },
+                            xmlToJSON: false
+                        }
+                    }).then((response) => {
+                        // const photoReference = response.data.result.photos[0].photo_reference
+                        const city = response.data.result.address_components[0].long_name
+                        const country = response.data.result.address_components[3].long_name
+
+                        this.setState({
+                            country,
+                            city,
+                            userInput: "",
+                        })
+                    })
+                })
+            }
         }
-    }
     chooseType = (e) => {
         e.preventDefault();
 
@@ -147,13 +134,7 @@ class BuildTripForm extends Component {
                 <form className="tripForm countryForm" action="submit">
                     <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
                     <input type="text" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} required />
-                    <input type="submit" value="Submit" onClick={this.selectCountryInput} />
-                </form>
-                {/* THIS FORM WILL RETURN THE CITY THEY WANT TO SET AS STARTING LOCATION TO VOTE */}
-                <form className="tripForm cityForm" action="submit">
-                    <label htmlFor="selectedCity" className="visuallyhidden">Input the city you wish to travel to.</label>
-                    <input type="text" name="selectedCity" id="selectedCity" placeholder="Enter city" onChange={this.handleChange} required/>
-                    <input type="submit" value="Submit" onClick={this.selectCityInput}/>
+                    <input type="submit" value="Submit" onClick={this.selectInput} />
                 </form>
                 {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
                 <form className="tripForm typeForm" action="submit">
@@ -186,3 +167,28 @@ class BuildTripForm extends Component {
 
 
 export default BuildTripForm;
+
+// axios({
+//     method: 'GET',
+//     url: "http://proxy.hackeryou.com",
+//     dataResponse: JSON,
+//     paramsSerializer: function (params) {
+//         return Qs.stringify(params, { arrayFormat: 'brackets' })
+//     },
+//     params: {
+//         reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
+//         params: {
+//             photoreference: photoReference,
+//             key: apiKey,
+//             maxwidth: 500,
+//         },
+//         xmlToJSON: false
+//     }
+// }).then((response) => {
+//     const photo = response.data
+
+//     this.setState({
+//         photo,
+//     })
+//     console.log(response)
+// })
