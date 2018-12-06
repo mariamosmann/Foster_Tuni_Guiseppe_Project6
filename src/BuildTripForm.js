@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
+import firebase from './firebase.js';
 
 
 class BuildTripForm extends Component {
@@ -15,6 +16,7 @@ class BuildTripForm extends Component {
             typeChoices: activitiesArray,
             selectedType: "",
             typeInput: "",
+            user: null
         }
     }
     // componentDidMount() {

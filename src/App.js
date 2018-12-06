@@ -5,6 +5,7 @@ import './App.css';
 import BuildTripForm from './BuildTripForm.js';
 import TripDashboard from './TripDashboard.js';
 import TripDetails from './TripDetails.js';
+import firebase from './firebase.js';
 // import activitiesArray from './activitiesArray.js'
 
 class App extends Component {
