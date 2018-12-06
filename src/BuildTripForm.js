@@ -4,22 +4,32 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 
+// GOOGLE API KEY = AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U
+
 
 class BuildTripForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            selectedLocation: "",
-            locationInput: "",
-            locationData: [],
+            //COUNTRY STATES
+            selectedCountry: "",
+            countryInput: "",
+            countryData: "",
+            //CITY STATES
+            selectedCity: "",
+            cityInput: "",
+            cityData: [],
+            //TYPE STATES
             typeChoices: activitiesArray,
             selectedType: "",
             typeInput: "",
+            //DATE STATES
+            selectedStartDate: "",
+            startDate: "",
+            selectedStartDate: "",
+            endDate: "",
         }
     }
-    // componentDidMount() {
-        
-    // }
     handleChange = (e) => {
         this.setState({
             //target.value IS THE VALUE OF THE INPUT
@@ -27,19 +37,17 @@ class BuildTripForm extends Component {
             [e.target.name]: e.target.value
         })
     }
+    selectCountryInput = (e) => {
 
-    selectLocationInput = (e) => {
-        
         e.preventDefault();
         //This gives us a state value when the user clicks submit that we will use to pass on to the API and return with feedback.
-        const locationInput = this.state.selectedLocation;
+        const countryInput = this.state.selectedCountry;
         const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
         //STOPS EMPTY INPUTS
-        if (locationInput !== '') {
-            // const locationInput = this.state.selectedLocation;
+        if (countryInput !== '') {
             this.setState({
-                locationInput,
-                selectedLocation: '',
+                countryInput,
+                selectedCountry: '',
             })
             //IF THE INPUT ISNT EMPTY FETCH THE API
             axios({
@@ -53,7 +61,7 @@ class BuildTripForm extends Component {
                     reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
                     params: {
                         key: apiKey,
-                        location: `${locationInput}`,
+                        location: `${countryInput}`,
                         outFormat: JSON,
                         thumbMaps: true,
                     },
@@ -61,7 +69,44 @@ class BuildTripForm extends Component {
                 }
             }).then((response) => {
                 this.setState({
-                    locationData: response.data.results[0].locations
+                    countryData: response.data.results[0].locations[0].adminArea1
+                });
+            })
+        }
+    }
+    selectCityInput = (e) => {
+        
+        e.preventDefault();
+        //This gives us a state value when the user clicks submit that we will use to pass on to the API and return with feedback.
+        const cityInput = this.state.selectedCity;
+        const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
+        //STOPS EMPTY INPUTS
+        if (cityInput !== '') {
+            this.setState({
+                cityInput,
+                selectedCity: '',
+            })
+            //IF THE INPUT ISNT EMPTY FETCH THE API
+            axios({
+                method: 'GET',
+                url: "http://proxy.hackeryou.com",
+                dataResponse: JSON,
+                paramsSerializer: function (params) {
+                    return Qs.stringify(params, { arrayFormat: 'brackets' })
+                },
+                params: {
+                    reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
+                    params: {
+                        key: apiKey,
+                        location: `${cityInput}`,
+                        outFormat: JSON,
+                        thumbMaps: true,
+                    },
+                    xmlToJSON: false
+                }
+            }).then((response) => {
+                this.setState({
+                    cityData: response.data.results[0].locations
                 });
             })
         }
@@ -72,36 +117,68 @@ class BuildTripForm extends Component {
         const typeInput = this.state.selectedType;
         //STOPS EMPTY INPUTS
         if (typeInput !== '') {
-            // const locationInput = this.state.selectedLocation;
             this.setState({
                 typeInput,
+                selectedType: ""
             })        
         }
+    }
+    chooseDate = (e) => {
+        e.preventDefault();
+
+        const startDate = this.state.selectedStartDate;
+        const endDate = this.state.selectedEndDate;
+        //STOPS EMPTY INPUTS
+
+        //RIGHT NOW YOU HAVE TO SELECT A START DATE BUT NOT AN END DATE, WHY?
+        if ((startDate !== "") && (endDate !== "")) {
+            this.setState({
+                startDate,
+                endDate,
+                selectedEndDate: "",
+                selectedStartDate: "",
+            })
+        } 
     }
     render() {
         return (
             <div className="BuildTripForm">
-                {/* I WILL BE PUTTING IN A CHANGE SO THAT ONE SMALLER BOX CAN CYCLE YOU THROUGH THE CHOICES SINCE WE WANT THEM TO BE MADETORY ANYWAY */}
-                <form className="tripForm locationForm" action="submit">
-                    <label htmlFor="selectedLocation" className="visuallyhidden">Input the location you wish to travel to.</label>
-                    <input type="text" name="selectedLocation" id="selectedLocation" placeholder="Enter location" onChange={this.handleChange}/>
-                    <input type="submit" value="Submit" onClick={this.selectLocationInput}/>
+                {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
+                <form className="tripForm countryForm" action="submit">
+                    <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
+                    <input type="text" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} required />
+                    <input type="submit" value="Submit" onClick={this.selectCountryInput} />
                 </form>
-                {/* I WILL BE PUTTING IN A CHANGE SO THAT ONE SMALLER BOX CAN CYCLE YOU THROUGH THE CHOICES SINCE WE WANT THEM TO BE MADETORY ANYWAY */}
+                {/* THIS FORM WILL RETURN THE CITY THEY WANT TO SET AS STARTING LOCATION TO VOTE */}
+                <form className="tripForm cityForm" action="submit">
+                    <label htmlFor="selectedCity" className="visuallyhidden">Input the city you wish to travel to.</label>
+                    <input type="text" name="selectedCity" id="selectedCity" placeholder="Enter city" onChange={this.handleChange} required/>
+                    <input type="submit" value="Submit" onClick={this.selectCityInput}/>
+                </form>
+                {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
                 <form className="tripForm typeForm" action="submit">
                     <label htmlFor="selectedType">Choose the type of trip you wish to take:</label>
-                    {/* HOW CAN I GET THIS TO START BLANK, THE FIRST INPUT IS NOT SENT TO THE STATE BUT IF I PUT A PLACEHOLDER IN THE AREA IT CAN BE A TYPE OF TRIP. HAVE IT NOT LETTING YOU SET STATE WITHOUT CHANGING BUT THAT DOESNT MAKE SENSE*/}
-                    <select name="selectedType" id="selectedType" onChange={this.handleChange}>
+                    <select name="selectedType" id="selectedType"
+                    onChange={this.handleChange} required>
+                        <option disabled selected value>--Type of trip--</option>
                         {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
                     </select>
                         <input type="submit" value="Submit" onClick={this.chooseType}/>
                 </form>
-                {/* I WILL BE PUTTING IN A CHANGE SO THAT ONE SMALLER BOX CAN CYCLE YOU THROUGH THE CHOICES SINCE WE WANT THEM TO BE MADETORY ANYWAY */}
-                
+                {/* THIS FORM WILL LET YOU SELECT DATES */}
+                <form className="tripForm dateForm" action="submit">
+                    <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
+                    <label htmlFor="selectedEndDate">Choose the ending date of the trip you wish to take.</label>
+                    {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
+                    <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange}/>
+                    <input type="date" id="selectedEndDate" name="selectedEndDate" onChange={this.handleChange} min={this.state.selectedStartDate} />
+                    <input type="submit" value="Submit" onClick={this.chooseDate}/>
+                </form>
                 {/* THIS FORM WILL LET US CHOOSE FROM THE STARTING CATAGORIES */}
 
-                {/* THIS FORM WILL LET US CHOOSE STARTING FRIENDS TO INVITE */}
-                
+                {/* THIS FORM WILL LET US CHOOSE STARTING FRIENDS TO INVITE */}    
+
+                {/* THIS FORM WILL GIVE THE CHOICE TO MAKE THE PROJECT PUBLIC */}
             </div>
         );
     }
