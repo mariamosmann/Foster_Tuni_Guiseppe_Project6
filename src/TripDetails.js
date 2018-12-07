@@ -6,12 +6,7 @@ import './App.css';
 
 //CHANGES: COUNTRY IS SET, USERS CAN ONLY ADD CITIES IN THAT COUNTRY, THEY DON'T NEED TO ADD A REASON ANYMORE, COUNTRY AND REASON (FROM DROP DOWN) SHOULD BE DISPLAYED, EVERY CITY THAT GETS APPROVED SHOULD GO TO AN ARRAY AND APPEAR IN A DROP DOWN WHEN THEY PRESS THE + BUTTON, EVERY BOARD WILL DISPLAY A NAME AND PLACE THAT IS RELATED TO (like HOTEL - PARIS), ON TOP OF THE PRE SET LIST THAT WILL BE DISPLAYED, USERS CAN PICK A CATHEGORY FOR THAT BOARD (hotel, activities, restaurantes, shows, etc -- so it will be easiet to implement suggestions later)
 
-//GROUP MEMBERS (side pannel)
-//members that were already added: use forEach method (we don't need another array, so no map or filter) on array of users to display their name and photo 
-//options for getting the array: as a prop, importing a js file (that will only have the array), making a call to the API and storing the info in the state of this component (I don't see any advantage in doing that. Information that needs to be passed around for other components should be in the App)
-//store that array's info in the state of this component (we'll need to add members to it later)
-//make a button that will add more users
-//stretch goal in case we have a group admin: add an x icon so the admin can delete members
+
 
 
 
@@ -76,13 +71,26 @@ inviteFriend = (event) => {
     //after the user sign up, add him to this group
 }
 
+addVote = () => {
+
+}
+
+substractVote = () => {
+
+}
+
 
 class TripDetails extends Component {
     constructor() {
         super();
         this.state = {
-            friendEmail: "",
-            searchFriend: ""
+            groupMembers: [],
+            cities: [
+                {
+                  city: "",
+                  type: "",  
+                }
+            ]
         }
     }
 
@@ -93,8 +101,8 @@ class TripDetails extends Component {
 
                 {/* TRIP DETAILS HEADER START */}
                 <header className="tripDetails__header header">
-                    {/* make destiny prop */}
-                    <h2 className="header__heading header__heading--h2">Trip to {this.props.destiny}</h2>
+                    {/* make country prop */}
+                    <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
 
                     {/* make type prop */}
                     <h3 className="header__heading header__heading--h3">{this.props.type}</h3>
@@ -102,8 +110,11 @@ class TripDetails extends Component {
 
                 {/* GROUP START */}
                 <aside className="tripDetails__aside group">
+                    {this.setState({
+                        groupMembers: groupMembers.push(this.props.groupMembers)
+                    })}
                     {//this prop should point to an array with this group members info
-                    this.props.groupMembers.map(member => {
+                    this.groupMembers.map(member => {
                         return (
                             //BEM notes: the "user" block structure can be used when showing users anywhere in the site
                             <div className="group__member user">
@@ -140,7 +151,8 @@ class TripDetails extends Component {
                                 onChange={this.props.handleChange} 
                                 value={this.state.friendEmail}/>
 
-                                {/* stretch goal: button to add another friend and send multiple invites */}
+                                {/* stretch goal: add by username */}
+                                {/* make into component, add button to send and then go back to the form */}
 
                                 <input type="submit" value="Invite" className="popUp__submit"/>
                             </form>
@@ -159,13 +171,49 @@ class TripDetails extends Component {
                 </aside>
                 {/* GROUP END */}
                 
-                {/* BOARD START */}
+                {/* BOARDS START */}
                 <div className="boards">
-                    
-                    
+                    {/* CITIES START */}
+                    <div className="boards__board">
+
+                        <h4 className="boards__heading boards__heading--h4">Where are we going?</h4>
+
+                        {/* Displaying the first city and the other cities for voting */}
+                        <div className="boards__voting">                    
+                            {//will this work?
+                                //add a city prop (array with an object containing city and type), so it can show what user already entered as the first one
+                                this.setState({
+                                    cities: cities.push(this.props.city)
+                                })                
+                            }
+
+                            {//display every city/type inside cities array in state so users can vote
+                            this.cities.map(item => {
+                                return (
+                                    <div className="boards__option option">
+                                        <p className="option__title">{item.city}</p>
+
+                                        {/* WHEN CREATING THE CITY IT NEEDS AN ID */}
+                                        <div className="option__voteButtons">
+                                            {/* ICON UP*/}
+                                            <img onClick={addVote} src="" alt=""/>
+                                            {/* ICON DOWN */}
+                                            <img onClick={substractVote}src="" alt="" />
+                                        </div>
+                                        
+                                        <p className="option__type">{item.type}</p>
+                                    </div>
+                                )
+                            }) 
+                            }
+
+                            
+                        </div>                    
+                    </div>
+                    {/* CITIES END */}
 
                 </div>
-
+                {/* BOARDS END */}
 
             </div>
         );
