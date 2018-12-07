@@ -74,7 +74,8 @@ addCity = event => {
     const newCity = {
         city: this.state.suggestion.item,
         type: this.state.suggestion.type,
-        votes: 0
+        votes: 0,
+        userVoted: []
     }
 
     this.setState({
@@ -107,13 +108,20 @@ addCity = event => {
 // }
 
 addVote = (event) => {
+    //MAKE IF TO SEE IF USER VOTED
+    this.state.cities[event.target.className].userVoted.filter(user => {
+
+    })
     //event.target.className will be that city index, so this.state.cities[2].votes
     const cityIndex = this.state.cities[event.target.className].votes;
 
     const addingVote = cityIndex + 1;
 
+    const userUID = checkHowToGetThat;
+
     this.setState({
-        [cities[event.target.className].votes]: addingVote
+        [cities[event.target.className].votes]: addingVote,
+        [cities[event.target.className].userVoted]: [cities[event.target.className].userVoted].push(userUID) 
     })
 }
 
@@ -138,7 +146,8 @@ class TripDetails extends Component {
                 {
                   city: "",
                   type: "",
-                  votes: 0  
+                  votes: 0,
+                  userVoted: []  
                 }
             ],
             suggestion: {
