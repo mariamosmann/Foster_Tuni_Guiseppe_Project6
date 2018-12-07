@@ -10,13 +10,8 @@ import './App.css';
 
 
 
-//PICKING A PLACE
-//destination board (div)
-//Destination (h3)
-//Info passed as prop: display the destination (p) that the creator of the group chose when creting the group and in the reason (p) display which category they chose
-//form (connected to handle input) for adding more suggestions: one text input for place, one text input for reson, submit button w/ onClick 
-//handle sumbit will stop default behaviour, push new info to firebase, reset the state 
-//info will be added and displayed dynamically
+
+
 
 //VOTING SYSTEM +  ESSENTIALS BOARD
 //suggestions will have up and down icons with onClick to control the voting system
@@ -61,7 +56,7 @@ popUp = event => {
 //     })
 // }
 
-//addFriend
+//Add Friend
 //use same functionality as add friends from when you create a group
 inviteFriend = (event) => {
     //preventing the form from refreshing the page
@@ -71,12 +66,65 @@ inviteFriend = (event) => {
     //after the user sign up, add him to this group
 }
 
-addVote = () => {
+//Add City
+//adding city suggestion to the board
+addCity = event => {
+    event.preventDefault();
 
+    const newCity = {
+        city: this.state.suggestion.item,
+        type: this.state.suggestion.type,
+        votes: 0
+    }
+
+    this.setState({
+        cities: cities.push(newCity),
+        suggestion: {
+            item: "",
+            type: ""
+        } 
+    })
+}
+
+//Add Item
+//adding user suggestion to the board
+// addItem = event => {
+//     event.preventDefault();
+
+//     const newSuggestion = {
+//         item: this.state.suggestion.item,
+//         type: this.state.suggestion.type
+//     }
+
+//     this.setState({
+//         boardType: newSuggestion,
+//         suggestion: {
+//             item: "",
+//             type: ""
+//         }
+//     })
+
+// }
+
+addVote = (event) => {
+    //event.target.className will be that city index, so this.state.cities[2].votes
+    const cityIndex = this.state.cities[event.target.className].votes;
+
+    const addingVote = cityIndex + 1;
+
+    this.setState({
+        [cities[event.target.className].votes]: addingVote
+    })
 }
 
 substractVote = () => {
+    const cityIndex = this.state.cities[event.target.className].votes;
 
+    const substractingVote = cityIndex - 1;
+
+    this.setState({
+        [cities[event.target.className].votes]: substractingVote  
+    })
 }
 
 
@@ -85,12 +133,18 @@ class TripDetails extends Component {
         super();
         this.state = {
             groupMembers: [],
+            friendEmail: "",
             cities: [
                 {
                   city: "",
-                  type: "",  
+                  type: "",
+                  votes: 0  
                 }
-            ]
+            ],
+            suggestion: {
+                city: "",
+                item: ""
+            }
         }
     }
 
@@ -178,6 +232,7 @@ class TripDetails extends Component {
 
                         <h4 className="boards__heading boards__heading--h4">Where are we going?</h4>
 
+                        {/* VOTING START */}
                         {/* Displaying the first city and the other cities for voting */}
                         <div className="boards__voting">                    
                             {//will this work?
@@ -193,12 +248,11 @@ class TripDetails extends Component {
                                     <div className="boards__option option">
                                         <p className="option__title">{item.city}</p>
 
-                                        {/* WHEN CREATING THE CITY IT NEEDS AN ID */}
                                         <div className="option__voteButtons">
                                             {/* ICON UP*/}
-                                            <img onClick={addVote} src="" alt=""/>
+                                            <img onClick={addVote} src="" alt="" className={}/>
                                             {/* ICON DOWN */}
-                                            <img onClick={substractVote}src="" alt="" />
+                                            <img onClick={substractVote}src="" alt="" className={}/>
                                         </div>
                                         
                                         <p className="option__type">{item.type}</p>
@@ -206,9 +260,31 @@ class TripDetails extends Component {
                                 )
                             }) 
                             }
+                        </div>
+                        {/* VOTING END */}
 
-                            
-                        </div>                    
+                        {/* ADD OPTION START */}
+                            <div className="boards__add add">
+                                <p className="add__text">Add suggestion to be voted:</p>
+
+                                <form onSubmit={this.addCity} action="" className="add__form">
+                                    <label htmlFor="suggestion" className="add__label visuallyhidden">Your suggestion.</label>
+                                    <input 
+                                    type="text"
+                                    id="suggestion"
+                                    className="add__suggestion"
+                                    placeholder="Your suggestion"
+                                    onChange={this.props.handleChange}
+                                    value={this.state.suggestion.item}
+                                    />
+
+                                    {/* DROP DOWN W/ OPTIONS */}
+                                
+                                    <input type="submit" value="Add" className="add__submit"/>
+                                </form>                      
+                            </div>
+                        {/* ADD OPTION END */}
+                    
                     </div>
                     {/* CITIES END */}
 
