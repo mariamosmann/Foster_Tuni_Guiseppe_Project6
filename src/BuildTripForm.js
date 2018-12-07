@@ -8,6 +8,7 @@ import firebase from './firebase.js';
 // GOOGLE API KEY = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
+const dbRef = firebase.database()
 
 class BuildTripForm extends Component {
     constructor(props) {
@@ -40,7 +41,6 @@ class BuildTripForm extends Component {
                     () => {
                         this.dbRef = firebase.database().ref(`/${this.state.user.uid}`);
                         this.dbRef.on("value", snapshot => {
-                            // check to see if snapshot.val() is null. if it is, we need to set state to an empty object. if it's got data, set the state to snapshot.val()
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
                                 selectedType: snapshot.val() || {}
@@ -129,24 +129,33 @@ class BuildTripForm extends Component {
                     })
                 })
             }
-        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
 
-        dbRef.push(userInput);
+        // dbRef.push(userInput);
         }
     chooseType = (e) => {
         e.preventDefault();
-
+        // const countryChoice = this.state.country
         const typeInput = this.state.selectedType;
         //STOPS EMPTY INPUTS
         if (typeInput !== '') {
             this.setState({
                 typeInput,
                 selectedType: ""
-            })        
+            })            
         };
-        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
-
-        dbRef.push(typeInput);
+        dbRef.ref(`/${this.state.selectedType}/${this.state.country}/`).update({
+            users: this.state.user.uid,
+            country: this.state.country
+        });
+        
+        //     const tripInfo = {
+        //     country: countryChoice,
+        //     activity: typeInput
+        //     }
+        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+        
+        // dbRef.push(tripInfo)
     }
     chooseDate = (e) => {
         e.preventDefault();
@@ -167,11 +176,35 @@ class BuildTripForm extends Component {
     }
     logIn = () => {
         auth.signInWithPopup(provider).then(result => {
-            this.setState({
+            if (result){
+                console.log("First")
+                this.setState({
                 user: result.user
             });
-        });
-    };
+                // if (this.state.user === null) {
+                //     dbRef.ref(`/Users/Guest}`).update({
+                //         displayName: 'Guest',
+                //         trips: `${this.state.country}`
+                //     })
+                // }
+            if (result.additionalUserInfo.isNewUser){
+                console.log(result)
+                dbRef.ref(`/Users/${result.user.uid}`).set({
+                    displayName: result.user.displayName,
+                    email: result.user.email,
+                    photoURL: result.user.photoURL,
+                    trips: `${this.state.country}`
+                })
+            }
+        }
+    });
+    //     if(this.state.user === null){
+    //         dbRef.ref(`/Users/Guest}`).update({
+    //             displayName: 'Guest',
+    //             trips: `${this.state.country}`
+    //     })
+    // }
+}
     logOut = () => {
         auth.signOut().then(() => {
             this.setState({
@@ -190,6 +223,7 @@ class BuildTripForm extends Component {
                             <button onClick={this.logIn}>Login</button>
                         )}
                         {/* <button onClick={this.guest}>Use as Guest</button> */}
+                      
                 </header>
                 <form className="tripForm countryForm" action="submit">
                     <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
