@@ -3,9 +3,11 @@ import './App.css';
 import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
+import firebase from './firebase.js';
 
-// GOOGLE API KEY = AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U
-
+// GOOGLE API KEY = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
+const provider = new firebase.auth.GoogleAuthProvider();
+const auth = firebase.auth();
 
 class BuildTripForm extends Component {
     constructor(props) {
@@ -25,14 +27,44 @@ class BuildTripForm extends Component {
             startDate: "",
             selectedEndDate: "",
             endDate: "",
+            user: null
         }
     }
+    componentDidMount() {
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                this.setState(
+                    {
+                        user: user
+                    },
+                    () => {
+                        this.dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+                        this.dbRef.on("value", snapshot => {
+                            // check to see if snapshot.val() is null. if it is, we need to set state to an empty object. if it's got data, set the state to snapshot.val()
+                            this.setState({
+                                selectedCountry: snapshot.val() || {},
+                                selectedType: snapshot.val() || {}
+                            });
+                        });
+                    }
+                );
+            }
+        });
+    }
     handleChange = (e) => {
+        // const travelInfo = {
+        //     location: this.userInput,
+        //     activity: this.typeInput
+        // }
         this.setState({
             //target.value IS THE VALUE OF THE INPUT
             //Sets the state value to include the value of the input
             [e.target.name]: e.target.value
-        })
+
+        });
+        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+
+        // dbRef.push(travelInfo);
     }
     selectInput = (e) => {
 
@@ -97,6 +129,9 @@ class BuildTripForm extends Component {
                     })
                 })
             }
+        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+
+        dbRef.push(userInput);
         }
     chooseType = (e) => {
         e.preventDefault();
@@ -108,7 +143,10 @@ class BuildTripForm extends Component {
                 typeInput,
                 selectedType: ""
             })        
-        }
+        };
+        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+
+        dbRef.push(typeInput);
     }
     chooseDate = (e) => {
         e.preventDefault();
@@ -127,10 +165,32 @@ class BuildTripForm extends Component {
             })
         } 
     }
+    logIn = () => {
+        auth.signInWithPopup(provider).then(result => {
+            this.setState({
+                user: result.user
+            });
+        });
+    };
+    logOut = () => {
+        auth.signOut().then(() => {
+            this.setState({
+                user: null
+            });
+        });
+    };
     render() {
         return (
             <div className="BuildTripForm">
                 {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
+                <header>
+                    {this.state.user ? (
+                        <button onClick={this.logOut}>Logout</button>
+                    ) : (
+                            <button onClick={this.logIn}>Login</button>
+                        )}
+                        {/* <button onClick={this.guest}>Use as Guest</button> */}
+                </header>
                 <form className="tripForm countryForm" action="submit">
                     <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
                     <input type="text" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} required />
@@ -139,9 +199,9 @@ class BuildTripForm extends Component {
                 {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
                 <form className="tripForm typeForm" action="submit">
                     <label htmlFor="selectedType">Choose the type of trip you wish to take:</label>
-                    <select name="selectedType" id="selectedType"
+                    <select defaultValue="selectedType" name="selectedType" id="selectedType"
                     onChange={this.handleChange} required>
-                        <option disabled selected value>--Type of trip--</option>
+                        <option disabled="disabled" selected="selected" value="selectedType">--Type of trip--</option>
                         {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
                     </select>
                         <input type="submit" value="Submit" onClick={this.chooseType}/>
