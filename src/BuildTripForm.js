@@ -39,25 +39,32 @@ class BuildTripForm extends Component {
                     },
                     () => {
                         this.dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+                        this.dbRef.on("value", snapshot => {
+                            // check to see if snapshot.val() is null. if it is, we need to set state to an empty object. if it's got data, set the state to snapshot.val()
+                            this.setState({
+                                selectedCountry: snapshot.val() || {},
+                                selectedType: snapshot.val() || {}
+                            });
+                        });
                     }
                 );
             }
         });
     }
     handleChange = (e) => {
-        const travelInfo = {
-            location: this.selectInput,
-            activity: this.chooseType
-        }
+        // const travelInfo = {
+        //     location: this.userInput,
+        //     activity: this.typeInput
+        // }
         this.setState({
             //target.value IS THE VALUE OF THE INPUT
             //Sets the state value to include the value of the input
             [e.target.name]: e.target.value
 
-        })
-        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+        });
+        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
 
-        dbRef.push(travelInfo);
+        // dbRef.push(travelInfo);
     }
     selectInput = (e) => {
 
@@ -122,6 +129,9 @@ class BuildTripForm extends Component {
                     })
                 })
             }
+        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+
+        dbRef.push(userInput);
         }
     chooseType = (e) => {
         e.preventDefault();
@@ -133,7 +143,10 @@ class BuildTripForm extends Component {
                 typeInput,
                 selectedType: ""
             })        
-        }
+        };
+        const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+
+        dbRef.push(typeInput);
     }
     chooseDate = (e) => {
         e.preventDefault();
