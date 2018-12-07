@@ -57,18 +57,32 @@ popUp = event => {
     }
 }
 
-addFriend = event => {
+// ***** MIGHT NOT NEED THAT, CHECK IF popUp ALONE CAN TOGGLE CORRECTLY
+// closePopUp = event => {
+//     event.preventDefault();
+
+//     this.setState({
+//         popUpButton: false
+//     })
+// }
+
+//addFriend
+//use same functionality as add friends from when you create a group
+inviteFriend = (event) => {
+    //preventing the form from refreshing the page
     event.preventDefault();
 
-    this.setState ({
-        
-    })
+    //this function should send an email invitation
+    //after the user sign up, add him to this group
 }
+
+
 class TripDetails extends Component {
     constructor() {
         super();
         this.state = {
-            
+            friendEmail: "",
+            searchFriend: ""
         }
     }
 
@@ -79,8 +93,8 @@ class TripDetails extends Component {
 
                 {/* TRIP DETAILS HEADER START */}
                 <header className="tripDetails__header header">
-                    {/* make country prop */}
-                    <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
+                    {/* make destiny prop */}
+                    <h2 className="header__heading header__heading--h2">Trip to {this.props.destiny}</h2>
 
                     {/* make type prop */}
                     <h3 className="header__heading header__heading--h3">{this.props.type}</h3>
@@ -89,17 +103,18 @@ class TripDetails extends Component {
                 {/* GROUP START */}
                 <aside className="tripDetails__aside group">
                     {//this prop should point to an array with this group members info
-                    this.props.groupMembers.forEach(member => {
+                    this.props.groupMembers.map(member => {
                         return (
-                            <div className="group__member">
-                                <div className="group__photoContainer">
-                                    <img src={member.photoURL} alt={`API_URL/${member.name}`} className="group__photo"/>
+                            //BEM notes: the "user" block structure can be used when showing users anywhere in the site
+                            <div className="group__member user">
+                                <div className="user__photoContainer">
+                                    <img src={member.photoURL} alt={member.name}} className="user__photo"/>
                                 </div>
 
-                                <p className="group__name">{member.name}</p>
+                                <p className="user__name">{member.name}</p>
                             </div>
                         )
-                    });
+                    })
                     }
 
                     {/* make popUp prop to pass popUp function */}
@@ -110,17 +125,29 @@ class TripDetails extends Component {
                     this.state.popUpButton
                     ? (
                         <div className="popUp">
-                            <h3 className="popUp__heading">Add a Friend</h3>
+                            <h3 className="popUp__heading">Invite a Friend</h3> 
 
-                            <form className="popUp__form" action="">
-                                <label htmlFor="addFriend" className="popUp__label">Add your friend's email</label>
-                                <input type="email" id="addFriend" className="popUp__input" onChange={this.props.handleChange}required/>
+                            <p className="popUp__text">Send an invitation to join this group:</p>
 
-                                {/* make prop for addFriend function */}
-                                <input type="submit" value="Send invite" className="popUp__submit" onClick={this.props.addFriend}/>
+                            {/* make prop for inviteFriend */}
+                            <form onSubmit={this.props.inviteFriend}className="popUp__form" action="">
+                                <label htmlFor="friendEmail" className="popUp__label visuallyhidden">Type your friend's email.</label>
+                                <input 
+                                type="email" 
+                                id="friendEmail" 
+                                className="popUp__input" 
+                                placeholder="Your friend's email"
+                                onChange={this.props.handleChange} 
+                                value={this.state.friendEmail}/>
 
-                                //CHECK HOW TO PUSH THINGS TO AN ARRAY IN firebase
+                                {/* stretch goal: button to add another friend and send multiple invites */}
+
+                                <input type="submit" value="Invite" className="popUp__submit"/>
                             </form>
+
+                            <div className="popUp__close">
+                                <img onClick={this.props.popUp} src="" alt="" className="popUp__icon"/>
+                            </div>
                         </div>
                     )
                     :
@@ -128,12 +155,16 @@ class TripDetails extends Component {
                         <div className="popUp popUp--hidden">                        
                         </div>
                     )
-                    }
-                    
+                    }                    
                 </aside>
-
+                {/* GROUP END */}
                 
+                {/* BOARD START */}
+                <div className="boards">
+                    
+                    
 
+                </div>
 
 
             </div>
