@@ -16,7 +16,7 @@ class App extends Component {
       <div className="App">
         <BuildTripForm />
         <TripDashboard />
-        <TripDetails />
+        {/* <TripDetails /> */}
       </div>
     );
   }

@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-// import axios from 'axios';
-// import Qs from 'qs';
-// import activitiesArray from './activitiesArray.js'
+import activitiesArray from './activitiesArray.js'
 
-class TripDetails extends Component {
+class Test extends Component {
     constructor() {
         super();
         this.state = {
@@ -12,10 +10,12 @@ class TripDetails extends Component {
             friendEmail: "",
             cities: [
                 {
-                  city: "",
-                  type: "" 
+                    city: "",
+                    type: "",
+                    votes: 1
                 }
             ],
+            typeChoices: activitiesArray,
             citySuggestion: "",
             typeSuggestion: ""
         }
@@ -29,6 +29,8 @@ class TripDetails extends Component {
         });
     };
 
+    //add city
+    //adding a city to our cities array
     addCity = event => {
         event.preventDefault();
 
@@ -38,7 +40,8 @@ class TripDetails extends Component {
         //adding the new city
         newCities.push({
             city: this.state.citySuggestion,
-            type: this.state.typeSuggestion
+            type: this.state.typeSuggestion,
+            votes: 1
         });
 
         //updating the array
@@ -53,7 +56,61 @@ class TripDetails extends Component {
         })
     }
 
+    //add vote
+    //adding votes until it reaches the majority of votes
+    addVote = (event) => {
+
+        //creating a variable for how many votes it has
+        //MAKE THIS IN A WAY THAT WORKS BETTER FOR EVERY BOARD
+        const totalVotes = this.state.cities[event.target.className].votes;
+
+        //creating a variable to determine majority of votes
+        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+        if (totalVotes < stopVotes) {
+
+            //cloning the array
+            const addingVote = Array.from(this.state.cities)
+
+            //adding a vote to the array
+            addingVote[event.target.className].votes++
+
+            //updating the array
+            this.setState({
+                cities: addingVote
+            })
+        }
+    }
+
+    //subtract vote
+    //subtract votes until it reaches the majority of votes
+    subtractVote = (event) => {
+
+        //creating a variable for how many votes it has
+        //MAKE THIS IN A WAY THAT WORKS BETTER FOR EVERY BOARD
+        const totalVotes = this.state.cities[event.target.className].votes;
+
+        //creating a variable to determine majority of votes
+        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+        if (totalVotes < stopVotes && totalVotes > 1) {
+
+            //cloning the array
+            const subtractingVote = Array.from(this.state.cities)
+
+            //subtracting a vote from the array
+            subtractingVote[event.target.className].votes--
+
+            //updating the array
+            this.setState({
+                cities: subtractingVote
+            })
+        }
+    }
+
     render() {
+        // console.log("rdr", this.state.groupMembers)
+        // console.log("rdr", this.state.cities)
         return (
             <div className="tripDetails">
                 <header className="tripDetails__header header">
@@ -127,13 +184,28 @@ class TripDetails extends Component {
 
                         <div className="boards__voting">
                             {//display every city/type inside cities array in state so users can vote
-                                this.state.cities.map(item => {
+                                this.state.cities.map((item, i) => {
                                     return (
                                         <div className="boards__option option">
                                             <p className="option__title">{item.city}</p>
 
-                                            {/* make dropdown */}
+                                            {/* +1 voting button */}
+                                            <div className="option__addVote">
+                                                <img onClick={this.addVote} src="https://cdn0.iconfinder.com/data/icons/large-glossy-icons/64/Apply.png" alt="" className={i}
+                                                    key={i}
+                                                />
+                                            </div>
+
                                             <p className="option__type">{item.type}</p>
+
+                                            {/* -1 voting button */}
+                                            <div className="option__subtractVote">
+                                                <img onClick={this.subtractVote} src="http://www.clker.com/cliparts/x/W/f/4/C/s/close-button-th.png" alt="" alt="" className={i}
+                                                    key={i}
+                                                />
+                                            </div>
+
+                                            <p className="option__votes">{item.votes}</p>
                                         </div>
                                     )
                                 })
@@ -142,27 +214,34 @@ class TripDetails extends Component {
 
                         {/* ADD OPTION START */}
                         <div className="boards__add add">
-                            <p className="add__text">Add suggestion to be voted:</p>
+                            <p className="add__text">Add city to be voted:</p>
 
                             <form onSubmit={this.addCity} action="" className="add__form">
-                                <label htmlFor="suggestion" className="add__label visuallyhidden">Your suggestion.</label>
+                                <label htmlFor="citySuggestion" className="add__label visuallyhidden">Suggest a city to visit.</label>
                                 <input
                                     type="text"
                                     id="citySuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Your suggestion"
+                                    className="add__city"
+                                    placeholder="City"
                                     onChange={this.handleChange}
                                     value={this.state.citySuggestion}
                                 />
 
-                                <input
-                                    type="text"
+                                <label htmlFor="typeSuggestion">Choose the type of trip you wish to take:</label>
+                                <select
+                                    defaultValue="typeSuggestion"
+                                    name="typeSuggestion"
                                     id="typeSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Your suggestion"
+                                    className="add__type"
                                     onChange={this.handleChange}
-                                    value={this.state.typeSuggestion}
-                                />
+                                    required>
+                                    <option disabled="disabled" selected="selected" value="typeSuggestion">--Type of trip--</option>
+                                    {this.state.typeChoices.map((type) => {
+                                        return (
+                                            <option key={type} value={type}>{type}</option>
+                                        )
+                                    })}
+                                </select>
 
                                 <input type="submit" value="Add" className="add__submit" />
                             </form>
@@ -175,7 +254,6 @@ class TripDetails extends Component {
     }
 
     componentDidMount() {
-
         this.setState({
             // adding the initial group members to this component array
             groupMembers: this.props.groupMembers,
@@ -183,17 +261,15 @@ class TripDetails extends Component {
             cities: [
                 {
                     city: this.props.city,
-                    type: this.props.type
+                    type: this.props.type,
+                    votes: 1
                 }
             ]
         })
     }
 }
 
-export default TripDetails;
-
-//*****NOTES*****
-//main header should be the same for both group and details, with logout option under the user's icon/photo
+export default Test;
 
 //////////////////////////////////////////
 //ON APP STATE
