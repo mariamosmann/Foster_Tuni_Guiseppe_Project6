@@ -252,24 +252,24 @@ class BuildTripForm extends Component {
                 //         trips: `${this.state.country}`
                 //     })
                 // }
-            if (result.additionalUserInfo.isNewUser){
-                console.log(result)
-                dbRef.ref(`/Users/${result.user.uid}`).set({
-                    displayName: result.user.displayName,
-                    email: result.user.email,
-                    photoURL: result.user.photoURL,
-                    trips: `${this.state.country}`
-                })
+                if (result.additionalUserInfo.isNewUser){
+                    console.log(result)
+                    dbRef.ref(`/Users/${result.user.uid}`).set({
+                        displayName: result.user.displayName,
+                        email: result.user.email,
+                        photoURL: result.user.photoURL,
+                        trips: `${this.state.country}`
+                    })
+                }
             }
-        }
-    });
+        });
     //     if(this.state.user === null){
     //         dbRef.ref(`/Users/Guest}`).update({
     //             displayName: 'Guest',
     //             trips: `${this.state.country}`
     //     })
     // }
-}
+    }
     logOut = () => {
         auth.signOut().then(() => {
             this.setState({
@@ -290,13 +290,10 @@ class BuildTripForm extends Component {
             <div className="BuildTripForm">
                 {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
                 <header>
-                    {this.state.user ? (
-                        <button onClick={this.logOut}>Logout</button>
-                    ) : (
-                            <button onClick={this.logIn}>Login</button>
-                        )}
+                {this.state.user 
+                ? (<button onClick={this.logOut}>Logout</button>) 
+                : (<button onClick={this.logIn}>Login</button>)}
                         {/* <button onClick={this.guest}>Use as Guest</button> */}
-                      
                 </header>
                 {startForm
                 ? <form className="tripForm tripForm--country" action="submit">
