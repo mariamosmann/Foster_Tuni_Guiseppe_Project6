@@ -198,12 +198,6 @@ class BuildTripForm extends Component {
             }
         }
     });
-    //     if(this.state.user === null){
-    //         dbRef.ref(`/Users/Guest}`).update({
-    //             displayName: 'Guest',
-    //             trips: `${this.state.country}`
-    //     })
-    // }
 }
     logOut = () => {
         auth.signOut().then(() => {
@@ -212,6 +206,10 @@ class BuildTripForm extends Component {
             });
         });
     };
+    guest = () =>{
+        
+    }
+
     render() {
         return (
             <div className="BuildTripForm">
@@ -220,9 +218,9 @@ class BuildTripForm extends Component {
                     {this.state.user ? (
                         <button onClick={this.logOut}>Logout</button>
                     ) : (
-                            <button onClick={this.logIn}>Login</button>
+                        <button onClick={this.logIn}>Login</button>
                         )}
-                        {/* <button onClick={this.guest}>Use as Guest</button> */}
+                        <button onClick={this.guest}>Use As Guest</button>
                       
                 </header>
                 <form className="tripForm countryForm" action="submit">
