@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-// import axios from 'axios';
-// import Qs from 'qs';
-// import activitiesArray from './activitiesArray.js'
+import activitiesArray from './activitiesArray.js'
 
-class TripDetails extends Component {
+class Test extends Component {
     constructor() {
         super();
         this.state = {
@@ -12,12 +10,17 @@ class TripDetails extends Component {
             friendEmail: "",
             cities: [
                 {
-                  city: "",
-                  type: "" 
+                    city: "",
+                    type: "",
+                    votes: 0,
+                    whoVoted: ["Goofy", "Minnie"]
                 }
             ],
+            typeChoices: activitiesArray,
             citySuggestion: "",
-            typeSuggestion: ""
+            typeSuggestion: "",
+            selectedCities: [],
+            thisUser: "me" //user IUD
         }
     }
 
@@ -29,6 +32,8 @@ class TripDetails extends Component {
         });
     };
 
+    //add city
+    //adding a city to our cities array
     addCity = event => {
         event.preventDefault();
 
@@ -38,7 +43,9 @@ class TripDetails extends Component {
         //adding the new city
         newCities.push({
             city: this.state.citySuggestion,
-            type: this.state.typeSuggestion
+            type: this.state.typeSuggestion,
+            votes: 0,
+            whoVoted: [""]
         });
 
         //updating the array
@@ -50,6 +57,103 @@ class TripDetails extends Component {
         this.setState({
             citySuggestion: "",
             typeSuggestion: ""
+        })
+    }
+
+    //add vote
+    //adding votes until it reaches the majority of votes
+    addVote = (event) => {
+        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
+
+        //checking if user voted
+        const checkUser = this.state.cities[event.target.className].whoVoted.filter((user) => {
+            return user === this.state.thisUser
+        })
+
+        //if user didn't vote, let them vote
+        if (checkUser[0] != this.state.thisUser) {
+
+            //cloning the array
+            const addingVote = Array.from(this.state.cities)
+
+            //adding a vote to the array
+            addingVote[event.target.className].votes++
+
+            //adding user to list of those who voted
+            addingVote[event.target.className].whoVoted.push(this.state.thisUser)
+
+            //updating the array
+            this.setState({
+                cities: addingVote
+            })
+
+            this.addSelecteddCity()
+        } else {
+            alert("You already voted!")
+        }
+    }
+
+    //subtract vote
+    //subtract votes until it reaches the majority of votes
+    subtractVote = (event) => {
+
+        //checking if user voted
+        const checkUser = this.state.cities[event.target.className].whoVoted.filter((user) => {
+            return user === this.state.thisUser
+        })
+
+        //creating a variable for how many votes it has
+        //MAKE THIS IN A WAY THAT WORKS BETTER FOR EVERY BOARD
+        const totalVotes = this.state.cities[event.target.className].votes;
+
+        //not allowing votes do go below 0
+        if (totalVotes > 0) {
+            // if user didn't downvote, let them
+            if (checkUser[0] != this.state.thisUser) {
+
+                //cloning the array
+                const subtractingVote = Array.from(this.state.cities)
+
+                //subtracting a vote from the array
+                subtractingVote[event.target.className].votes--
+
+                //adding user to list of those who voted
+                subtractingVote[event.target.className].whoVoted.push(this.state.thisUser)
+
+                //updating the array
+                this.setState({
+                    cities: subtractingVote
+                })
+            } else {
+                alert("You already downvoted!")
+            }
+        }
+    }
+
+    addSelecteddCity = () => {
+
+        //creating a variable to determine majority of votes
+        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+        //identifying the cities that were already selected
+        const allSelectedCities = this.state.cities.filter(city => {
+            return city.votes === stopVotes;
+        })
+
+        //identifying cities that aren't in the selectedCities array already
+        const uniqueSelectedCities = allSelectedCities.filter(city => {
+            return city.name != this.state.selectedCities.name
+        })
+
+        //cloning the array
+        const newSelectedCities = Array.from(this.state.selectedCities)
+
+        //concat the old array and the new array
+        const combinedArray = newSelectedCities.concat(uniqueSelectedCities);
+
+        //updating the array
+        this.setState({
+            selectedCities: combinedArray
         })
     }
 
@@ -127,47 +231,85 @@ class TripDetails extends Component {
 
                         <div className="boards__voting">
                             {//display every city/type inside cities array in state so users can vote
-                                this.state.cities.map(item => {
-                                    return (
-                                        <div className="boards__option option">
-                                            <p className="option__title">{item.city}</p>
+                                this.state.cities.map((item, i) => {
 
-                                            {/* make dropdown */}
-                                            <p className="option__type">{item.type}</p>
-                                        </div>
-                                    )
+                                    //creating a variable to determine majority of votes
+                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+                                    if (this.state.cities[i].votes === stopVotes) {
+
+                                        return (
+                                            <div className="boards__option option">
+                                                <p className="option__title option__title--selected">{item.city}</p>
+
+                                                <p className="option__type option__type--selected">{item.type}</p>
+                                            </div>
+                                        )
+                                    } else {
+                                        return (
+                                            <div className="boards__option option">
+                                                <p className="option__title">{item.city}</p>
+
+                                                {/* +1 voting button */}
+                                                <div className="option__addVote">
+                                                    <img onClick={this.addVote} src="https://cdn0.iconfinder.com/data/icons/large-glossy-icons/64/Apply.png" alt="" className={i}
+                                                        key={i}
+                                                    />
+                                                </div>
+
+                                                <p className="option__type">{item.type}</p>
+
+                                                {/* -1 voting button */}
+                                                <div className="option__subtractVote">
+                                                    <img onClick={this.subtractVote} src="http://www.clker.com/cliparts/x/W/f/4/C/s/close-button-th.png" alt="" alt="" className={i}
+                                                        key={i}
+                                                    />
+                                                </div>
+
+                                                <p className="option__votes">{item.votes}</p>
+                                            </div>
+                                        )
+                                    }
                                 })
                             }
                         </div>
 
                         {/* ADD OPTION START */}
                         <div className="boards__add add">
-                            <p className="add__text">Add suggestion to be voted:</p>
+                            <p className="add__text">Add city to be voted:</p>
 
                             <form onSubmit={this.addCity} action="" className="add__form">
-                                <label htmlFor="suggestion" className="add__label visuallyhidden">Your suggestion.</label>
+                                <label htmlFor="citySuggestion" className="add__label visuallyhidden">Suggest a city to visit.</label>
                                 <input
                                     type="text"
                                     id="citySuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Your suggestion"
+                                    className="add__city"
+                                    placeholder="City"
                                     onChange={this.handleChange}
                                     value={this.state.citySuggestion}
                                 />
 
-                                <input
-                                    type="text"
+                                <label htmlFor="typeSuggestion">Choose the type of trip you wish to take:</label>
+                                <select
+                                    defaultValue="typeSuggestion"
+                                    name="typeSuggestion"
                                     id="typeSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Your suggestion"
+                                    className="add__type"
                                     onChange={this.handleChange}
-                                    value={this.state.typeSuggestion}
-                                />
+                                    required>
+                                    <option disabled="disabled" selected="selected" value="typeSuggestion">--Type of trip--</option>
+                                    {this.state.typeChoices.map((type) => {
+                                        return (
+                                            <option key={type} value={type}>{type}</option>
+                                        )
+                                    })}
+                                </select>
 
                                 <input type="submit" value="Add" className="add__submit" />
                             </form>
                         </div>
                         {/* ADD OPTION END */}
+
                     </div>
                 </div>
             </div>
@@ -175,7 +317,6 @@ class TripDetails extends Component {
     }
 
     componentDidMount() {
-
         this.setState({
             // adding the initial group members to this component array
             groupMembers: this.props.groupMembers,
@@ -183,17 +324,16 @@ class TripDetails extends Component {
             cities: [
                 {
                     city: this.props.city,
-                    type: this.props.type
+                    type: this.props.type,
+                    votes: 2,
+                    whoVoted: ["Goofy", "Minnie"]
                 }
             ]
         })
     }
 }
 
-export default TripDetails;
-
-//*****NOTES*****
-//main header should be the same for both group and details, with logout option under the user's icon/photo
+export default Test;
 
 //////////////////////////////////////////
 //ON APP STATE
