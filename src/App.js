@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import "./styles/style.scss";
 // import axios from 'axios';
 // import Qs from 'qs';
 import BuildTripForm from './BuildTripForm.js';
