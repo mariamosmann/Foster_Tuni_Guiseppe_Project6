@@ -259,6 +259,7 @@ class BuildTripForm extends Component {
                     })
                 }
             }
+<<<<<<< HEAD
         });
     //     if(this.state.user === null){
     //         dbRef.ref(`/Users/Guest}`).update({
@@ -267,6 +268,11 @@ class BuildTripForm extends Component {
     //     })
     // }
     }
+=======
+        }
+    });
+}
+>>>>>>> a21fa6a4a0476e80faea5a2e98da9a7979b0ede9
     logOut = () => {
         auth.signOut().then(() => {
             this.setState({
@@ -274,9 +280,16 @@ class BuildTripForm extends Component {
             });
         });
     };
+<<<<<<< HEAD
     sendToFirebase = (e) => {
         e.preventDefault();
     }
+=======
+    guest = () =>{
+        
+    }
+
+>>>>>>> a21fa6a4a0476e80faea5a2e98da9a7979b0ede9
     render() {
         const startForm = this.state.country === "";
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
@@ -290,10 +303,20 @@ class BuildTripForm extends Component {
             <div className="BuildTripForm">
                 {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
                 <header>
+<<<<<<< HEAD
                 {this.state.user 
                 ? (<button onClick={this.logOut}>Logout</button>) 
                 : (<button onClick={this.logIn}>Login</button>)}
                         {/* <button onClick={this.guest}>Use as Guest</button> */}
+=======
+                    {this.state.user ? (
+                        <button onClick={this.logOut}>Logout</button>
+                    ) : (
+                        <button onClick={this.logIn}>Login</button>
+                        )}
+                        <button onClick={this.guest}>Use As Guest</button>
+                      
+>>>>>>> a21fa6a4a0476e80faea5a2e98da9a7979b0ede9
                 </header>
                 {startForm
                 ? <form className="tripForm tripForm--country" action="submit">
