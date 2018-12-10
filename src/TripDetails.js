@@ -17,7 +17,8 @@ class Test extends Component {
             ],
             typeChoices: activitiesArray,
             citySuggestion: "",
-            typeSuggestion: ""
+            typeSuggestion: "",
+            selectedCities: []
         }
     }
 
@@ -79,6 +80,8 @@ class Test extends Component {
             this.setState({
                 cities: addingVote
             })
+
+            this.addSelecteddCity()
         }
     }
 
@@ -108,9 +111,29 @@ class Test extends Component {
         }
     }
 
+    addSelecteddCity = () => {
+
+        //creating a variable to determine majority of votes
+        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+        //identifying the cities that were selected
+        const selectedCity = this.state.cities.filter((item) => {
+            return item.votes === stopVotes;
+        })
+
+        //cloning the array
+        const newSelectedCities = Array.from(this.state.selectedCities)
+
+        //concat the old array and the new array
+        const combinedArray = newSelectedCities.concat(selectedCity);
+
+        //updating the array
+        this.setState({
+            selectedCities: combinedArray
+        })
+    }
+
     render() {
-        // console.log("rdr", this.state.groupMembers)
-        // console.log("rdr", this.state.cities)
         return (
             <div className="tripDetails">
                 <header className="tripDetails__header header">
@@ -185,29 +208,44 @@ class Test extends Component {
                         <div className="boards__voting">
                             {//display every city/type inside cities array in state so users can vote
                                 this.state.cities.map((item, i) => {
-                                    return (
-                                        <div className="boards__option option">
-                                            <p className="option__title">{item.city}</p>
 
-                                            {/* +1 voting button */}
-                                            <div className="option__addVote">
-                                                <img onClick={this.addVote} src="https://cdn0.iconfinder.com/data/icons/large-glossy-icons/64/Apply.png" alt="" className={i}
-                                                    key={i}
-                                                />
+                                    //creating a variable to determine majority of votes
+                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+                                    if (this.state.cities[i].votes === stopVotes) {
+
+                                        return (
+                                            <div className="boards__option option">
+                                                <p className="option__title option__title--selected">{item.city}</p>
+
+                                                <p className="option__type option__type--selected">{item.type}</p>
                                             </div>
+                                        )
+                                    } else {
+                                        return (
+                                            <div className="boards__option option">
+                                                <p className="option__title">{item.city}</p>
 
-                                            <p className="option__type">{item.type}</p>
+                                                {/* +1 voting button */}
+                                                <div className="option__addVote">
+                                                    <img onClick={this.addVote} src="https://cdn0.iconfinder.com/data/icons/large-glossy-icons/64/Apply.png" alt="" className={i}
+                                                        key={i}
+                                                    />
+                                                </div>
 
-                                            {/* -1 voting button */}
-                                            <div className="option__subtractVote">
-                                                <img onClick={this.subtractVote} src="http://www.clker.com/cliparts/x/W/f/4/C/s/close-button-th.png" alt="" alt="" className={i}
-                                                    key={i}
-                                                />
+                                                <p className="option__type">{item.type}</p>
+
+                                                {/* -1 voting button */}
+                                                <div className="option__subtractVote">
+                                                    <img onClick={this.subtractVote} src="http://www.clker.com/cliparts/x/W/f/4/C/s/close-button-th.png" alt="" alt="" className={i}
+                                                        key={i}
+                                                    />
+                                                </div>
+
+                                                <p className="option__votes">{item.votes}</p>
                                             </div>
-
-                                            <p className="option__votes">{item.votes}</p>
-                                        </div>
-                                    )
+                                        )
+                                    }
                                 })
                             }
                         </div>
@@ -247,6 +285,7 @@ class Test extends Component {
                             </form>
                         </div>
                         {/* ADD OPTION END */}
+
                     </div>
                 </div>
             </div>
@@ -254,6 +293,28 @@ class Test extends Component {
     }
 
     componentDidMount() {
+
+
+
+        // //creating a variable to determine majority of votes
+        // const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+        // if (this.state.cities[i].votes == stopVotes) {
+        //     const votedCity = Array.from(this.state.votedCities)
+
+        //     //adding the new city
+        //     votedCity.push({
+        //         city: item.city,
+        //         type: item.type
+        //     })
+
+        //     //updating the array
+        //     this.setState({
+        //         votedCities: votedCity
+        //     })                           
+        // }                     
+
+
         this.setState({
             // adding the initial group members to this component array
             groupMembers: this.props.groupMembers,
