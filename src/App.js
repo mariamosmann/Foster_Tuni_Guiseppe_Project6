@@ -16,8 +16,10 @@ class App extends Component {
     return (
       <Router>
       <div className="App">
-        <BuildTripForm />
-        <TripDashboard />
+
+        <Route exact path='/' component={BuildTripForm} />
+        <Route path="/dashboard" component={TripDashboard} />
+        {/* <TripDashboard /> */}
         {/* <TripDetails /> */}
       </div>
       </Router>

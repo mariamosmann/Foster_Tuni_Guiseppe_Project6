@@ -65,22 +65,26 @@ class TripDashboard extends Component {
 
     render() {
         return (
-                <Router>
+             
             <div>
                 <div className="dashboard">
-
+                    <div>
+                        
+                    </div>
+                   
                     <div>
                         <Link to='/dashboard/user'> Your Trips</Link>
-                        <Route path='/dashboard/user' component={YourTrip}  ></Route>
+                        <Route path='/dashboard/user' component={YourTrip} />
                     </div>
                     <div>
                         <Link to='/dashboard/public'>Community Portal</Link>
-                        <Route path='/dashboard/public' component={Public}></Route>
+                        <Route path='/dashboard/public' component={Public} />
                     </div>
-                </div>    
+                        
                 
+                </div>
             </div>
-            </Router>
+            
 
             
             // {/* // <div className="dashboard">
