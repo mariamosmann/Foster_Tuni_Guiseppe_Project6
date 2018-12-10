@@ -278,11 +278,12 @@ class BuildTripForm extends Component {
         });
     };
     render() {
-        const submitLocation = this.state.country !== "";
-        const submitType = this.state.typeInput !== "";
-        const submitStartDate = this.state.startDate !== "";
-        const submitEndDate = this.state.endDate !== "";
-        const submitEmail = this.state.submitEmail === "yes" ;
+        const startForm = this.state.country === "";
+        const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
+        const submitType = (this.state.typeInput !== "") && (this.state.startDate === "");
+        const submitStartDate = (this.state.startDate !== "") && (this.state.endDate === "");
+        const submitEndDate = (this.state.endDate !== "") && (this.state.submitEmail === "");
+        const submitEmail = (this.state.submitEmail === "yes") && (this.state.publicChoice === "") ;
         const submitPublic = this.state.publicChoice !== "";
 
         return (
@@ -297,11 +298,15 @@ class BuildTripForm extends Component {
                         {/* <button onClick={this.guest}>Use as Guest</button> */}
                       
                 </header>
-                <form className="tripForm tripForm--country" action="submit">
+                {startForm
+                ? <form className="tripForm tripForm--country" action="submit">
                     <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
                     <input type="text" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} required />
                     <input type="submit" value="Continue" onClick={this.selectInput} />
                 </form>
+                : <form className="visuallyhidden"></form>
+                }
+                
                 {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
                 {submitLocation
                     ? <form className="tripForm tripForm--type" action="submit">
