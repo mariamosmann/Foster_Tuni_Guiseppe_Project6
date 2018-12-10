@@ -74,9 +74,6 @@ class BuildTripForm extends Component {
 
         // dbRef.push(travelInfo);
     }
-    preventDefault = (e) => {
-        e.preventDefault();
-    }
     selectInput = (e) => {
 
             e.preventDefault();
@@ -277,6 +274,9 @@ class BuildTripForm extends Component {
             });
         });
     };
+    sendToFirebase = (e) => {
+        e.preventDefault();
+    }
     render() {
         const startForm = this.state.country === "";
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
@@ -363,7 +363,7 @@ class BuildTripForm extends Component {
                     <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
                     <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
                     <p>This trip will be {this.state.publicChoice}</p>
-                    <input type="submit" value="Create trip" onClick={this.preventDefault}/>
+                    <input type="submit" value="Create trip" onClick={this.sendToFirebase}/>
                 </form>
                 : <form className="visuallyhidden"></form>
                 }
