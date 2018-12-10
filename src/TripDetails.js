@@ -12,13 +12,15 @@ class Test extends Component {
                 {
                     city: "",
                     type: "",
-                    votes: 1
+                    votes: 0,
+                    whoVoted: ["Goofy", "Minnie"]
                 }
             ],
             typeChoices: activitiesArray,
             citySuggestion: "",
             typeSuggestion: "",
-            selectedCities: []
+            selectedCities: [],
+            thisUser: "me" //user IUD
         }
     }
 
@@ -42,7 +44,8 @@ class Test extends Component {
         newCities.push({
             city: this.state.citySuggestion,
             type: this.state.typeSuggestion,
-            votes: 1
+            votes: 0,
+            whoVoted: [""]
         });
 
         //updating the array
@@ -60,15 +63,15 @@ class Test extends Component {
     //add vote
     //adding votes until it reaches the majority of votes
     addVote = (event) => {
+        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
-        //creating a variable for how many votes it has
-        //MAKE THIS IN A WAY THAT WORKS BETTER FOR EVERY BOARD
-        const totalVotes = this.state.cities[event.target.className].votes;
+        //checking if user voted
+        const checkUser = this.state.cities[event.target.className].whoVoted.filter((user) => {
+            return user === this.state.thisUser
+        })
 
-        //creating a variable to determine majority of votes
-        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-        if (totalVotes < stopVotes) {
+        //if user didn't vote, let them vote
+        if (checkUser[0] != this.state.thisUser) {
 
             //cloning the array
             const addingVote = Array.from(this.state.cities)
@@ -76,12 +79,17 @@ class Test extends Component {
             //adding a vote to the array
             addingVote[event.target.className].votes++
 
+            //adding user to list of those who voted
+            addingVote[event.target.className].whoVoted.push(this.state.thisUser)
+
             //updating the array
             this.setState({
                 cities: addingVote
             })
 
             this.addSelecteddCity()
+        } else {
+            alert("You already voted!")
         }
     }
 
@@ -89,25 +97,36 @@ class Test extends Component {
     //subtract votes until it reaches the majority of votes
     subtractVote = (event) => {
 
+        //checking if user voted
+        const checkUser = this.state.cities[event.target.className].whoVoted.filter((user) => {
+            return user === this.state.thisUser
+        })
+
         //creating a variable for how many votes it has
         //MAKE THIS IN A WAY THAT WORKS BETTER FOR EVERY BOARD
         const totalVotes = this.state.cities[event.target.className].votes;
 
-        //creating a variable to determine majority of votes
-        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+        //not allowing votes do go below 0
+        if (totalVotes > 0) {
+            // if user didn't downvote, let them
+            if (checkUser[0] != this.state.thisUser) {
 
-        if (totalVotes < stopVotes && totalVotes > 1) {
+                //cloning the array
+                const subtractingVote = Array.from(this.state.cities)
 
-            //cloning the array
-            const subtractingVote = Array.from(this.state.cities)
+                //subtracting a vote from the array
+                subtractingVote[event.target.className].votes--
 
-            //subtracting a vote from the array
-            subtractingVote[event.target.className].votes--
+                //adding user to list of those who voted
+                subtractingVote[event.target.className].whoVoted.push(this.state.thisUser)
 
-            //updating the array
-            this.setState({
-                cities: subtractingVote
-            })
+                //updating the array
+                this.setState({
+                    cities: subtractingVote
+                })
+            } else {
+                alert("You already downvoted!")
+            }
         }
     }
 
@@ -116,16 +135,21 @@ class Test extends Component {
         //creating a variable to determine majority of votes
         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
-        //identifying the cities that were selected
-        const selectedCity = this.state.cities.filter((item) => {
-            return item.votes === stopVotes;
+        //identifying the cities that were already selected
+        const allSelectedCities = this.state.cities.filter(city => {
+            return city.votes === stopVotes;
+        })
+
+        //identifying cities that aren't in the selectedCities array already
+        const uniqueSelectedCities = allSelectedCities.filter(city => {
+            return city.name != this.state.selectedCities.name
         })
 
         //cloning the array
         const newSelectedCities = Array.from(this.state.selectedCities)
 
         //concat the old array and the new array
-        const combinedArray = newSelectedCities.concat(selectedCity);
+        const combinedArray = newSelectedCities.concat(uniqueSelectedCities);
 
         //updating the array
         this.setState({
@@ -293,28 +317,6 @@ class Test extends Component {
     }
 
     componentDidMount() {
-
-
-
-        // //creating a variable to determine majority of votes
-        // const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-        // if (this.state.cities[i].votes == stopVotes) {
-        //     const votedCity = Array.from(this.state.votedCities)
-
-        //     //adding the new city
-        //     votedCity.push({
-        //         city: item.city,
-        //         type: item.type
-        //     })
-
-        //     //updating the array
-        //     this.setState({
-        //         votedCities: votedCity
-        //     })                           
-        // }                     
-
-
         this.setState({
             // adding the initial group members to this component array
             groupMembers: this.props.groupMembers,
@@ -323,7 +325,8 @@ class Test extends Component {
                 {
                     city: this.props.city,
                     type: this.props.type,
-                    votes: 1
+                    votes: 2,
+                    whoVoted: ["Goofy", "Minnie"]
                 }
             ]
         })
