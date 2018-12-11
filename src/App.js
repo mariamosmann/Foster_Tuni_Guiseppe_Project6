@@ -9,7 +9,6 @@ import BuildTripForm from './BuildTripForm.js';
 import TripDashboard from './TripDashboard.js';
 import MainNav from './MainNav.js';
 // import TripDetails from './TripDetails.js';
-// import activitiesArray from './activitiesArray.js'
 
 class App extends Component {
   
@@ -21,7 +20,6 @@ class App extends Component {
         <MainNav />
         <Route exact path='/' component={BuildTripForm} />
         <Route path="/dashboard" component={TripDashboard} />
-        {/* <TripDashboard /> */}
         {/* <TripDetails /> */}
       </div>
       </Router>
