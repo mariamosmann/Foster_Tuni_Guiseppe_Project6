@@ -336,13 +336,13 @@ class BuildTripForm extends Component {
         // console.log(dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
         //     trip
         // ))
-        const currentTripID =dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
+        const currentTripID = dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
             trip
         );
         this.setState({
-            currentTrip: currentTripID.path.pieces_[3]
+            currentTrip: currentTripID.path.pieces_[4]
         })
-        console.log(currentTripID)
+        console.log(currentTripID, 'new info')
         this.props.history.push('/details')
 
         // this.duplicateTripsToCollab(trip);
@@ -450,17 +450,17 @@ class BuildTripForm extends Component {
                 : <form className="visuallyhidden"></form>
                 }
                 {/* DO WE WANT A FORM THAT WILL ALLOW US TO CHOOSE FROM THE STARTING CATAGORIES */}
-                {/* <Route to='/details' 
+                <Route to='/details' 
                     render = { () => (<TripDetails
                         country={this.state.country}
                         city={this.state.city}
                         type={this.state.typeInput}
-                        groupMembers={this.state.selectedType.country.country.users}
+                        groupMembers={this.state.currentTrip.users}
                         popUp={this.popUp}
                         popUpButton={this.state.popUpButton}
                         inviteFriend={this.state.setEmails}
                   />
-                  )} /> */}
+                  )} /> 
                     
                     
                               

@@ -1,3 +1,4 @@
+
 /* SETUP STYLING*/
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section, summary {
   display: block; }
@@ -163,3 +164,4 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
   z-index: 999;
   background: white;
   color: black; }
+
