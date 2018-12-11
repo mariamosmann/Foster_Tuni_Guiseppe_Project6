@@ -29,3 +29,8 @@ class App extends Component {
 }
 
 export default App;
+
+//DONT FORGET TO SET THE NEW USER BACK UP WHEN WE ARE DONE
+
+// building by Rudez Studio from the Noun Project
+// https://thenounproject.com/rudezstudio/collection/building-and-manufacturing/
