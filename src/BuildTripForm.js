@@ -325,7 +325,7 @@ class BuildTripForm extends Component {
             trip
         );
 
-        this.duplicateTripsToCollab(trip);
+        // this.duplicateTripsToCollab(trip);
 
     }
     render() {
