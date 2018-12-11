@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import "./styles/style.scss";
+import './App.css';
 import arrowUp from "./assets/arrowUp.svg";
 import arrowDown from "./assets/arrowDown.svg";
 import activitiesArray from './activitiesArray.js';
@@ -43,6 +43,22 @@ class TripDetails extends Component {
             selectedEmail: "",
             emailChoice: [],
         }
+    }
+    componentDidMount() {
+        console.log(this.props.groupMembers, 'its')
+        this.setState({
+            // adding the initial group members to this component array
+            groupMembers: this.props.groupMembers,
+            //adding the city that the group creator chose in the first form, it has to be an array
+            cities: [
+                {
+                    city: this.props.city,
+                    type: this.props.type,
+                    votes: 0,
+                    whoVoted: []
+                }
+            ]
+        })
     }
 
     //handle change
@@ -1107,20 +1123,21 @@ class TripDetails extends Component {
         )
     }
 
-    componentDidMount() {
-        this.setState({
-            // adding the initial group members to this component array
-            groupMembers: this.props.groupMembers,
-            //adding the city that the group creator chose in the first form, it has to be an array
-            cities: [
-                {
-                    city: this.props.city,
-                    type: this.props.type,
-                    votes: 0,
-                }
-            ]
-        })
-    }
+    // componentDidMount() {
+    //     this.setState({
+    //         // adding the initial group members to this component array
+    //         groupMembers: this.props.groupMembers,
+    //         //adding the city that the group creator chose in the first form, it has to be an array
+    //         cities: [
+    //             {
+    //                 city: this.props.city,
+    //                 type: this.props.type,
+    //                 votes: 0,
+    //                 whoVoted: []
+    //             }
+    //         ]
+    //     })
+    // }
 }
 
 export default TripDetails;
