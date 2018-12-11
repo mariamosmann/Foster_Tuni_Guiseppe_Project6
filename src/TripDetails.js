@@ -40,6 +40,8 @@ class TripDetails extends Component {
             nightlifeCity: "",
             nightlifeSuggestion: "",
             nightlifeType: "",
+            selectedEmail: "",
+            emailChoice: [],
         }
     }
 
@@ -196,7 +198,6 @@ class TripDetails extends Component {
             })
         }
     }
-
     addFood = event => {
         event.preventDefault();
 
@@ -444,7 +445,16 @@ class TripDetails extends Component {
             })
         }
     }
+    chooseEmail = (e) => {
+        const emailChoice = this.state.selectedEmail
 
+        if (emailChoice !== "") {
+            this.setState({
+                emailChoice: [...this.state.emailChoice, emailChoice],
+                selectedEmail: "",
+            })
+        }
+    }
     render() {
         return (
             <div className="tripDetails">
@@ -652,6 +662,7 @@ class TripDetails extends Component {
 
                     </div>
                     {/* HOTEL END */}
+
 
                     {/* FOOD START */}
                     <div className="boards__board board">
@@ -1085,6 +1096,12 @@ class TripDetails extends Component {
                     </div>
                     {/* SHOPPING END */}
 
+                    {/* ADD FRIEND FORM START */}
+                    <form className="tripForm tripForm--friends" action="submit">
+                        <input type="email" name="selectedEmail" onChange={this.handleChange} />
+                        <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another" />
+                    </form>
+                    {/* ADD FRIEND FORM ENDS */}
                 </div>
             </div>
         )
