@@ -1,0 +1,17 @@
+$text: #393e41;
+$background: #d7d8d9;
+$color: #6f7274;
+$colorSecondary: #ffcb00;
+$colorAccent: #f34843;
+
+$fontSize: 20;
+$fontFamily: 'Raleway', sans-serif;
+
+@mixin heading($fontSizeHeading) { 
+    font-family: $fontFamily;
+    font-size: ($fontSizeHeading / 10) * 1rem;    
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
