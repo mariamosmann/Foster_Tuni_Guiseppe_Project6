@@ -2,15 +2,47 @@
 
     & .wrapper {
         height: 70vh;
+        padding: 5vh 0;
     }
 
     & button {
-        margin: 1rem;
+        margin: 2rem;
         float: right;
     }
 }
+
 .tripForm {
-    width: 50%;
+    width: 45%;
     border: 1px solid red;
-    height: 80%;
+    height: 60vh;
+    float: left;
+    padding: 7% 5% 7% 5%;
+    text-align: center;
+
+    & label {
+        font-size: 1.6rem;
+    }
+
+    & input, & select {
+        width: 80%;
+        height: 15%;
+        margin-left: 10%;
+        margin-right: 10%;
+        text-align: center;
+    }
+
+    &__middleInput { 
+        margin-top: 20%;
+        margin-bottom: 25%;
+    }
+}
+
+//FIX THE RADIO INPUTS
+//FIX THE EMAIL SUBMIT BUTTONS
+
+.tripDetails {
+    width: 45%;
+    border: 1px solid blue;
+    height: 60vh;
+    float: right;
 }

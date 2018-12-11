@@ -206,13 +206,34 @@ h1, h2, h3, p {
         cursor: pointer; }
 
 .BuildTripForm .wrapper {
-  height: 70vh; }
+  height: 70vh;
+  padding: 5vh 0; }
 
 .BuildTripForm button {
-  margin: 1rem;
+  margin: 2rem;
   float: right; }
 
 .tripForm {
-  width: 50%;
+  width: 45%;
   border: 1px solid red;
-  height: 80%; }
+  height: 60vh;
+  float: left;
+  padding: 7% 5% 7% 5%;
+  text-align: center; }
+  .tripForm label {
+    font-size: 1.6rem; }
+  .tripForm input, .tripForm select {
+    width: 80%;
+    height: 15%;
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center; }
+  .tripForm__middleInput {
+    margin-top: 20%;
+    margin-bottom: 25%; }
+
+.tripDetails {
+  width: 45%;
+  border: 1px solid blue;
+  height: 60vh;
+  float: right; }
