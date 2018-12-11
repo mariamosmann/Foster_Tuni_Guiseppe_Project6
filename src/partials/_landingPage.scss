@@ -1,0 +1,16 @@
+.BuildTripForm {
+
+    & .wrapper {
+        height: 70vh;
+    }
+
+    & button {
+        margin: 1rem;
+        float: right;
+    }
+}
+.tripForm {
+    width: 50%;
+    border: 1px solid red;
+    height: 80%;
+}
