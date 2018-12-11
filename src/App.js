@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import "./styles/style.scss";
+=======
 import './App.css';
 import firebase from './firebase.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
