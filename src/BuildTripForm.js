@@ -10,8 +10,8 @@ import TripDetails from './TripDetails.js'
 // GOOGLE API KEY = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
-const dbRef = firebase.database()
-
+const dbRef = firebase.database();
+  
 class BuildTripForm extends Component {
     constructor(props) {
         super(props);
@@ -43,11 +43,14 @@ class BuildTripForm extends Component {
             //PUBLIC STATES
             selectedPublic: "",
             publicChoice: "",
+            //IMAGE
+            placeImage: "",
             //USER STATES
             user: null
         }
     }
     componentDidMount() {
+
         auth.onAuthStateChanged(user => {
             if (user) {
                 this.setState(
@@ -71,19 +74,13 @@ class BuildTripForm extends Component {
         });
     }
     handleChange = (e) => {
-        // const travelInfo = {
-        //     location: this.userInput,
-        //     activity: this.typeInput
-        // }
+
         this.setState({
             //target.value IS THE VALUE OF THE INPUT
             //Sets the state value to include the value of the input
             [e.target.name]: e.target.value
 
         });
-        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
-
-        // dbRef.push(travelInfo);
     }
     selectInput = (e) => {
 
@@ -131,26 +128,50 @@ class BuildTripForm extends Component {
                                 place_id: placeID,
                                 key: apiKey,
                                 inputtype: "textquery",
-                                fields: "address_components,formatted_address,types,name,photos"
+                                fields: "address_components,formatted_address,types,name"
                             },
                             xmlToJSON: false
                         }
                     }).then((response) => {
-                        // const photoReference = response.data.result.photos[0].photo_reference
-                        const city = response.data.result.address_components[0].long_name
-                        const country = response.data.result.address_components[3].long_name
+                        const city = response.data.result.address_components[0].long_name;
+                        const country = response.data.result.address_components[3].long_name;
 
                         this.setState({
                             country,
                             city,
                             userInput: "",
                         })
+
+                        // axios({
+                        //     method: 'GET',
+                        //     url: "http://proxy.hackeryou.com",
+                        //     // dataResponse: JSON,
+                        //     paramsSerializer: function (params) {
+                        //         return Qs.stringify(params, { arrayFormat: 'brackets' })
+                        //     },
+                        //     params: {
+                        //         reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
+                        //         params: {
+                        //             key: apiKey,
+                        //             photoreference: photoReference,
+                        //             maxwidth: 1200,
+                        //             sensor: false,
+                        //             // inputtype: "textquery",
+                        //             // fields: "address_components,formatted_address,types,name,photos"
+                        //         },
+                        //         xmlToJSON: false
+                        //     }
+                        // }).then((response) => {
+                        //     const placeImage = response.data
+
+                        //     this.setState({
+                        //         placeImage,
+                        //     })
+                        //     console.log(this.state.placeImage)
+                        // })
                     })
                 })
             }
-        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
-
-        // dbRef.push(userInput);
         }
     chooseType = (e) => {
         e.preventDefault();
@@ -163,18 +184,6 @@ class BuildTripForm extends Component {
                 selectedType: ""
             })            
         };
-        dbRef.ref(`/${this.state.selectedType}/${this.state.country}/`).update({
-            users: this.state.user.uid,
-            country: this.state.country
-        });
-        
-        //     const tripInfo = {
-        //     country: countryChoice,
-        //     activity: typeInput
-        //     }
-        // const dbRef = firebase.database().ref(`/${this.state.user.uid}`);
-        
-        // dbRef.push(tripInfo)
     }
     chooseStartDate = (e) => {
         e.preventDefault();
@@ -205,7 +214,7 @@ class BuildTripForm extends Component {
         }
     }
     chooseEmail = (e) => {
-
+        
         const emailChoice = this.state.selectedEmail
         
         if (emailChoice !== "") {
@@ -213,7 +222,15 @@ class BuildTripForm extends Component {
                 emailChoice: [...this.state.emailChoice, emailChoice],
                 selectedEmail: "",
             })
+
         }
+        // firebase.database().ref().child("Other").orderByChild("email").equalTo(emailChoice).once("value", function (snapshot) {
+        //             snapshot.forEach(function (child) {
+        //                 child.firebase.database().ref().update(updateData);
+        //             });
+        //         });
+
+        
     }
     setEmails = (e) => {
         e.preventDefault();
@@ -249,6 +266,8 @@ class BuildTripForm extends Component {
     }
     logIn = () => {
         auth.signInWithPopup(provider).then(result => {
+           
+            
             if (result){
                 console.log("First")
                 this.setState({
@@ -260,15 +279,15 @@ class BuildTripForm extends Component {
                 //         trips: `${this.state.country}`
                 //     })
                 // }
-                if (result.additionalUserInfo.isNewUser){
-                    console.log(result)
+                // if (result.additionalUserInfo.isNewUser){
+                //     console.log(result)
                     dbRef.ref(`/Users/${result.user.uid}`).set({
                         displayName: result.user.displayName,
                         email: result.user.email,
                         photoURL: result.user.photoURL,
-                        trips: `${this.state.country}`
+                        // trips: `${this.state.country}`
                     })
-                }
+                // }
             }
         });
     //     if(this.state.user === null){
@@ -285,8 +304,39 @@ class BuildTripForm extends Component {
             });
         });
     };
+    // duplicateTripsToCollab = (trip) => {
+    //     trip.users.forEach(function(email) {
+    //         dbRef.ref().child("Users").orderByChild("email").equalTo(email).once("value", function (snapshot) {
+    //             snapshot.forEach(function (child) {
+    //                 dbRef.ref(`/Users/${child.ref_.path.pieces_[1]}/trips`).push(trip);
+    //                 console.log(child, "child")
+    //             });
+    //         });
+    //     })
+    // }
     sendToFirebase = (e) => {
         e.preventDefault();
+
+        const trip = {
+            users: [...this.state.emailChoice, this.state.user.email],
+            type: this.state.typeInput,
+            country: this.state.country,
+            city: this.state.city,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+            public: this.state.publicChoice,
+        }
+
+        // dbRef.ref(`/Catagories/${this.state.typeInput}`).push(
+        //     trip
+        // );
+
+        dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
+            trip
+        );
+
+        // this.duplicateTripsToCollab(trip);
+
     }
     goToDetails = (e) =>{
         e.preventDefault();
@@ -319,7 +369,7 @@ class BuildTripForm extends Component {
                 {startForm
                 ? <form className="tripForm tripForm--country" action="submit">
                     <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
-                    <input type="text" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} required />
+                    <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} className="autocomplete "required />
                     <input type="submit" value="Continue" onClick={this.selectInput} />
                 </form>
                 : <form className="visuallyhidden"></form>
@@ -334,6 +384,7 @@ class BuildTripForm extends Component {
                             <option disabled="disabled" selected="selected" value="selectedType">--Type of trip--</option>
                             {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
                         </select>
+                        
                         <input type="submit" value="Continue" onClick={this.chooseType} />
                     </form>
                     : <form className="visuallyhidden"></form>
@@ -365,6 +416,7 @@ class BuildTripForm extends Component {
                 </form> 
                 : <form className="visuallyhidden"></form>
                 }
+                {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
                 {submitEmail
                 ? <form className="tripForm tripForm--public" action="submit">
                     <label htmlFor="publicYes">Public
@@ -379,7 +431,7 @@ class BuildTripForm extends Component {
                 }
                 {submitPublic
                 ? <form action="submit">
-                    <h2>Your proposed {this.state.typeInput}trip to {this.state.country}</h2>
+                    <h2>Your proposed {this.state.typeInput} trip to {this.state.country}</h2>
                     <h3>You will begin in {this.state.city}</h3>
                     <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
                     <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>

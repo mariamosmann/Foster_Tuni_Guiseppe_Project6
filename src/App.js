@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 8de2cd6ddbd0ab9602c1f801ffe15a339f5f85f5
 import './App.css';
 import firebase from './firebase.js';
 import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom';
@@ -61,3 +64,8 @@ class App extends Component {
 }
 
 export default App;
+
+//DONT FORGET TO SET THE NEW USER BACK UP WHEN WE ARE DONE
+
+// building by Rudez Studio from the Noun Project
+// https://thenounproject.com/rudezstudio/collection/building-and-manufacturing/
