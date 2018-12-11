@@ -11,6 +11,7 @@ import TripDetails from './TripDetails.js'
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 const dbRef = firebase.database();
+
   
 class BuildTripForm extends Component {
     constructor(props) {
@@ -48,7 +49,8 @@ class BuildTripForm extends Component {
             //USER STATES
             user: null,
             // groupMembers: null
-            currentTrip: null
+            currentTrip: '',
+            otherUsers: []
         }
     }
     componentDidMount() {
@@ -71,6 +73,7 @@ class BuildTripForm extends Component {
 
                             });
                         });
+                        
                     }
                 );
             }
@@ -329,21 +332,27 @@ class BuildTripForm extends Component {
             endDate: this.state.endDate,
             public: this.state.publicChoice,
         }
-
-        // dbRef.ref(`/Catagories/${this.state.typeInput}`).push(
-        //     trip
-        // );
-        // console.log(dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
-        //     trip
-        // ))
+        console.log(trip)
         const currentTripID = dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
             trip
         );
+
         this.setState({
-            currentTrip: currentTripID.path.pieces_[4]
+            currentTrip: currentTripID.path.pieces_[3]
+        }, () =>{
+            const otherUsers = dbRef.ref(`/Users/${this.state.user.uid}/trips/${this.state.currentTrip}/users`)
+            otherUsers.on('value', snapshot =>{
+                console.log(snapshot.val())
+                this.setState({
+                    otherUsers: this.state.otherUsers
+            })
+            })
         })
-        console.log(currentTripID, 'new info')
         this.props.history.push('/details')
+        
+
+        // console.log(currentTripID, 'new info')
+        // this.history.push('/details')
 
         // this.duplicateTripsToCollab(trip);
 
@@ -455,10 +464,7 @@ class BuildTripForm extends Component {
                         country={this.state.country}
                         city={this.state.city}
                         type={this.state.typeInput}
-                        groupMembers={this.state.currentTrip.users}
-                        popUp={this.popUp}
-                        popUpButton={this.state.popUpButton}
-                        inviteFriend={this.state.setEmails}
+                        groupMembers={this.state.otherUsers}
                   />
                   )} /> 
                     
