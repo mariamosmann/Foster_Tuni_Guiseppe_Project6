@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import activitiesArray from './activitiesArray.js'
 
-class Test extends Component {
+class TripDetails extends Component {
     constructor() {
         super();
         this.state = {
@@ -164,7 +164,7 @@ class Test extends Component {
                     {/* displaying the country and the type of trip that the user chose */}
                     <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
 
-                    <h3 className="header__heading header__heading--h3">{this.props.type}</h3>
+                    <h3 className="header__heading header__heading--h3">{this.props.typeInput}</h3>
                 </header>
 
                 <aside>
@@ -333,7 +333,7 @@ class Test extends Component {
     }
 }
 
-export default Test;
+export default TripDetails;
 
 //////////////////////////////////////////
 //ON APP STATE
@@ -393,9 +393,9 @@ export default Test;
 /* <TripDetails
     country={this.state.userChoice.country}
     city={this.state.userChoice.city}
-    type={this.state.userChoice.type}
-    groupMembers={this.state.groupMembers}
+    typeInput={this.state.userChoice.typeInput}
+    groupMembers={this.state.typeInput.country.users}
     popUp={this.popUp}
     popUpButton={this.state.popUpButton}
-    inviteFriend={this.inviteFriend}
+    inviteFriend={this.state.setEmails}
 /> */

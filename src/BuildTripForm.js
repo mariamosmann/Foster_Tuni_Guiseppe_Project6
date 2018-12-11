@@ -4,6 +4,8 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import TripDetails from './TripDetails.js'
 
 // GOOGLE API KEY = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
 const provider = new firebase.auth.GoogleAuthProvider();
@@ -14,14 +16,20 @@ class BuildTripForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
             //COUNTRY STATES
             selectedCountry: "",
             userInput: "",
-            country: "",
+            country: '',
             city: "",
             //TYPE STATES
             typeChoices: activitiesArray,
-            selectedType: "",
+            selectedType: {
+                country: {
+                    country: '',
+                    users: ''
+                }
+            },
             typeInput: "",
             //DATE STATES
             selectedStartDate: "",
@@ -51,7 +59,10 @@ class BuildTripForm extends Component {
                         this.dbRef.on("value", snapshot => {
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
-                                selectedType: snapshot.val() || {}
+                                selectedType: snapshot.val() || {},
+                                user: snapshot.val() || {},
+
+
                             });
                         });
                     }
@@ -277,6 +288,13 @@ class BuildTripForm extends Component {
     sendToFirebase = (e) => {
         e.preventDefault();
     }
+    goToDetails = (e) =>{
+        e.preventDefault();
+            this.props.history.push('/details') 
+            
+
+    }    
+    
     render() {
         const startForm = this.state.country === "";
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
@@ -366,13 +384,27 @@ class BuildTripForm extends Component {
                     <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
                     <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
                     <p>This trip will be {this.state.publicChoice}</p>
-                    <input type="submit" value="Create trip" onClick={this.sendToFirebase}/>
+                    <input type="submit" value="Create trip" onClick={this.sendToFirebase} onSubmit={this.goToDetails}/>
                 </form>
                 : <form className="visuallyhidden"></form>
                 }
-                {/* DO WE WANT A FORM THAT WILL ALLOW US TO CHOOSE FROM THE STARTING CATAGORIES */}              
+                {/* DO WE WANT A FORM THAT WILL ALLOW US TO CHOOSE FROM THE STARTING CATAGORIES */}
+                <Route to='/details' 
+                    render = { () => (<TripDetails
+                        country={this.state.country}
+                        city={this.state.city}
+                        type={this.state.typeInput}
+                        groupMembers={this.state.selectedType.country.country.users}
+                        popUp={this.popUp}
+                        popUpButton={this.state.popUpButton}
+                        inviteFriend={this.state.setEmails}
+                  />
+                  )} />
+                    
+                    
+                              
             </div>
-        );
+        )
     }
 }
 
