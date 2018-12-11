@@ -163,3 +163,44 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
   z-index: 999;
   background: white;
   color: black; }
+
+html {
+  font-size: 62.5%; }
+
+.wrapper {
+  margin: 0 auto;
+  width: 80%;
+  max-width: 1200px; }
+
+h1, h2, h3, p {
+  margin: 0;
+  padding: 0; }
+
+.mainHeader {
+  height: 30vh;
+  background: navajowhite; }
+  .mainHeader__nav {
+    height: 100%;
+    text-align: center;
+    padding-top: 5vh; }
+    .mainHeader__nav__profile {
+      float: left;
+      width: 20%; }
+    .mainHeader__nav__logo {
+      height: 20vh;
+      width: 60%;
+      float: left; }
+      .mainHeader__nav__logo--start {
+        font-size: 4rem; }
+      .mainHeader__nav__logo--img {
+        aria-hidden: true;
+        height: 75%;
+        padding-right: 1rem; }
+      .mainHeader__nav__logo--end {
+        font-size: 10rem;
+        letter-spacing: 1rem; }
+    .mainHeader__nav__trips {
+      width: 20%;
+      float: right; }
+      .mainHeader__nav__trips__item {
+        cursor: pointer; }

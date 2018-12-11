@@ -5,7 +5,6 @@ import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
 
-// GOOGLE API KEY = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 const dbRef = firebase.database();
@@ -35,8 +34,6 @@ class BuildTripForm extends Component {
             //PUBLIC STATES
             selectedPublic: "",
             publicChoice: "",
-            //IMAGE
-            placeImage: "",
             //USER STATES
             user: null
         }
@@ -65,10 +62,7 @@ class BuildTripForm extends Component {
     handleChange = (e) => {
 
         this.setState({
-            //target.value IS THE VALUE OF THE INPUT
-            //Sets the state value to include the value of the input
             [e.target.name]: e.target.value
-
         });
     }
     selectInput = (e) => {
@@ -130,34 +124,6 @@ class BuildTripForm extends Component {
                             city,
                             userInput: "",
                         })
-
-                        // axios({
-                        //     method: 'GET',
-                        //     url: "http://proxy.hackeryou.com",
-                        //     // dataResponse: JSON,
-                        //     paramsSerializer: function (params) {
-                        //         return Qs.stringify(params, { arrayFormat: 'brackets' })
-                        //     },
-                        //     params: {
-                        //         reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
-                        //         params: {
-                        //             key: apiKey,
-                        //             photoreference: photoReference,
-                        //             maxwidth: 1200,
-                        //             sensor: false,
-                        //             // inputtype: "textquery",
-                        //             // fields: "address_components,formatted_address,types,name,photos"
-                        //         },
-                        //         xmlToJSON: false
-                        //     }
-                        // }).then((response) => {
-                        //     const placeImage = response.data
-
-                        //     this.setState({
-                        //         placeImage,
-                        //     })
-                        //     console.log(this.state.placeImage)
-                        // })
                     })
                 })
             }
@@ -166,7 +132,7 @@ class BuildTripForm extends Component {
         e.preventDefault();
         // const countryChoice = this.state.country
         const typeInput = this.state.selectedType;
-        //STOPS EMPTY INPUTS
+
         if (typeInput !== '') {
             this.setState({
                 typeInput,
@@ -178,9 +144,7 @@ class BuildTripForm extends Component {
         e.preventDefault();
 
         const startDate = this.state.selectedStartDate;
-        //STOPS EMPTY INPUTS
 
-        //RIGHT NOW YOU HAVE TO SELECT A START DATE BUT NOT AN END DATE, WHY?
         if (startDate !== "") {
             this.setState({
                 startDate,
@@ -192,9 +156,7 @@ class BuildTripForm extends Component {
         e.preventDefault();
 
         const endDate = this.state.selectedEndDate;
-        //STOPS EMPTY INPUTS
 
-        //RIGHT NOW YOU HAVE TO SELECT A START DATE BUT NOT AN END DATE, WHY?
         if (endDate !== "") {
             this.setState({
                 endDate,
@@ -262,29 +224,15 @@ class BuildTripForm extends Component {
                 this.setState({
                 user: result.user
             });
-                // if (this.state.user === null) {
-                //     dbRef.ref(`/Users/Guest}`).update({
-                //         displayName: 'Guest',
-                //         trips: `${this.state.country}`
-                //     })
-                // }
-                // if (result.additionalUserInfo.isNewUser){
-                //     console.log(result)
+
+                if (result.additionalUserInfo.isNewUser){
                     dbRef.ref(`/Users/${result.user.uid}`).set({
                         displayName: result.user.displayName,
                         email: result.user.email,
-                        photoURL: result.user.photoURL,
-                        // trips: `${this.state.country}`
                     })
-                // }
+                }
             }
         });
-    //     if(this.state.user === null){
-    //         dbRef.ref(`/Users/Guest}`).update({
-    //             displayName: 'Guest',
-    //             trips: `${this.state.country}`
-    //     })
-    // }
     }
     logOut = () => {
         auth.signOut().then(() => {
@@ -303,6 +251,16 @@ class BuildTripForm extends Component {
     //         });
     //     })
     // }
+    guest = () => {
+       
+        this.setState({
+            user: {
+                uid: "Guest",
+                displayName: "Guest",
+                email: "N/A"
+            }
+        })
+    }
     sendToFirebase = (e) => {
         e.preventDefault();
 
@@ -316,19 +274,17 @@ class BuildTripForm extends Component {
             public: this.state.publicChoice,
         }
 
-        // dbRef.ref(`/Catagories/${this.state.typeInput}`).push(
-        //     trip
-        // );
-
         dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
-            trip
+            trip //SHOULD THIS BE GOING TO JUST USER OR SOMETHING SO THAT GUEST DOESNT BREAK?
         );
 
         // this.duplicateTripsToCollab(trip);
 
     }
     render() {
-        const startForm = this.state.country === "";
+        const logInOrGuest = this.state.user === null;
+
+        const startForm = (this.state.country === "") && (this.state.user !== null);
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
         const submitType = (this.state.typeInput !== "") && (this.state.startDate === "");
         const submitStartDate = (this.state.startDate !== "") && (this.state.endDate === "");
@@ -337,17 +293,15 @@ class BuildTripForm extends Component {
         const submitPublic = this.state.publicChoice !== "";
 
         return (
-            <div className="BuildTripForm">
+            <div className="BuildTripForm wrapper">
                 {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
-                <header>
-                    {this.state.user ? (
-                        <button onClick={this.logOut}>Logout</button>
-                    ) : (
-                        <button onClick={this.logIn}>Login</button>
-                        )}
-                        <button onClick={this.guest}>Use As Guest</button>
-                      
-                </header>
+                {logInOrGuest
+                ?<div className="tripFrom tripForm--logIn">
+                    <button onClick={this.logIn}>Login</button>
+                    <button onClick={this.guest}>Use As Guest</button>
+                </div> 
+                : <button onClick={this.logOut} className="logOut">Logout</button>
+                }                
                 {startForm
                 ? <form className="tripForm tripForm--country" action="submit">
                     <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
