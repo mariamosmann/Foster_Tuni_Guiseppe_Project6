@@ -7,7 +7,6 @@ import firebase from './firebase.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import TripDetails from './TripDetails.js'
 
-// GOOGLE API KEY = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 const dbRef = firebase.database();
@@ -44,13 +43,14 @@ class BuildTripForm extends Component {
             //PUBLIC STATES
             selectedPublic: "",
             publicChoice: "",
-            //IMAGE
-            placeImage: "",
+            //MAP STATE
+            cityMap: "",
             //USER STATES
             user: null,
             // groupMembers: null
             currentTrip: '',
-            otherUsers: []
+            otherUsers: [],
+            showForm:true
         }
     }
     componentDidMount() {
@@ -82,19 +82,16 @@ class BuildTripForm extends Component {
     handleChange = (e) => {
 
         this.setState({
-            //target.value IS THE VALUE OF THE INPUT
-            //Sets the state value to include the value of the input
             [e.target.name]: e.target.value
-
         });
     }
     selectInput = (e) => {
 
             e.preventDefault();
 
-            const apiKey = `AIzaSyBgY9n1Rn6S8uuQtKGrJUf__sb1itP5p5U`
+            const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
             const userInput = this.state.selectedCountry;
-            let globalID = new Date().getTime();
+            // let globalID = new Date().getTime();
             if (userInput !== '') {
                 this.setState({
                     userInput,
@@ -109,81 +106,84 @@ class BuildTripForm extends Component {
                         return Qs.stringify(params, { arrayFormat: 'brackets' })
                     },
                     params: {
-                        reqUrl: "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+                        reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
                         params: {
-                            input: userInput,
                             key: apiKey,
-                            sessiontoken: globalID
+                            location: userInput,
+                            outFormat: JSON,
+                            thumbMaps: true,
                         },
                         xmlToJSON: false
                     }
                 }).then((response) => {
-                    const placeID = response.data.predictions[0].place_id
-                    //SPECIFIES OUR DATA TO THE AREA WE NEED
+                    console.log(response.data)
+                    const country = response.data.results[0].locations[0].adminArea1
+                    const city = response.data.results[0].locations[0].adminArea5
+                    const cityMap = response.data.results[0].locations[0].mapUrl
 
-                    axios({
-                        method: 'GET',
-                        url: "http://proxy.hackeryou.com",
-                        dataResponse: JSON,
-                        paramsSerializer: function (params) {
-                            return Qs.stringify(params, { arrayFormat: 'brackets' })
-                        },
-                        params: {
-                            reqUrl: "https://maps.googleapis.com/maps/api/place/details/json",
-                            params: {
-                                place_id: placeID,
-                                key: apiKey,
-                                inputtype: "textquery",
-                                fields: "address_components,formatted_address,types,name"
-                            },
-                            xmlToJSON: false
-                        }
-                    }).then((response) => {
-                        const city = response.data.result.address_components[0].long_name;
-                        const country = response.data.result.address_components[3].long_name;
-
-                        this.setState({
+                    this.setState({
                             country,
                             city,
+                            cityMap,
                             userInput: "",
                         })
-
-                        // axios({
-                        //     method: 'GET',
-                        //     url: "http://proxy.hackeryou.com",
-                        //     // dataResponse: JSON,
-                        //     paramsSerializer: function (params) {
-                        //         return Qs.stringify(params, { arrayFormat: 'brackets' })
-                        //     },
-                        //     params: {
-                        //         reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
-                        //         params: {
-                        //             key: apiKey,
-                        //             photoreference: photoReference,
-                        //             maxwidth: 1200,
-                        //             sensor: false,
-                        //             // inputtype: "textquery",
-                        //             // fields: "address_components,formatted_address,types,name,photos"
-                        //         },
-                        //         xmlToJSON: false
-                        //     }
-                        // }).then((response) => {
-                        //     const placeImage = response.data
-
-                        //     this.setState({
-                        //         placeImage,
-                        //     })
-                        //     console.log(this.state.placeImage)
-                        // })
-                    })
                 })
+
+                // axios({
+                //     method: 'GET',
+                //     url: "http://proxy.hackeryou.com",
+                //     dataResponse: JSON,
+                //     paramsSerializer: function (params) {
+                //         return Qs.stringify(params, { arrayFormat: 'brackets' })
+                //     },
+                //     params: {
+                //         reqUrl: "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+                //         params: {
+                //             input: userInput,
+                //             key: apiKey,
+                //             sessiontoken: globalID
+                //         },
+                //         xmlToJSON: false
+                //     }
+                // }).then((response) => {
+                //     const placeID = response.data.predictions[0].place_id
+                //     //SPECIFIES OUR DATA TO THE AREA WE NEED
+
+                //     axios({
+                //         method: 'GET',
+                //         url: "http://proxy.hackeryou.com",
+                //         dataResponse: JSON,
+                //         paramsSerializer: function (params) {
+                //             return Qs.stringify(params, { arrayFormat: 'brackets' })
+                //         },
+                //         params: {
+                //             reqUrl: "https://maps.googleapis.com/maps/api/place/details/json",
+                //             params: {
+                //                 place_id: placeID,
+                //                 key: apiKey,
+                //                 inputtype: "textquery",
+                //                 fields: "address_components,formatted_address,types,name"
+                //             },
+                //             xmlToJSON: false
+                //         }
+                //     }).then((response) => {
+                //         const city = response.data.result.address_components[0].long_name;
+                //         const country = response.data.result.address_components[3].long_name;
+
+                //         this.setState({
+                //             country,
+                //             city,
+                //             userInput: "",
+                //         })
+                //     })
+                // })
             }
         }
     chooseType = (e) => {
         e.preventDefault();
         // const countryChoice = this.state.country
         const typeInput = this.state.selectedType;
-        //STOPS EMPTY INPUTS
+
         if (typeInput !== '') {
             this.setState({
                 typeInput,
@@ -195,9 +195,7 @@ class BuildTripForm extends Component {
         e.preventDefault();
 
         const startDate = this.state.selectedStartDate;
-        //STOPS EMPTY INPUTS
 
-        //RIGHT NOW YOU HAVE TO SELECT A START DATE BUT NOT AN END DATE, WHY?
         if (startDate !== "") {
             this.setState({
                 startDate,
@@ -209,9 +207,7 @@ class BuildTripForm extends Component {
         e.preventDefault();
 
         const endDate = this.state.selectedEndDate;
-        //STOPS EMPTY INPUTS
 
-        //RIGHT NOW YOU HAVE TO SELECT A START DATE BUT NOT AN END DATE, WHY?
         if (endDate !== "") {
             this.setState({
                 endDate,
@@ -279,29 +275,15 @@ class BuildTripForm extends Component {
                 this.setState({
                 user: result.user
             });
-                // if (this.state.user === null) {
-                //     dbRef.ref(`/Users/Guest}`).update({
-                //         displayName: 'Guest',
-                //         trips: `${this.state.country}`
-                //     })
-                // }
-                // if (result.additionalUserInfo.isNewUser){
-                    console.log(result, 'result')
+
+                if (result.additionalUserInfo.isNewUser){
                     dbRef.ref(`/Users/${result.user.uid}`).set({
                         displayName: result.user.displayName,
                         email: result.user.email,
-                        photoURL: result.user.photoURL,
-                        // trips: `${this.state.country}`
                     })
-                // }
+                }
             }
         });
-    //     if(this.state.user === null){
-    //         dbRef.ref(`/Users/Guest}`).update({
-    //             displayName: 'Guest',
-    //             trips: `${this.state.country}`
-    //     })
-    // }
     }
     logOut = () => {
         auth.signOut().then(() => {
@@ -320,6 +302,16 @@ class BuildTripForm extends Component {
     //         });
     //     })
     // }
+    guest = () => {
+       
+        this.setState({
+            user: {
+                uid: "Guest",
+                displayName: "Guest",
+                email: "N/A"
+            }
+        })
+    }
     sendToFirebase = (e) => {
         e.preventDefault();
 
@@ -332,7 +324,7 @@ class BuildTripForm extends Component {
             endDate: this.state.endDate,
             public: this.state.publicChoice,
         }
-        console.log(trip)
+
         const currentTripID = dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
             trip
         );
@@ -340,31 +332,24 @@ class BuildTripForm extends Component {
         this.setState({
             currentTrip: currentTripID.path.pieces_[3]
         }, () =>{
-            const otherUsers = dbRef.ref(`/Users/${this.state.user.uid}/trips/${this.state.currentTrip}/users`)
-            otherUsers.on('value', snapshot =>{
-                console.log(snapshot.val())
+            const otherUsersRef = dbRef.ref(`/Users/${this.state.user.uid}/trips/${this.state.currentTrip}/users`)
+            otherUsersRef.on('value', snapshot =>{
+                const userArray = snapshot.val()
                 this.setState({
-                    otherUsers: this.state.otherUsers
-            })
+                    otherUsers:userArray,
+                    showForm:false
+                }, ()=>{
+                    this.props.history.push('/details')
+                })
             })
         })
-        this.props.history.push('/details')
-        
-
-        // console.log(currentTripID, 'new info')
-        // this.history.push('/details')
-
-        // this.duplicateTripsToCollab(trip);
 
     }
-    // goToDetails = (e) =>{
-    //     e.preventDefault();
-    //     console.log('going to details')
-    //         this.props.history.push('/details')
-    // }    
     
     render() {
-        const startForm = this.state.country === "";
+        const logInOrGuest = this.state.user === null;
+
+        const startForm = (this.state.country === "") && (this.state.user !== null);
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
         const submitType = (this.state.typeInput !== "") && (this.state.startDate === "");
         const submitStartDate = (this.state.startDate !== "") && (this.state.endDate === "");
@@ -374,102 +359,108 @@ class BuildTripForm extends Component {
 
         return (
             <div className="BuildTripForm">
-                {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
-                <header>
-                    {this.state.user ? (
-                        <button onClick={this.logOut}>Logout</button>
-                    ) : (
+                <div className="wrapper clearfix">
+                    {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
+                    {logInOrGuest
+                    ?<div className="tripFrom tripForm--logIn">
                         <button onClick={this.logIn}>Login</button>
-                        )}
                         <button onClick={this.guest}>Use As Guest</button>
-                      
-                </header>
-                {startForm
-                ? <form className="tripForm tripForm--country" action="submit">
-                    <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
-                    <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter country" onChange={this.handleChange} className="autocomplete "required />
-                    <input type="submit" value="Continue" onClick={this.selectInput} />
-                </form>
-                : <form className="visuallyhidden"></form>
-                }
-                
-                {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
-                {submitLocation
-                    ? <form className="tripForm tripForm--type" action="submit">
-                        <label htmlFor="selectedType">Choose the type of trip you wish to take:</label>
-                        <select defaultValue="selectedType" name="selectedType" id="selectedType"
-                            onChange={this.handleChange} required>
-                            <option disabled="disabled" selected="selected" value="selectedType">--Type of trip--</option>
-                            {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
-                        </select>
+                    </div> 
+                    : <button onClick={this.logOut} className="logOut">Logout</button>
+                    }          
+
+                        {startForm && this.state.showForm
+                            ? <form className="tripForm tripForm--country" action="submit" autoComplete="off">
+                            <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
+                            <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter starting city" onChange={this.handleChange} spellCheck="true" required />
+                            <input type="submit" value="Continue" onClick={this.selectInput} />
+                        </form>
+                        : <form className="visuallyhidden"></form>
+                        }
                         
-                        <input type="submit" value="Continue" onClick={this.chooseType} />
-                    </form>
-                    : <form className="visuallyhidden"></form>
-                }
-                {/* THESE FORMS WILL LET YOU SELECT DATES */}
-                {submitType
-                    ? <form className="tripForm tripForm--startDate" action="submit">
-                        <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
+                        {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
+                    {submitLocation && this.state.showForm
+                            ? <form className="tripForm tripForm--type" action="submit">
+                                <label htmlFor="selectedType">Choose the type of trip you wish to take:</label>
+                                <select defaultValue="selectedType" name="selectedType" id="selectedType"
+                                    onChange={this.handleChange} required>
+                                    <option disabled="disabled" selected="selected" value="selectedType">--Type of trip--</option>
+                                    {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
+                                </select>
+                                <input type="submit" value="Continue" onClick={this.chooseType} />
+                            </form>
+                            : <form className="visuallyhidden"></form>
+                        }
+                        {/* THESE FORMS WILL LET YOU SELECT DATES */}
+                    {submitType && this.state.showForm
+                            ? <form className="tripForm tripForm--startDate" action="submit">
+                                <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
+                                {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
+                                <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange} />
+                                <input type="submit" value="Continue" onClick={this.chooseStartDate} />
+                            </form>
+                            : <form className="visuallyhidden"></form>
+                        }
                         {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
-                        <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange} />
-                        <input type="submit" value="Continue" onClick={this.chooseStartDate} />
-                    </form>
-                    : <form className="visuallyhidden"></form>
-                }
-                {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
-                {submitStartDate
-                ? <form className="tripForm tripForm--endDate" action="submit">
-                    <label htmlFor="selectedEndDate">Choose the ending date of the trip you wish to take.</label>
-                    <input type="date" id="selectedEndDate" name="selectedEndDate" onChange={this.handleChange} min={this.state.selectedStartDate} />
-                    <input type="submit" value="Continue" onClick={this.chooseEndDate} />
-                </form>
-                : <form className="visuallyhidden"></form>
-                }
-                {submitEndDate
-                ? <form className="tripForm tripForm--friends"action="submit">
-                    <input type="email" name="selectedEmail" onChange={this.handleChange}/>
-                    <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another"/>
-                    <input type="submit" value="Continue" onClick={this.setEmails}/>
-                </form> 
-                : <form className="visuallyhidden"></form>
-                }
-                {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
-                {submitEmail
-                ? <form className="tripForm tripForm--public" action="submit">
-                    <label htmlFor="publicYes">Public
-                        <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} />
-                    </label>
-                    <label htmlFor="publicNo">Private
-                        <input type="radio" name="selectedPublic" value="private" onChange={this.handleChange} />
-                    </label>
-                    <input type="submit" value="Continue" onClick={this.choosePublic}/>
-                </form>
-                : <form className="visuallyhidden"></form>
-                }
-                {submitPublic
-                    ? <form action="submit" onSubmit={this.sendToFirebase}>
-                    <h2>Your proposed {this.state.typeInput} trip to {this.state.country}</h2>
-                    <h3>You will begin in {this.state.city}</h3>
-                    <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
-                    <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
-                    <p>This trip will be {this.state.publicChoice}</p>
-                    <input type="submit" value="Create trip"/>
-                </form>
-                : <form className="visuallyhidden"></form>
-                }
-                {/* DO WE WANT A FORM THAT WILL ALLOW US TO CHOOSE FROM THE STARTING CATAGORIES */}
-                <Route to='/details' 
-                    render = { () => (<TripDetails
-                        country={this.state.country}
-                        city={this.state.city}
-                        type={this.state.typeInput}
-                        groupMembers={this.state.otherUsers}
-                  />
-                  )} /> 
+                    {submitStartDate && this.state.showForm
+                        ? <form className="tripForm tripForm--endDate" action="submit">
+                            <label htmlFor="selectedEndDate">Choose the ending date of the trip you wish to take.</label>
+                            <input type="date" id="selectedEndDate" name="selectedEndDate" onChange={this.handleChange} min={this.state.selectedStartDate} />
+                            <input type="submit" value="Continue" onClick={this.chooseEndDate} />
+                        </form>
+                        : <form className="visuallyhidden"></form>
+                        }
+                    {submitEndDate && this.state.showForm
+                        ? <form className="tripForm tripForm--friends"action="submit">
+                            <input type="email" name="selectedEmail" onChange={this.handleChange}/>
+                            <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another"/>
+                            <input type="submit" value="Continue" onClick={this.setEmails}/>
+                        </form> 
+                        : <form className="visuallyhidden"></form>
+                        }
+                        {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
+                    {submitEmail && this.state.showForm
+                        ? <form className="tripForm tripForm--public" action="submit">
+                            <label htmlFor="publicYes">Public
+                                <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} />
+                            </label>
+                            <label htmlFor="publicNo">Private
+                                <input type="radio" name="selectedPublic" value="private" onChange={this.handleChange} />
+                            </label>
+                            <input type="submit" value="Continue" onClick={this.choosePublic}/>
+                        </form>
+                        : <form className="visuallyhidden"></form>
+                        }
+                    {submitPublic && this.state.showForm
+                        ? <form action="submit">
+                            <h2>Your proposed {this.state.typeInput} trip to {this.state.country}</h2>
+                            <h3>You will begin in {this.state.city}</h3>
+                            <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
+                            <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
+                            <p>This trip will be {this.state.publicChoice}</p>
+                            <input type="submit" value="Create trip" onClick={this.sendToFirebase}/>
+                        </form>
+                        : <form className="visuallyhidden"></form>
+                        }
+                    {
                     
+                    this.state.showForm === false 
                     
-                              
+                    && 
+                    
+                    <Route path="/details"
+                        render={() => (
+                        <TripDetails
+                            country={this.state.country}
+                            city={this.state.city}
+                            type={this.state.typeInput}
+                            groupMembers={this.state.otherUsers}
+                            />
+                        )} 
+                        /> 
+                    
+                    }
+                </div>
             </div>
         )
     }
@@ -478,27 +469,3 @@ class BuildTripForm extends Component {
 
 export default BuildTripForm;
 
-// axios({
-//     method: 'GET',
-//     url: "http://proxy.hackeryou.com",
-//     dataResponse: JSON,
-//     paramsSerializer: function (params) {
-//         return Qs.stringify(params, { arrayFormat: 'brackets' })
-//     },
-//     params: {
-//         reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
-//         params: {
-//             photoreference: photoReference,
-//             key: apiKey,
-//             maxwidth: 500,
-//         },
-//         xmlToJSON: false
-//     }
-// }).then((response) => {
-//     const photo = response.data
-
-//     this.setState({
-//         photo,
-//     })
-//     console.log(response)
-// })
