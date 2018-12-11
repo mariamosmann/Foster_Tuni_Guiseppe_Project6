@@ -46,7 +46,9 @@ class BuildTripForm extends Component {
             //IMAGE
             placeImage: "",
             //USER STATES
-            user: null
+            user: null,
+            // groupMembers: null
+            currentTrip: null
         }
     }
     componentDidMount() {
@@ -58,13 +60,14 @@ class BuildTripForm extends Component {
                         user: user
                     },
                     () => {
-                        this.dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+                        this.dbRef = firebase.database().ref(`/Users/${this.state.user.uid}`);
                         this.dbRef.on("value", snapshot => {
+                            console.log(snapshot.val(), 'looking for snapshot')
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
                                 selectedType: snapshot.val() || {},
-                                user: snapshot.val() || {},
-
+                                // user: snapshot.val() || {},
+                                
 
                             });
                         });
@@ -269,7 +272,7 @@ class BuildTripForm extends Component {
            
             
             if (result){
-                console.log("First")
+                console.log("First", result)
                 this.setState({
                 user: result.user
             });
@@ -280,7 +283,7 @@ class BuildTripForm extends Component {
                 //     })
                 // }
                 // if (result.additionalUserInfo.isNewUser){
-                //     console.log(result)
+                    console.log(result, 'result')
                     dbRef.ref(`/Users/${result.user.uid}`).set({
                         displayName: result.user.displayName,
                         email: result.user.email,
@@ -330,20 +333,26 @@ class BuildTripForm extends Component {
         // dbRef.ref(`/Catagories/${this.state.typeInput}`).push(
         //     trip
         // );
-
-        dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
+        // console.log(dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
+        //     trip
+        // ))
+        const currentTripID =dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
             trip
         );
+        this.setState({
+            currentTrip: currentTripID.path.pieces_[3]
+        })
+        console.log(currentTripID)
+        this.props.history.push('/details')
 
         // this.duplicateTripsToCollab(trip);
 
     }
-    goToDetails = (e) =>{
-        e.preventDefault();
-            this.props.history.push('/details') 
-            
-
-    }    
+    // goToDetails = (e) =>{
+    //     e.preventDefault();
+    //     console.log('going to details')
+    //         this.props.history.push('/details')
+    // }    
     
     render() {
         const startForm = this.state.country === "";
@@ -430,13 +439,13 @@ class BuildTripForm extends Component {
                 : <form className="visuallyhidden"></form>
                 }
                 {submitPublic
-                ? <form action="submit">
+                    ? <form action="submit" onSubmit={this.sendToFirebase}>
                     <h2>Your proposed {this.state.typeInput} trip to {this.state.country}</h2>
                     <h3>You will begin in {this.state.city}</h3>
                     <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
                     <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
                     <p>This trip will be {this.state.publicChoice}</p>
-                    <input type="submit" value="Create trip" onClick={this.sendToFirebase} onSubmit={this.goToDetails}/>
+                    <input type="submit" value="Create trip"/>
                 </form>
                 : <form className="visuallyhidden"></form>
                 }
