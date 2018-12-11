@@ -117,12 +117,11 @@ class BuildTripForm extends Component {
                                 place_id: placeID,
                                 key: apiKey,
                                 inputtype: "textquery",
-                                fields: "address_components,formatted_address,types,name,photos"
+                                fields: "address_components,formatted_address,types,name"
                             },
                             xmlToJSON: false
                         }
                     }).then((response) => {
-                        const photoReference = response.data.result.photos[0].photo_reference;
                         const city = response.data.result.address_components[0].long_name;
                         const country = response.data.result.address_components[3].long_name;
 
@@ -132,33 +131,33 @@ class BuildTripForm extends Component {
                             userInput: "",
                         })
 
-                        axios({
-                            method: 'GET',
-                            url: "http://proxy.hackeryou.com",
-                            // dataResponse: JSON,
-                            paramsSerializer: function (params) {
-                                return Qs.stringify(params, { arrayFormat: 'brackets' })
-                            },
-                            params: {
-                                reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
-                                params: {
-                                    key: apiKey,
-                                    photoreference: photoReference,
-                                    maxwidth: 1200,
-                                    sensor: false,
-                                    // inputtype: "textquery",
-                                    // fields: "address_components,formatted_address,types,name,photos"
-                                },
-                                xmlToJSON: false
-                            }
-                        }).then((response) => {
-                            const placeImage = response.data
+                        // axios({
+                        //     method: 'GET',
+                        //     url: "http://proxy.hackeryou.com",
+                        //     // dataResponse: JSON,
+                        //     paramsSerializer: function (params) {
+                        //         return Qs.stringify(params, { arrayFormat: 'brackets' })
+                        //     },
+                        //     params: {
+                        //         reqUrl: "https://maps.googleapis.com/maps/api/place/photo",
+                        //         params: {
+                        //             key: apiKey,
+                        //             photoreference: photoReference,
+                        //             maxwidth: 1200,
+                        //             sensor: false,
+                        //             // inputtype: "textquery",
+                        //             // fields: "address_components,formatted_address,types,name,photos"
+                        //         },
+                        //         xmlToJSON: false
+                        //     }
+                        // }).then((response) => {
+                        //     const placeImage = response.data
 
-                            this.setState({
-                                placeImage,
-                            })
-                            console.log(this.state.placeImage)
-                        })
+                        //     this.setState({
+                        //         placeImage,
+                        //     })
+                        //     console.log(this.state.placeImage)
+                        // })
                     })
                 })
             }
