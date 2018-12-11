@@ -13,14 +13,14 @@ class TripDetails extends Component {
                     city: "",
                     type: "",
                     votes: 0,
-                    whoVoted: ["Goofy", "Minnie"]
+                    whoVoted: []
                 }
             ],
             typeChoices: activitiesArray,
             citySuggestion: "",
             typeSuggestion: "",
             selectedCities: [],
-            thisUser: "me" //user IUD
+            thisUser: "" //user IUD
         }
     }
 
@@ -45,7 +45,7 @@ class TripDetails extends Component {
             city: this.state.citySuggestion,
             type: this.state.typeSuggestion,
             votes: 0,
-            whoVoted: [""]
+            whoVoted: []
         });
 
         //updating the array
@@ -87,7 +87,24 @@ class TripDetails extends Component {
                 cities: addingVote
             })
 
-            this.addSelecteddCity()
+            //creating a variable to determine majority of votes
+            const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+            //checking if city already have enough votes to be pushed to the selectedCities array
+            if (addingVote[event.target.className].votes === stopVotes) {
+                //if it has enough votes
+
+                //cloning the array
+                const addingSelectedCity = Array.from(this.state.selectedCities)
+
+                //pushing the city to the array
+                addingSelectedCity.push(this.state.cities[event.target.className])
+
+                //updating the array
+                this.setState({
+                    selectedCities: addingSelectedCity
+                })
+            }
         } else {
             alert("You already voted!")
         }
@@ -125,36 +142,9 @@ class TripDetails extends Component {
                     cities: subtractingVote
                 })
             } else {
-                alert("You already downvoted!")
+                alert("You already voted!")
             }
         }
-    }
-
-    addSelecteddCity = () => {
-
-        //creating a variable to determine majority of votes
-        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-        //identifying the cities that were already selected
-        const allSelectedCities = this.state.cities.filter(city => {
-            return city.votes === stopVotes;
-        })
-
-        //identifying cities that aren't in the selectedCities array already
-        const uniqueSelectedCities = allSelectedCities.filter(city => {
-            return city.name != this.state.selectedCities.name
-        })
-
-        //cloning the array
-        const newSelectedCities = Array.from(this.state.selectedCities)
-
-        //concat the old array and the new array
-        const combinedArray = newSelectedCities.concat(uniqueSelectedCities);
-
-        //updating the array
-        this.setState({
-            selectedCities: combinedArray
-        })
     }
 
     render() {
@@ -167,7 +157,7 @@ class TripDetails extends Component {
                     <h3 className="header__heading header__heading--h3">{this.props.typeInput}</h3>
                 </header>
 
-                <aside>
+                <aside className="aside__group group">
                     {/* mapping through this group members array to display them one by one, with photo and name */}
                     {this.state.groupMembers.map(member => {
                         return (
@@ -189,7 +179,7 @@ class TripDetails extends Component {
                         this.props.popUpButton
                             ? (
                                 <div className="popUp">
-                                    <h3 className="popUp__heading">Invite a Friend</h3>
+                                    <h3 className="popUp__heading popUp__heading--h3">Invite a Friend</h3>
 
                                     <p className="popUp__text">Send an invitation to join this group:</p>
 
@@ -212,7 +202,7 @@ class TripDetails extends Component {
                                     {/* make into component, add button to send and then go back to the form */}
 
                                     {/* button to close the pop up window */}
-                                    <div className="popUp__close">
+                                    <div className="popUp__closeButton">
                                         <img onClick={this.props.popUp} src="http://www.clker.com/cliparts/x/W/f/4/C/s/close-button-th.png" alt="" className="popUp__icon" />
                                     </div>
                                 </div>
@@ -226,10 +216,10 @@ class TripDetails extends Component {
                 </aside>
 
                 <div className="boards">
-                    <div className="boards__board">
-                        <h4 className="boards__heading boards__heading--h4">Where are we going?</h4>
+                    <div className="boards__board board">
+                        <h4 className="board__heading board__heading--h4">Where are we going?</h4>
 
-                        <div className="boards__voting">
+                        <div className="board__voting">
                             {//display every city/type inside cities array in state so users can vote
                                 this.state.cities.map((item, i) => {
 
@@ -239,7 +229,7 @@ class TripDetails extends Component {
                                     if (this.state.cities[i].votes === stopVotes) {
 
                                         return (
-                                            <div className="boards__option option">
+                                            <div className="board__option option">
                                                 <p className="option__title option__title--selected">{item.city}</p>
 
                                                 <p className="option__type option__type--selected">{item.type}</p>
@@ -247,13 +237,13 @@ class TripDetails extends Component {
                                         )
                                     } else {
                                         return (
-                                            <div className="boards__option option">
+                                            <div className="board__option option">
                                                 <p className="option__title">{item.city}</p>
 
                                                 {/* +1 voting button */}
                                                 <div className="option__addVote">
                                                     <img onClick={this.addVote} src="https://cdn0.iconfinder.com/data/icons/large-glossy-icons/64/Apply.png" alt="" className={i}
-                                                        key={i}
+                                                        key={i} id="option__addIcon"
                                                     />
                                                 </div>
 
@@ -262,7 +252,7 @@ class TripDetails extends Component {
                                                 {/* -1 voting button */}
                                                 <div className="option__subtractVote">
                                                     <img onClick={this.subtractVote} src="http://www.clker.com/cliparts/x/W/f/4/C/s/close-button-th.png" alt="" alt="" className={i}
-                                                        key={i}
+                                                        key={i} id="option__subtractIcon"
                                                     />
                                                 </div>
 
@@ -275,7 +265,7 @@ class TripDetails extends Component {
                         </div>
 
                         {/* ADD OPTION START */}
-                        <div className="boards__add add">
+                        <div className="board__add add">
                             <p className="add__text">Add city to be voted:</p>
 
                             <form onSubmit={this.addCity} action="" className="add__form">
@@ -309,8 +299,9 @@ class TripDetails extends Component {
                             </form>
                         </div>
                         {/* ADD OPTION END */}
-
                     </div>
+
+                    {/* ADD BOARD GOES HERE */}
                 </div>
             </div>
         )
@@ -325,8 +316,8 @@ class TripDetails extends Component {
                 {
                     city: this.props.city,
                     type: this.props.type,
-                    votes: 2,
-                    whoVoted: ["Goofy", "Minnie"]
+                    votes: 0,
+                    whoVoted: []
                 }
             ]
         })
