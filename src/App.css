@@ -204,3 +204,15 @@ h1, h2, h3, p {
       float: right; }
       .mainHeader__nav__trips__item {
         cursor: pointer; }
+
+.BuildTripForm .wrapper {
+  height: 70vh; }
+
+.BuildTripForm button {
+  margin: 1rem;
+  float: right; }
+
+.tripForm {
+  width: 50%;
+  border: 1px solid red;
+  height: 80%; }
