@@ -389,7 +389,7 @@ class BuildTripForm extends Component {
                 : <form className="visuallyhidden"></form>
                 }
                 {/* DO WE WANT A FORM THAT WILL ALLOW US TO CHOOSE FROM THE STARTING CATAGORIES */}
-                <Route to='/details' 
+                {/* <Route to='/details' 
                     render = { () => (<TripDetails
                         country={this.state.country}
                         city={this.state.city}
@@ -399,7 +399,7 @@ class BuildTripForm extends Component {
                         popUpButton={this.state.popUpButton}
                         inviteFriend={this.state.setEmails}
                   />
-                  )} />
+                  )} /> */}
                     
                     
                               
