@@ -376,6 +376,7 @@ class BuildTripForm extends Component {
                 ? <div className="visuallyhidden"></div>
                 : <button onClick={this.logOut} className="logOut">Logout</button>
                 }
+                <div className="wrapper noUser">
                 {logInOrGuest
                 ?<div className="tripForm tripForm--logIn">
                     <button onClick={this.logIn}>Login</button>
@@ -383,6 +384,7 @@ class BuildTripForm extends Component {
                 </div> 
                 : <button className="visuallyhidden"></button>
                 }  
+                </div>
                 {nextPage && this.state.showForm
                     ? (<div className="wrapper clearfix">
                         {startForm && this.state.showForm
@@ -411,7 +413,6 @@ class BuildTripForm extends Component {
                         {submitType && this.state.showForm
                             ? <form className="tripForm tripForm--startDate" action="submit">
                                 <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
-                                {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
                                 <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange} className="tripForm__middleInput" />
                                 <input type="submit" value="Continue" onClick={this.chooseStartDate} />
                             </form>
@@ -436,7 +437,7 @@ class BuildTripForm extends Component {
                             : <form className="visuallyhidden"></form>
                         }
                         {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
-                        {submitEmail && this.state.showForm
+                        {/* {submitEmail && this.state.showForm
                             ? <form className="tripForm tripForm--public" action="submit">
                                 <label htmlFor="publicYes">Public</label>
                                 <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} className="radioInput radioInput--first" />
@@ -445,48 +446,51 @@ class BuildTripForm extends Component {
                                 <input type="submit" value="Continue" onClick={this.choosePublic} />
                             </form>
                             : <form className="visuallyhidden"></form>
-                        }
+                        } */}
                         {/* FORM TO SEND THE DATA TO FIREBASE*/}
-                        {submitPublic && this.state.showForm
+                        {submitEmail && this.state.showForm
                             ? <form className="tripForm tripForm--complete" action="submit">
                                 <label htmlFor="complete" className="visuallyhidden">Create trip</label>
                                 <input type="submit" name="complete" value="Create trip" onClick={this.sendToFirebase} className="tripForm__middleInput" />
                             </form>
                             : <form className="visuallyhidden"></form>
                         }
-
                         {/* FORM THAT WILL DISPLAY THE TRIP DETAILS AFTER ENTERING THEM */}
-                        <aside className="tripDetails" >
-                            <h2>Trip details</h2>
-                            {addCountryDetails
-                                ? <div className="tripDetails__title">
-                                    <h3>Destination country: <span className="non-bold">{this.state.country}</span></h3>
-                                    <h3>Starting cocation: <span className="non-bold">{this.state.city}</span></h3>
-                                </div>
-                                : <div className="visuallyhidden"></div>
-                            }
-                            {addTypeDetails
-                                ? <p><span className="bold">Type of trip:</span> {this.state.typeInput}</p>
-                                : <p className="visuallyhidden"></p>
-                            }
-                            {addEndDateDetails
-                                ? <ul><span className="bold">Dates:</span>
-                                    <li><span className="bold">From -</span> {this.state.startDate}</li>
-                                    <li><span className="bold">To -</span> {this.state.endDate}</li>
-                                </ul>
-                                : <ul className="visuallyhidden"></ul>
-                            }
-                            {addEmailDetails
-                                ? <ul><span className="bold">Friends:</span> {this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
-                                : <ul className="visuallyhidden"></ul>
-                            }
-                            {addPublicDetails
-                                ? <div>
-                                    <p><span className="bold">Public/Private:</span> {this.state.publicChoice}</p>
-                                </div>
-                                : <div className="visuallyhidden"></div>
-                            }
-                        </aside>
+                        {logInOrGuest === false
+                            ? (<aside className="createdTripDetails" >
+                                <h2>Trip details</h2>
+                                {addCountryDetails
+                                    ? <div className="createdTripDetails__title">
+                                        <h3>Destination country: <span className="non-bold">{this.state.country}</span></h3>
+                                        <h3>Starting cocation: <span className="non-bold">{this.state.city}</span></h3>
+                                    </div>
+                                    : <div className="visuallyhidden"></div>
+                                }
+                                {addTypeDetails
+                                    ? <p><span className="bold">Type of trip:</span> {this.state.typeInput}</p>
+                                    : <p className="visuallyhidden"></p>
+                                }
+                                {addEndDateDetails
+                                    ? <ul><span className="bold">Dates:</span>
+                                        <li><span className="bold">From -</span> {this.state.startDate}</li>
+                                        <li><span className="bold">To -</span> {this.state.endDate}</li>
+                                    </ul>
+                                    : <ul className="visuallyhidden"></ul>
+                                }
+                                {addEmailDetails
+                                    ? <ul><span className="bold">Friends:</span> {this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
+                                    : <ul className="visuallyhidden"></ul>
+                                }
+                                {addPublicDetails
+                                    ? <div>
+                                        <p><span className="bold">Public/Private:</span> {this.state.publicChoice}</p>
+                                    </div>
+                                    : <div className="visuallyhidden"></div>
+                                }
+                            </aside>)
+                        : <aside className="visuallyhidden"></aside>
+                        }
+                        
                     </div>
                     
                 )
@@ -513,7 +517,7 @@ class BuildTripForm extends Component {
                 }
                 </div>)
             }              
-                    {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
+                    
                     
                 
             </div>
