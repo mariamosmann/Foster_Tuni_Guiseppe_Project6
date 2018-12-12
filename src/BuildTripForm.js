@@ -296,17 +296,17 @@ class BuildTripForm extends Component {
                 ? <div className="visuallyhidden"></div>
                 : <button onClick={this.logOut} className="logOut">Logout</button>
                 }
-                <div className="wrapper noUser">
                 {logInOrGuest
-                ?<div className="tripForm tripForm--logIn">
-                    <button onClick={this.logIn}>Login</button>
-                    <button onClick={this.guest}>Use As Guest</button>
+                ?<div className="wrapper noUser">
+                    <div className="tripForm tripForm--logIn">
+                        <button onClick={this.logIn}>Login</button>
+                        <button onClick={this.guest}>Use As Guest</button>
+                    </div>
                 </div> 
                 : <button className="visuallyhidden"></button>
                 }  
-                </div>
                 {nextPage && this.state.showForm
-                    ? (<div className="wrapper clearfix">
+                    ? (<div className="wrapper clearfix formWrapper">
                         {startForm && this.state.showForm
                             ? <form className="tripForm tripForm--country" action="submit" autocomplete="off">
                                 <label htmlFor="selectedCountry">Enter the starting city in the country you wish to travel to.</label>

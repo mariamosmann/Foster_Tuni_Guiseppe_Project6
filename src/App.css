@@ -238,9 +238,8 @@ li {
       .mainHeader__nav__trips__item {
         cursor: pointer; }
 
-.BuildTripForm .wrapper {
-  height: 70vh;
-  padding: 5vh 0; }
+.BuildTripForm .formWrapper {
+  height: 70vh; }
 
 .BuildTripForm .logOut {
   margin: 2rem 3rem;
