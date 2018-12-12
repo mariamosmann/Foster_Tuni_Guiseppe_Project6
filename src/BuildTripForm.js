@@ -5,7 +5,8 @@ import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import TripDetails from './TripDetails.js'
+import TripDetails from './TripDetails.js';
+import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
@@ -116,7 +117,6 @@ class BuildTripForm extends Component {
                         xmlToJSON: false
                     }
                 }).then((response) => {
-                    console.log(response.data)
                     const country = response.data.results[0].locations[0].adminArea1
                     const city = response.data.results[0].locations[0].adminArea5
                     const cityMap = response.data.results[0].locations[0].mapUrl
@@ -347,8 +347,8 @@ class BuildTripForm extends Component {
     }
     
     render() {
+        //FORM CONDITIONS FOR RENDERING OPERATORS
         const logInOrGuest = this.state.user === null;
-
         const startForm = (this.state.country === "") && (this.state.user !== null);
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
         const submitType = (this.state.typeInput !== "") && (this.state.startDate === "");
@@ -357,91 +357,66 @@ class BuildTripForm extends Component {
         const submitEmail = (this.state.submitEmail === "yes") && (this.state.publicChoice === "") ;
         const submitPublic = this.state.publicChoice !== "";
 
-        return (
-            <div className="BuildTripForm">
-                <div className="wrapper clearfix">
-                    {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
-                    {logInOrGuest
-                    ?<div className="tripFrom tripForm--logIn">
-                        <button onClick={this.logIn}>Login</button>
-                        <button onClick={this.guest}>Use As Guest</button>
-                    </div> 
-                    : <button onClick={this.logOut} className="logOut">Logout</button>
-                    }          
+        const addCountryDetails = this.state.country !== "";
+        const addTypeDetails = this.state.typeInput !== "";
+        const addEndDateDetails = this.state.endDate !== "";
+        const addEmailDetails = this.state.submitEmail === "yes";
+        const addPublicDetails = this.state.publicChoice !== "";
+        const mapConnect = {
+            backgroundImage: `url(${this.state.cityMap})`,
+            // background: `linear-gradient(black,black,white)`,
+            backgroundSize: `cover`,
+            backgroundPosition: `center`,
+        };
 
-                        {startForm && this.state.showForm
-                            ? <form className="tripForm tripForm--country" action="submit" autoComplete="off">
-                            <label htmlFor="selectedCountry" className="visuallyhidden">Input the country you wish to travel to.</label>
-                            <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter starting city" onChange={this.handleChange} spellCheck="true" required />
-                            <input type="submit" value="Continue" onClick={this.selectInput} />
+        return (
+            <div className="BuildTripForm clearfix" style={mapConnect}>
+                {logInOrGuest
+                ? <div className="visuallyhidden"></div>
+                : <button onClick={this.logOut} className="logOut">Logout</button>
+                }
+                <div className="wrapper clearfix">
+                {logInOrGuest
+                ?<div className="tripForm tripForm--logIn">
+                    <button onClick={this.logIn}>Login</button>
+                    <button onClick={this.guest}>Use As Guest</button>
+                </div> 
+                : <button className="visuallyhidden"></button>
+                }                
+                    {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
+                    {startForm
+                        ? <form className="tripForm tripForm--country" action="submit" autocomplete="off">
+                        <label htmlFor="selectedCountry">Enter the starting city in the country you wish to travel to.</label>
+                        <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter starting city" onChange={this.handleChange} spellcheck="true" className="tripForm__middleInput" required />
+                        <input type="submit" value="Continue" onClick={this.selectInput} />
+                    </form>
+                    : <form className="visuallyhidden"></form>
+                    }
+                    
+                    {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
+                    {submitLocation
+                        ? <form className="tripForm tripForm--type" action="submit">
+                            <label htmlFor="selectedType">Choose the type of trip you wish to take:</label>
+                            <select defaultValue="selectedType" name="selectedType" id="selectedType"
+                            onChange={this.handleChange} className="tripForm__middleInput" required>
+                                <option disabled="disabled" selected="selected" value="selectedType">--Type of trip--</option>
+                                {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
+                            </select>
+                            <input type="submit" value="Continue" onClick={this.chooseType} />
                         </form>
                         : <form className="visuallyhidden"></form>
-                        }
-                        
-                        {/* THIS FORM WILL LET THE USER CHOOSE THE TRIP TYPE */}
-                    {submitLocation && this.state.showForm
-                            ? <form className="tripForm tripForm--type" action="submit">
-                                <label htmlFor="selectedType">Choose the type of trip you wish to take:</label>
-                                <select defaultValue="selectedType" name="selectedType" id="selectedType"
-                                    onChange={this.handleChange} required>
-                                    <option disabled="disabled" selected="selected" value="selectedType">--Type of trip--</option>
-                                    {this.state.typeChoices.map((type) => <option key={type} value={type}>{type}</option>)}
-                                </select>
-                                <input type="submit" value="Continue" onClick={this.chooseType} />
-                            </form>
-                            : <form className="visuallyhidden"></form>
-                        }
-                        {/* THESE FORMS WILL LET YOU SELECT DATES */}
-                    {submitType && this.state.showForm
-                            ? <form className="tripForm tripForm--startDate" action="submit">
-                                <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
-                                {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
-                                <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange} />
-                                <input type="submit" value="Continue" onClick={this.chooseStartDate} />
-                            </form>
-                            : <form className="visuallyhidden"></form>
-                        }
-                        {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
-                    {submitStartDate && this.state.showForm
-                        ? <form className="tripForm tripForm--endDate" action="submit">
-                            <label htmlFor="selectedEndDate">Choose the ending date of the trip you wish to take.</label>
-                            <input type="date" id="selectedEndDate" name="selectedEndDate" onChange={this.handleChange} min={this.state.selectedStartDate} />
-                            <input type="submit" value="Continue" onClick={this.chooseEndDate} />
+                    }
+                    {/* THESE FORMS WILL LET YOU SELECT DATES */}
+                    {submitType
+                        ? <form className="tripForm tripForm--startDate" action="submit">
+                            <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
+                            {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
+                            <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange} className="tripForm__middleInput" />
+                            <input type="submit" value="Continue" onClick={this.chooseStartDate} />
                         </form>
                         : <form className="visuallyhidden"></form>
-                        }
-                    {submitEndDate && this.state.showForm
-                        ? <form className="tripForm tripForm--friends"action="submit">
-                            <input type="email" name="selectedEmail" onChange={this.handleChange}/>
-                            <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another"/>
-                            <input type="submit" value="Continue" onClick={this.setEmails}/>
-                        </form> 
-                        : <form className="visuallyhidden"></form>
-                        }
-                        {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
-                    {submitEmail && this.state.showForm
-                        ? <form className="tripForm tripForm--public" action="submit">
-                            <label htmlFor="publicYes">Public
-                                <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} />
-                            </label>
-                            <label htmlFor="publicNo">Private
-                                <input type="radio" name="selectedPublic" value="private" onChange={this.handleChange} />
-                            </label>
-                            <input type="submit" value="Continue" onClick={this.choosePublic}/>
-                        </form>
-                        : <form className="visuallyhidden"></form>
-                        }
-                    {submitPublic && this.state.showForm
-                        ? <form action="submit">
-                            <h2>Your proposed {this.state.typeInput} trip to {this.state.country}</h2>
-                            <h3>You will begin in {this.state.city}</h3>
-                            <p>You will propose to start on {this.state.startDate} and end on {this.state.endDate}</p>
-                            <ul>You will invite:{this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
-                            <p>This trip will be {this.state.publicChoice}</p>
-                            <input type="submit" value="Create trip" onClick={this.sendToFirebase}/>
-                        </form>
-                        : <form className="visuallyhidden"></form>
-                        }
+                    }         
+                    
                     {
                     
                     this.state.showForm === false 
@@ -455,11 +430,80 @@ class BuildTripForm extends Component {
                             city={this.state.city}
                             type={this.state.typeInput}
                             groupMembers={this.state.otherUsers}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
                             />
                         )} 
                         /> 
                     
                     }
+                    {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
+                    {submitStartDate
+                    ? <form className="tripForm tripForm--endDate" action="submit">
+                        <label htmlFor="selectedEndDate">Choose the ending date of the trip you wish to take.</label>
+                        <input type="date" id="selectedEndDate" name="selectedEndDate" onChange={this.handleChange} min={this.state.selectedStartDate} className="tripForm__middleInput" />
+                        <input type="submit" value="Continue" onClick={this.chooseEndDate} />
+                    </form>
+                    : <form className="visuallyhidden"></form>
+                    }
+                    {submitEndDate
+                    ? <form className="tripForm tripForm--friends"action="submit">
+                        <label htmlFor="selectedEndDate">Type in the emails of the friends you wish to invite.</label>
+                        <input type="email" name="selectedEmail" onChange={this.handleChange} className="tripForm__middleInput"/>
+                        <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another" className="tripForm--friends--bottom"/>
+                        <input type="submit" value="Continue" onClick={this.setEmails}/>
+                    </form> 
+                    : <form className="visuallyhidden"></form>
+                    }
+                    {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
+                    {submitEmail
+                    ? <form className="tripForm tripForm--public" action="submit">
+                        <label htmlFor="publicYes">Public</label>
+                        <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} className="radioInput radioInput--first"/>
+                        <label htmlFor="publicNo">Private</label>
+                        <input type="radio" name="selectedPublic" value="private" onChange={this.handleChange} className="radioInput radioInput--last"/>
+                        <input type="submit" value="Continue" onClick={this.choosePublic} />
+                    </form>
+                    : <form className="visuallyhidden"></form>
+                    }
+                    {submitPublic
+                    ? <form className="tripForm tripForm--complete" action="submit">
+                        <label htmlFor="complete" className="visuallyhidden">Create trip</label>
+                        <input type="submit" name="complete" value="Create trip" onClick={this.sendToFirebase} className="tripForm__middleInput"/>
+                    </form>
+                    : <form className="visuallyhidden"></form>
+                    }
+                    <aside className="tripDetails" >
+                        <h2>Trip details</h2>
+                        {addCountryDetails
+                        ? <div className="tripDetails__title">
+                            <h3>Destination country: <span className="non-bold">{this.state.country}</span></h3>
+                            <h3>Starting cocation: <span className="non-bold">{this.state.city}</span></h3>
+                        </div>
+                        : <div className="visuallyhidden"></div>
+                        }
+                        {addTypeDetails
+                        ? <p><span className="bold">Type of trip:</span> {this.state.typeInput}</p>
+                        : <p className="visuallyhidden"></p>
+                        }
+                        {addEndDateDetails
+                        ? <ul><span className="bold">Dates:</span> 
+                            <li><span className="bold">From -</span> {this.state.startDate}</li>
+                            <li><span className="bold">To -</span> {this.state.endDate}</li>
+                        </ul>
+                        : <ul className="visuallyhidden"></ul>
+                        } 
+                        {addEmailDetails
+                        ? <ul><span className="bold">Friends:</span> {this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
+                        : <ul className="visuallyhidden"></ul>
+                        }   
+                        {addPublicDetails
+                        ? <div>
+                            <p><span className="bold">Public/Private:</span> {this.state.publicChoice}</p>
+                        </div>
+                        : <div className="visuallyhidden"></div>
+                        }  
+                    </aside>
                 </div>
             </div>
         )

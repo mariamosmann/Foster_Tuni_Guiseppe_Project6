@@ -183,6 +183,25 @@ img {
   width: 80%;
   max-width: 1200px; }
 
+<<<<<<< HEAD
+=======
+h1, h2, h3, p, ul {
+  margin: 0;
+  padding: 0; }
+
+img {
+  display: inline-block; }
+
+li {
+  text-decoration: none; }
+
+.bold {
+  font-weight: bold; }
+
+.non-bold {
+  font-weight: normal; }
+
+>>>>>>> 8ec7a7cb36774c3f8ee29792996775c4a707c13f
 .mainHeader {
   height: 30vh;
   background: navajowhite; }
@@ -212,13 +231,15 @@ img {
         cursor: pointer; }
 
 .BuildTripForm .wrapper {
-  height: 70vh; }
+  height: 70vh;
+  padding: 5vh 0; }
 
-.BuildTripForm button {
-  margin: 1rem;
+.BuildTripForm .logOut {
+  margin: 2rem 3rem;
   float: right; }
 
 .tripForm {
+<<<<<<< HEAD
   width: 50%;
   border: 1px solid red;
   height: 80%; }
@@ -253,3 +274,66 @@ img {
 /* Landscape phone to portrait tablet */
 /* Landscape phones */
 /* portrait phones to landscape phones  */
+=======
+  background: rgba(255, 222, 173, 0.8);
+  width: 45%;
+  height: 60vh;
+  float: left;
+  padding: 7% 5% 7% 5%;
+  text-align: center; }
+  .tripForm label {
+    font-size: 1.6rem; }
+  .tripForm input, .tripForm select {
+    width: 80%;
+    height: 15%;
+    margin-left: 10%;
+    margin-right: 10%;
+    text-align: center; }
+  .tripForm__middleInput {
+    margin-top: 11vh;
+    margin-bottom: 11vh; }
+
+.tripForm--logIn button {
+  width: 80%;
+  height: 15%; }
+  .tripForm--logIn button:first-child {
+    margin-top: 5vh; }
+  .tripForm--logIn button:last-child {
+    margin-top: 20vh; }
+
+.tripForm--type .tripForm__middleInput {
+  margin-top: 12vh;
+  margin-bottom: 12vh; }
+
+.tripForm--friends {
+  max-height: 100%; }
+  .tripForm--friends--bottom {
+    margin-bottom: 1rem; }
+  .tripForm--friends .tripForm__middleInput {
+    margin-top: 9vh;
+    margin-bottom: 9vh; }
+
+.tripForm--public .radioInput {
+  width: auto;
+  margin-right: 70%;
+  height: auto; }
+  .tripForm--public .radioInput--first {
+    margin-bottom: 1rem; }
+  .tripForm--public .radioInput--last {
+    margin-top: 24vh; }
+
+.tripDetails {
+  width: 45%;
+  background: rgba(255, 222, 173, 0.8);
+  height: 60vh;
+  float: right;
+  text-align: center;
+  padding: 7% 5% 7% 5%;
+  text-transform: capitalize; }
+  .tripDetails h2, .tripDetails h3, .tripDetails p {
+    margin-bottom: 2rem; }
+  .tripDetails li {
+    margin: 0.5rem 0; }
+    .tripDetails li:last-child {
+      margin: 0.5rem 0 2rem 0; }
+>>>>>>> 8ec7a7cb36774c3f8ee29792996775c4a707c13f

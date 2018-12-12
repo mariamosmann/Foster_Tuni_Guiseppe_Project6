@@ -1,16 +1,122 @@
 .BuildTripForm {
+    // backdrop-filter: blur(2px) grayscale(100%);
 
     & .wrapper {
         height: 70vh;
+        padding: 5vh 0;
     }
 
-    & button {
-        margin: 1rem;
+    & .logOut {
+        margin: 2rem 3rem;
         float: right;
     }
 }
+
 .tripForm {
-    width: 50%;
-    border: 1px solid red;
-    height: 80%;
+    background: rgba(255, 222, 173, 0.8);
+    width: 45%;
+    height: 60vh;
+    float: left;
+    padding: 7% 5% 7% 5%;
+    text-align: center;
+
+    & label {
+        font-size: 1.6rem;
+    }
+
+    & input, & select {
+        width: 80%;
+        height: 15%;
+        margin-left: 10%;
+        margin-right: 10%;
+        text-align: center;
+    }
+
+    &__middleInput { 
+        margin-top: 11vh;
+        margin-bottom: 11vh;
+    }
 }
+
+.tripForm--logIn {
+    
+
+    & button {
+        width: 80%;
+        height: 15%;
+
+        &:first-child {
+            margin-top: 5vh;
+        }
+
+        &:last-child {
+            margin-top: 20vh;
+        }
+    }
+}
+
+.tripForm--type {
+
+    .tripForm__middleInput {
+        margin-top: 12vh;
+        margin-bottom: 12vh;
+    }
+}
+
+.tripForm--friends {
+    max-height: 100%;
+
+    &--bottom {
+        margin-bottom: 1rem;
+    }
+
+    .tripForm__middleInput {
+        margin-top: 9vh;
+        margin-bottom: 9vh;
+    }
+
+}
+
+.tripForm--public {
+
+    .radioInput {
+        width: auto;
+        margin-right: 70%;
+        height: auto;
+
+        &--first {
+            margin-bottom: 1rem;
+        }
+
+        &--last {
+            margin-top: 24vh;
+        }
+    }
+}
+
+//FIX THE RADIO INPUTS
+//FIX THE EMAIL SUBMIT BUTTONS
+
+.tripDetails {
+    width: 45%;
+    background: rgba(255, 222, 173, 0.8);
+    height: 60vh;
+    float: right;
+    text-align: center;
+    padding: 7% 5% 7% 5%;
+    text-transform: capitalize;
+
+    & h2, & h3, & p {
+        margin-bottom: 2rem;
+    }
+
+    & li {
+        margin: 0.5rem 0;
+
+        &:last-child {
+            margin: 0.5rem 0 2rem 0;
+        }
+    }
+    
+}
+
