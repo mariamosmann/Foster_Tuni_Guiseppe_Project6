@@ -329,18 +329,27 @@ class BuildTripForm extends Component {
         const addEndDateDetails = this.state.endDate !== "";
         const addEmailDetails = this.state.submitEmail === "yes";
         const addPublicDetails = this.state.publicChoice !== "";
-        
+        const mapConnect = {
+            backgroundImage: `url(${this.state.cityMap})`,
+            // background: `linear-gradient(black,black,white)`,
+            backgroundSize: `cover`,
+            backgroundPosition: `center`,
+        };
 
         return (
-            <div className="BuildTripForm">
+            <div className="BuildTripForm clearfix" style={mapConnect}>
                 {logInOrGuest
-                ?<div className="tripFrom tripForm--logIn">
+                ? <div className="visuallyhidden"></div>
+                : <button onClick={this.logOut} className="logOut">Logout</button>
+                }
+                <div className="wrapper clearfix">
+                {logInOrGuest
+                ?<div className="tripForm tripForm--logIn">
                     <button onClick={this.logIn}>Login</button>
                     <button onClick={this.guest}>Use As Guest</button>
                 </div> 
-                : <button onClick={this.logOut} className="logOut">Logout</button>
+                : <button className="visuallyhidden"></button>
                 }                
-                <div className="wrapper clearfix">
                     {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
                     {startForm
                         ? <form className="tripForm tripForm--country" action="submit" autocomplete="off">
@@ -387,7 +396,7 @@ class BuildTripForm extends Component {
                     ? <form className="tripForm tripForm--friends"action="submit">
                         <label htmlFor="selectedEndDate">Type in the emails of the friends you wish to invite.</label>
                         <input type="email" name="selectedEmail" onChange={this.handleChange} className="tripForm__middleInput"/>
-                        <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another"/>
+                        <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another" className="tripForm--friends--bottom"/>
                         <input type="submit" value="Continue" onClick={this.setEmails}/>
                     </form> 
                     : <form className="visuallyhidden"></form>
@@ -395,51 +404,48 @@ class BuildTripForm extends Component {
                     {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
                     {submitEmail
                     ? <form className="tripForm tripForm--public" action="submit">
-                        <label htmlFor="publicYes">Public
-                            <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} />
-                        </label>
-                        <label htmlFor="publicNo">Private
-                            <input type="radio" name="selectedPublic" value="private" onChange={this.handleChange} />
-                        </label>
-                        <input type="submit" value="Continue" onClick={this.choosePublic}/>
+                        <label htmlFor="publicYes">Public</label>
+                        <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} className="radioInput radioInput--first"/>
+                        <label htmlFor="publicNo">Private</label>
+                        <input type="radio" name="selectedPublic" value="private" onChange={this.handleChange} className="radioInput radioInput--last"/>
+                        <input type="submit" value="Continue" onClick={this.choosePublic} />
                     </form>
                     : <form className="visuallyhidden"></form>
                     }
                     {submitPublic
                     ? <form className="tripForm tripForm--complete" action="submit">
-                        <label htmlFor="complete">Create trip</label>
+                        <label htmlFor="complete" className="visuallyhidden">Create trip</label>
                         <input type="submit" name="complete" value="Create trip" onClick={this.sendToFirebase} className="tripForm__middleInput"/>
                     </form>
                     : <form className="visuallyhidden"></form>
                     }
-                    <aside className="tripDetails">
-                        <h2>Trip Details</h2>
+                    <aside className="tripDetails" >
+                        <h2>Trip details</h2>
                         {addCountryDetails
-                        ? <div>
-                            <h3>Destination Country: {this.state.country}</h3>
-                            <h3>Starting Location: {this.state.city}</h3>
+                        ? <div className="tripDetails__title">
+                            <h3>Destination country: <span className="non-bold">{this.state.country}</span></h3>
+                            <h3>Starting cocation: <span className="non-bold">{this.state.city}</span></h3>
                         </div>
                         : <div className="visuallyhidden"></div>
                         }
                         {addTypeDetails
-                        ? <p>Type of trip: {this.state.typeInput}</p>
+                        ? <p><span className="bold">Type of trip:</span> {this.state.typeInput}</p>
                         : <p className="visuallyhidden"></p>
                         }
                         {addEndDateDetails
-                        ? <ul>Dates: 
-                            <li>From - {this.state.startDate}</li>
-                            <li>To - {this.state.endDate}</li>
+                        ? <ul><span className="bold">Dates:</span> 
+                            <li><span className="bold">From -</span> {this.state.startDate}</li>
+                            <li><span className="bold">To -</span> {this.state.endDate}</li>
                         </ul>
                         : <ul className="visuallyhidden"></ul>
                         } 
                         {addEmailDetails
-                        ? <ul>Friends: {this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
+                        ? <ul><span className="bold">Friends:</span> {this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
                         : <ul className="visuallyhidden"></ul>
                         }   
                         {addPublicDetails
                         ? <div>
-                            <p>Public/Private {this.state.publicChoice}</p>
-                            <img src={this.state.cityMap} alt="Map of the selected city"/>
+                            <p><span className="bold">Public/Private:</span> {this.state.publicChoice}</p>
                         </div>
                         : <div className="visuallyhidden"></div>
                         }  
