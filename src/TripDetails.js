@@ -478,7 +478,7 @@ class TripDetails extends Component {
                     {/* displaying the country and the type of trip that the user chose */}
                     <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
 
-                    <h4 className="header__heading header__heading--h4">From {this.props.startingDate} - {this.props.endingDate}</h4>
+                    <h4 className="header__heading header__heading--h4">From {this.props.startDate} - {this.props.endDate}</h4>
 
                     <h4 className="header__heading header__heading--h4">{this.props.type}</h4>
                 </header>
