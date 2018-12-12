@@ -1,4 +1,5 @@
 .mainHeader {
+    @include heading(18);
     height: 30vh;
     background: navajowhite;
 
@@ -22,8 +23,7 @@
                 font-size: 4rem;
             }
 
-            &--img {
-                aria-hidden: true;
+            &--img {                
                 height: 75%;
                 padding-right: 1rem;
             }

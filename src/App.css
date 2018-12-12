@@ -205,6 +205,12 @@ li {
   font-weight: normal; }
 
 .mainHeader {
+  font-family: "Raleway", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  text-align: left;
   height: 30vh;
   background: navajowhite; }
   .mainHeader__nav {
@@ -221,7 +227,6 @@ li {
       .mainHeader__nav__logo--start {
         font-size: 4rem; }
       .mainHeader__nav__logo--img {
-        aria-hidden: true;
         height: 75%;
         padding-right: 1rem; }
       .mainHeader__nav__logo--end {
@@ -295,7 +300,7 @@ li {
   height: 60vh;
   float: right;
   text-align: center;
-  padding: 7% 5% 7% 5%;
+  padding: 5% 5% 5% 5%;
   text-transform: capitalize; }
   .tripDetails h2, .tripDetails h3, .tripDetails p {
     margin-bottom: 2rem; }
@@ -303,6 +308,50 @@ li {
     margin: 0.5rem 0; }
     .tripDetails li:last-child {
       margin: 0.5rem 0 2rem 0; }
+
+.header {
+  padding-top: 75px; }
+  .header__heading {
+    font-family: "Raleway", sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 30px; }
+    .header__heading--h4 {
+      font-family: "Raleway", sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+      text-align: left;
+      margin-bottom: 30px; }
+
+.boards {
+  padding: 75px 0; }
+
+.board {
+  width: calc((100% - 60px) / 3);
+  float: left;
+  margin-right: 30px; }
+  .board__heading {
+    font-family: "Raleway", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    text-align: left; }
+  .board__voting {
+    margin: 0 auto; }
+  .board:last-child {
+    margin-right: 0; }
+
+.option__addVote, .option__subtractVote {
+  width: 10%; }
+
+.tripForm {
+  clear: both; }
 
 /* Landscape tablet and laptops*/
 /* Portrait tablet and small desktops */
