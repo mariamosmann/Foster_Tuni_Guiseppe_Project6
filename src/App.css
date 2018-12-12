@@ -1,4 +1,3 @@
-/* SETUP STYLING*/
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section, summary {
   display: block; }
 
@@ -141,40 +140,48 @@ legend, button::-moz-focus-inner, input::-moz-focus-inner {
   padding: 0;
   white-space: nowrap;
   clip-path: inset(100%);
-  clip: rect(0 0 0);
+  clip: rect(0 0 0 0);
   overflow: hidden; }
-
-.visuallyhidden:not(:focus):not(:active) {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  border: 0;
-  padding: 0;
-  white-space: nowrap;
-  clip-path: inset(100%);
-  clip: rect(0 0 0);
-  overflow: hidden; }
-
-.skip-link {
-  position: absolute;
-  left: -1000px;
-  top: 5px;
-  z-index: 999;
-  background: white;
-  color: black; }
 
 html {
   font-size: 62.5%; }
+
+body {
+  background: #d7d8d9;
+  font-size: 2rem;
+  font-family: "Raleway", sans-serif;
+  color: #393e41;
+  font-weight: 400; }
+
+p {
+  line-height: 32px;
+  margin: 0;
+  padding: 0; }
+
+a {
+  color: #393e41;
+  text-decoration: none;
+  padding: 0; }
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0; }
+
+li {
+  margin: 0;
+  padding: 0; }
+
+img {
+  max-width: 100%;
+  display: block;
+  margin: 0;
+  padding: 0; }
 
 .wrapper {
   margin: 0 auto;
   width: 80%;
   max-width: 1200px; }
-
-h1, h2, h3, p {
-  margin: 0;
-  padding: 0; }
 
 .mainHeader {
   height: 30vh;
@@ -193,7 +200,6 @@ h1, h2, h3, p {
       .mainHeader__nav__logo--start {
         font-size: 4rem; }
       .mainHeader__nav__logo--img {
-        aria-hidden: true;
         height: 75%;
         padding-right: 1rem; }
       .mainHeader__nav__logo--end {
@@ -216,3 +222,32 @@ h1, h2, h3, p {
   width: 50%;
   border: 1px solid red;
   height: 80%; }
+
+.header {
+  padding: 75px 0; }
+  .header__heading {
+    font-family: "Raleway", sans-serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 30px; }
+    .header__heading--h4 {
+      font-family: "Raleway", sans-serif;
+      font-size: 2.4rem;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+      text-align: left;
+      margin-bottom: 30px; }
+
+.board {
+  width: calc((100% - 60px) / 3);
+  float: left; }
+
+/* Landscape tablet and laptops*/
+/* Portrait tablet and small desktops */
+/* Landscape phone to portrait tablet */
+/* Landscape phones */
+/* portrait phones to landscape phones  */

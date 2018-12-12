@@ -43,7 +43,7 @@ class MainNav extends Component {
                         </div>
                         {/* ADD IN ON CLICK DROP DOWN INFO WITH THEIR WHOLE USER, EASIER TO BUILD WITH THE INFO PASSING */}
                         <p className="mainHeader__nav__logo">
-                            <span className="mainHeader__nav__logo--start">synchroni</span><span className="mainHeader__nav__logo--end">C<img src={Logo} alt="synchronicity: building img by Rudez Studio from the Noun Project https://thenounproject.com/rudezstudio/collection/building-and-manufacturing/" className="mainHeader__nav__logo--img" />TY</span>
+                            <span className="mainHeader__nav__logo--start">synchroni</span><span className="mainHeader__nav__logo--end">C<img aria-hidden="true" src={Logo} alt="synchronicity: building img by Rudez Studio from the Noun Project https://thenounproject.com/rudezstudio/collection/building-and-manufacturing/" className="mainHeader__nav__logo--img" />TY</span>
                         </p>
                         <div className="mainHeader__nav__trips">
                             <div className="mainHeader__nav__trips__item" onClick={this.toggleList}>{this.state.user.name}'s trips
