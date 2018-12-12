@@ -238,16 +238,16 @@ li {
       .mainHeader__nav__trips__item {
         cursor: pointer; }
 
-.BuildTripForm .wrapper {
-  height: 70vh;
-  padding: 5vh 0; }
+.BuildTripForm .formWrapper {
+  height: 70vh; }
 
 .BuildTripForm .logOut {
   margin: 2rem 3rem;
   float: right; }
 
 .tripForm {
-  background: rgba(255, 222, 173, 0.8);
+  background: rgba(57, 62, 65, 0.9);
+  color: #ffcb00;
   width: 45%;
   height: 60vh;
   float: left;
@@ -265,13 +265,19 @@ li {
     margin-top: 11vh;
     margin-bottom: 11vh; }
 
-.tripForm--logIn button {
-  width: 80%;
-  height: 15%; }
-  .tripForm--logIn button:first-child {
-    margin-top: 5vh; }
-  .tripForm--logIn button:last-child {
-    margin-top: 20vh; }
+.noUser {
+  text-align: center; }
+
+.tripForm--logIn {
+  float: none;
+  margin: 0 auto; }
+  .tripForm--logIn button {
+    width: 80%;
+    height: 15%; }
+    .tripForm--logIn button:first-child {
+      margin-top: 5vh; }
+    .tripForm--logIn button:last-child {
+      margin-top: 20vh; }
 
 .tripForm--type .tripForm__middleInput {
   margin-top: 12vh;
@@ -294,19 +300,26 @@ li {
   .tripForm--public .radioInput--last {
     margin-top: 24vh; }
 
-.tripDetails {
+.createdTripDetails {
   width: 45%;
-  background: rgba(255, 222, 173, 0.8);
+  background: rgba(57, 62, 65, 0.9);
+  color: #ffcb00;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  text-align: left;
   height: 60vh;
   float: right;
   text-align: center;
   padding: 5% 5% 5% 5%;
   text-transform: capitalize; }
-  .tripDetails h2, .tripDetails h3, .tripDetails p {
+  .createdTripDetails h2, .createdTripDetails h3, .createdTripDetails p {
     margin-bottom: 2rem; }
-  .tripDetails li {
+  .createdTripDetails li {
     margin: 0.5rem 0; }
-    .tripDetails li:last-child {
+    .createdTripDetails li:last-child {
       margin: 0.5rem 0 2rem 0; }
 
 .header {

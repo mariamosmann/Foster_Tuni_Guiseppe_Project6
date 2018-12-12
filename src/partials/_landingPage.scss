@@ -1,9 +1,9 @@
 .BuildTripForm {
     // backdrop-filter: blur(2px) grayscale(100%);
 
-    & .wrapper {
+    & .formWrapper {
         height: 70vh;
-        padding: 5vh 0;
+        // padding: 5vh 0;
     }
 
     & .logOut {
@@ -13,7 +13,8 @@
 }
 
 .tripForm {
-    background: rgba(255, 222, 173, 0.8);
+    background: $formBackground;
+    color: $colorSecondary;
     width: 45%;
     height: 60vh;
     float: left;
@@ -38,8 +39,14 @@
     }
 }
 
+.noUser {
+    text-align: center;
+}
+
 .tripForm--logIn {
-    
+    float: none;
+    margin: 0 auto;
+
     & button {
         width: 80%;
         height: 15%;
@@ -94,11 +101,12 @@
 }
 
 //FIX THE RADIO INPUTS
-//FIX THE EMAIL SUBMIT BUTTONS
 
-.tripDetails {
+.createdTripDetails {
     width: 45%;
-    background: rgba(255, 222, 173, 0.8);
+    background: $formBackground;
+    color: $colorSecondary;
+    @include heading(16);
     height: 60vh;
     float: right;
     text-align: center;
