@@ -183,8 +183,6 @@ img {
   width: 80%;
   max-width: 1200px; }
 
-<<<<<<< HEAD
-=======
 h1, h2, h3, p, ul {
   margin: 0;
   padding: 0; }
@@ -201,7 +199,6 @@ li {
 .non-bold {
   font-weight: normal; }
 
->>>>>>> 8ec7a7cb36774c3f8ee29792996775c4a707c13f
 .mainHeader {
   height: 30vh;
   background: navajowhite; }
@@ -239,42 +236,6 @@ li {
   float: right; }
 
 .tripForm {
-<<<<<<< HEAD
-  width: 50%;
-  border: 1px solid red;
-  height: 80%; }
-
-.header {
-  padding: 75px 0; }
-  .header__heading {
-    font-family: "Raleway", sans-serif;
-    font-size: 4rem;
-    font-weight: 700;
-    margin: 0;
-    padding: 0;
-    text-align: left;
-    margin-bottom: 30px; }
-    .header__heading--h4 {
-      font-family: "Raleway", sans-serif;
-      font-size: 2.4rem;
-      font-weight: 700;
-      margin: 0;
-      padding: 0;
-      text-align: left;
-      margin-bottom: 30px; }
-
-.board {
-  width: calc((100% - 60px) / 3);
-  float: left;
-  margin: 0 30px 30px 0;
-  border: 2px solid blue; }
-
-/* Landscape tablet and laptops*/
-/* Portrait tablet and small desktops */
-/* Landscape phone to portrait tablet */
-/* Landscape phones */
-/* portrait phones to landscape phones  */
-=======
   background: rgba(255, 222, 173, 0.8);
   width: 45%;
   height: 60vh;
@@ -336,4 +297,3 @@ li {
     margin: 0.5rem 0; }
     .tripDetails li:last-child {
       margin: 0.5rem 0 2rem 0; }
->>>>>>> 8ec7a7cb36774c3f8ee29792996775c4a707c13f
