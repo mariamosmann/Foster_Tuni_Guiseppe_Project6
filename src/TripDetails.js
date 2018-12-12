@@ -45,6 +45,7 @@ class TripDetails extends Component {
         }
     }
     componentDidMount() {
+        console.log(this.props.groupMembers, 'its')
         this.setState({
             // adding the initial group members to this component array
             groupMembers: this.props.groupMembers,
@@ -1121,6 +1122,38 @@ class TripDetails extends Component {
             </div>
         )
     }
+
+    // componentDidMount() {
+    //     this.setState({
+    //         // adding the initial group members to this component array
+    //         groupMembers: this.props.groupMembers,
+    //         //adding the city that the group creator chose in the first form, it has to be an array
+    //         cities: [
+    //             {
+    //                 city: this.props.city,
+    //                 type: this.props.type,
+    //                 votes: 0,
+    //                 whoVoted: []
+    //             }
+    //         ]
+    //     })
+    // }
 }
 
 export default TripDetails;
+
+
+
+
+
+//////////////////////////////////////////
+//ON APP RENDER
+
+/* <TripDetails
+    country={this.state.userChoice.country}
+    city={this.state.userChoice.city}
+    type={this.state.userChoice.type}
+    startingDate={this.state.userChoice.startingDate}
+    endingDate={this.state.userChoice.endingDate}
+    groupMembers={this.state.groupMembers}
+/> */

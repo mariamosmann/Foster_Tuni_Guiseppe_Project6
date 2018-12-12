@@ -4,8 +4,9 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
-import { BrowserRouter as Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import TripDetails from './TripDetails.js';
+import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
@@ -68,6 +69,9 @@ class BuildTripForm extends Component {
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
                                 selectedType: snapshot.val() || {},
+                                // user: snapshot.val() || {},
+                                
+
                             });
                         });
                         
@@ -83,10 +87,12 @@ class BuildTripForm extends Component {
         });
     }
     selectInput = (e) => {
-         e.preventDefault();
+
+            e.preventDefault();
 
             const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
             const userInput = this.state.selectedCountry;
+            // let globalID = new Date().getTime();
             if (userInput !== '') {
                 this.setState({
                     userInput,
@@ -123,10 +129,60 @@ class BuildTripForm extends Component {
                             userInput: "",
                         })
                 })
+
+                // axios({
+                //     method: 'GET',
+                //     url: "http://proxy.hackeryou.com",
+                //     dataResponse: JSON,
+                //     paramsSerializer: function (params) {
+                //         return Qs.stringify(params, { arrayFormat: 'brackets' })
+                //     },
+                //     params: {
+                //         reqUrl: "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+                //         params: {
+                //             input: userInput,
+                //             key: apiKey,
+                //             sessiontoken: globalID
+                //         },
+                //         xmlToJSON: false
+                //     }
+                // }).then((response) => {
+                //     const placeID = response.data.predictions[0].place_id
+                //     //SPECIFIES OUR DATA TO THE AREA WE NEED
+
+                //     axios({
+                //         method: 'GET',
+                //         url: "http://proxy.hackeryou.com",
+                //         dataResponse: JSON,
+                //         paramsSerializer: function (params) {
+                //             return Qs.stringify(params, { arrayFormat: 'brackets' })
+                //         },
+                //         params: {
+                //             reqUrl: "https://maps.googleapis.com/maps/api/place/details/json",
+                //             params: {
+                //                 place_id: placeID,
+                //                 key: apiKey,
+                //                 inputtype: "textquery",
+                //                 fields: "address_components,formatted_address,types,name"
+                //             },
+                //             xmlToJSON: false
+                //         }
+                //     }).then((response) => {
+                //         const city = response.data.result.address_components[0].long_name;
+                //         const country = response.data.result.address_components[3].long_name;
+
+                //         this.setState({
+                //             country,
+                //             city,
+                //             userInput: "",
+                //         })
+                //     })
+                // })
             }
         }
     chooseType = (e) => {
         e.preventDefault();
+        // const countryChoice = this.state.country
         const typeInput = this.state.selectedType;
 
         if (typeInput !== '') {
@@ -160,7 +216,7 @@ class BuildTripForm extends Component {
             })
         }
     }
-    chooseEmail = () => {
+    chooseEmail = (e) => {
         
         const emailChoice = this.state.selectedEmail
         
@@ -171,11 +227,19 @@ class BuildTripForm extends Component {
             })
 
         }
+        // firebase.database().ref().child("Other").orderByChild("email").equalTo(emailChoice).once("value", function (snapshot) {
+        //             snapshot.forEach(function (child) {
+        //                 child.firebase.database().ref().update(updateData);
+        //             });
+        //         });
+
+        
     }
     setEmails = (e) => {
         e.preventDefault();
 
         const emailChoice = this.state.selectedEmail
+        
 
         if (emailChoice !== "") {
             this.setState({
@@ -188,6 +252,7 @@ class BuildTripForm extends Component {
                 submitEmail: "yes"
             })
         }
+
     }
     choosePublic = (e) => {
         e.preventDefault();
@@ -200,19 +265,22 @@ class BuildTripForm extends Component {
                 selectedPublic: "",
             })
         }
+
     }
     logIn = () => {
         auth.signInWithPopup(provider).then(result => {
+           
             
             if (result){
                 console.log("First", result)
                 this.setState({
                 user: result.user
             });
-            if (result.additionalUserInfo.isNewUser){
-                dbRef.ref(`/Users/${result.user.uid}`).set({
-                    displayName: result.user.displayName,
-                    email: result.user.email,
+
+                if (result.additionalUserInfo.isNewUser){
+                    dbRef.ref(`/Users/${result.user.uid}`).set({
+                        displayName: result.user.displayName,
+                        email: result.user.email,
                     })
                 }
             }
@@ -225,6 +293,16 @@ class BuildTripForm extends Component {
             });
         });
     };
+    // duplicateTripsToCollab = (trip) => {
+    //     trip.users.forEach(function(email) {
+    //         dbRef.ref().child("Users").orderByChild("email").equalTo(email).once("value", function (snapshot) {
+    //             snapshot.forEach(function (child) {
+    //                 dbRef.ref(`/Users/${child.ref_.path.pieces_[1]}/trips`).push(trip);
+    //                 console.log(child, "child")
+    //             });
+    //         });
+    //     })
+    // }
     guest = () => {
        
         this.setState({
@@ -266,10 +344,12 @@ class BuildTripForm extends Component {
                 })
             })
         })
+
     }
     
     render() {
         const logInOrGuest = this.state.user === null;
+
         const startForm = (this.state.country === "") && (this.state.user !== null);
         const submitLocation = (this.state.country !== "") && (this.state.typeInput === "");
         const submitType = (this.state.typeInput !== "") && (this.state.startDate === "");
@@ -282,11 +362,11 @@ class BuildTripForm extends Component {
             <div className="BuildTripForm">
                 <div className="wrapper clearfix">
                     {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
-                    {logInOrGuest ?
-                        <div className="tripFrom tripForm--logIn">
+                    {logInOrGuest
+                    ?<div className="tripFrom tripForm--logIn">
                         <button onClick={this.logIn}>Login</button>
                         <button onClick={this.guest}>Use As Guest</button>
-                </div> 
+                    </div> 
                     : <button onClick={this.logOut} className="logOut">Logout</button>
                     }          
 
