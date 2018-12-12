@@ -238,7 +238,9 @@ li {
 .BuildTripForm {
   position: relative; }
   .BuildTripForm .formWrapper {
-    height: 70vh; }
+    height: 70vh;
+    float: left;
+    width: 45%; }
   .BuildTripForm .logOut {
     position: absolute;
     right: 10%;
@@ -266,9 +268,8 @@ li {
   background: rgba(57, 62, 65, 0.95);
   color: #ffcb00;
   font-weight: bold;
-  width: 45%;
+  width: 100%;
   height: 60vh;
-  float: left;
   padding: 7% 5% 7% 5%;
   text-align: center;
   border: solid 5px #ffcb00;
@@ -283,7 +284,8 @@ li {
     margin-right: 10%;
     text-align: center; }
   .tripForm select {
-    animation: darkToSecondary 0.5s ease; }
+    animation: darkToSecondary 0.5s ease;
+    appearance: none; }
   .tripForm input[type="text"]:focus, .tripForm input[type="text/javascript"]:focus, .tripForm input[type="date"]:focus, .tripForm input[type="email"]:focus {
     background: #393e41;
     color: #ffcb00; }
@@ -308,11 +310,13 @@ li {
       animation-fill-mode: forwards; }
 
 .noUser {
-  text-align: center; }
+  text-align: center;
+  height: 65vh; }
 
 .tripForm--logIn {
   float: none;
-  margin: 5% auto; }
+  margin: 5vh auto;
+  width: 45%; }
   .tripForm--logIn button {
     width: 80%;
     height: 15%;
