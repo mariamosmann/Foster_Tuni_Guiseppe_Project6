@@ -44,9 +44,13 @@
 }
 
 .tripForm--logIn {
+<<<<<<< HEAD
     float: none;
     margin: 0 auto;
 
+=======
+    
+>>>>>>> a15810691cd1864a67e41394dfccdc9c96c93087
     & button {
         width: 80%;
         height: 15%;
@@ -123,7 +127,6 @@
         &:last-child {
             margin: 0.5rem 0 2rem 0;
         }
-    }
-    
+    }    
 }
 

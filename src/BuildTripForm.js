@@ -4,14 +4,12 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Route } from 'react-router-dom';
 import TripDetails from './TripDetails.js';
-// import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 const dbRef = firebase.database();
-
   
 class BuildTripForm extends Component {
     constructor(props) {
@@ -65,16 +63,11 @@ class BuildTripForm extends Component {
                     () => {
                         this.dbRef = firebase.database().ref(`/Users/${this.state.user.uid}`);
                         this.dbRef.on("value", snapshot => {
-                            console.log(snapshot.val(), 'looking for snapshot')
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
                                 selectedType: snapshot.val() || {},
-                                // user: snapshot.val() || {},
-                                
-
                             });
-                        });
-                        
+                        });    
                     }
                 );
             }
@@ -128,55 +121,6 @@ class BuildTripForm extends Component {
                             userInput: "",
                         })
                 })
-
-                // axios({
-                //     method: 'GET',
-                //     url: "http://proxy.hackeryou.com",
-                //     dataResponse: JSON,
-                //     paramsSerializer: function (params) {
-                //         return Qs.stringify(params, { arrayFormat: 'brackets' })
-                //     },
-                //     params: {
-                //         reqUrl: "https://maps.googleapis.com/maps/api/place/autocomplete/json",
-                //         params: {
-                //             input: userInput,
-                //             key: apiKey,
-                //             sessiontoken: globalID
-                //         },
-                //         xmlToJSON: false
-                //     }
-                // }).then((response) => {
-                //     const placeID = response.data.predictions[0].place_id
-                //     //SPECIFIES OUR DATA TO THE AREA WE NEED
-
-                //     axios({
-                //         method: 'GET',
-                //         url: "http://proxy.hackeryou.com",
-                //         dataResponse: JSON,
-                //         paramsSerializer: function (params) {
-                //             return Qs.stringify(params, { arrayFormat: 'brackets' })
-                //         },
-                //         params: {
-                //             reqUrl: "https://maps.googleapis.com/maps/api/place/details/json",
-                //             params: {
-                //                 place_id: placeID,
-                //                 key: apiKey,
-                //                 inputtype: "textquery",
-                //                 fields: "address_components,formatted_address,types,name"
-                //             },
-                //             xmlToJSON: false
-                //         }
-                //     }).then((response) => {
-                //         const city = response.data.result.address_components[0].long_name;
-                //         const country = response.data.result.address_components[3].long_name;
-
-                //         this.setState({
-                //             country,
-                //             city,
-                //             userInput: "",
-                //         })
-                //     })
-                // })
             }
         }
     chooseType = (e) => {
@@ -215,7 +159,7 @@ class BuildTripForm extends Component {
             })
         }
     }
-    chooseEmail = (e) => {
+    chooseEmail = () => {
         
         const emailChoice = this.state.selectedEmail
         
@@ -225,20 +169,12 @@ class BuildTripForm extends Component {
                 selectedEmail: "",
             })
 
-        }
-        // firebase.database().ref().child("Other").orderByChild("email").equalTo(emailChoice).once("value", function (snapshot) {
-        //             snapshot.forEach(function (child) {
-        //                 child.firebase.database().ref().update(updateData);
-        //             });
-        //         });
-
-        
+        }   
     }
     setEmails = (e) => {
         e.preventDefault();
 
         const emailChoice = this.state.selectedEmail
-        
 
         if (emailChoice !== "") {
             this.setState({
@@ -251,7 +187,6 @@ class BuildTripForm extends Component {
                 submitEmail: "yes"
             })
         }
-
     }
     choosePublic = (e) => {
         e.preventDefault();
@@ -263,15 +198,12 @@ class BuildTripForm extends Component {
                 publicChoice,
                 selectedPublic: "",
             })
-        }
-
+           }
     }
     logIn = () => {
         auth.signInWithPopup(provider).then(result => {
-           
-            
+                  
             if (result){
-                console.log("First", result)
                 this.setState({
                 user: result.user
             });
@@ -292,16 +224,6 @@ class BuildTripForm extends Component {
             });
         });
     };
-    // duplicateTripsToCollab = (trip) => {
-    //     trip.users.forEach(function(email) {
-    //         dbRef.ref().child("Users").orderByChild("email").equalTo(email).once("value", function (snapshot) {
-    //             snapshot.forEach(function (child) {
-    //                 dbRef.ref(`/Users/${child.ref_.path.pieces_[1]}/trips`).push(trip);
-    //                 console.log(child, "child")
-    //             });
-    //         });
-    //     })
-    // }
     guest = () => {
        
         this.setState({
@@ -343,7 +265,6 @@ class BuildTripForm extends Component {
                 })
             })
         })
-
     }
     
     render() {
@@ -365,7 +286,6 @@ class BuildTripForm extends Component {
         const addPublicDetails = this.state.publicChoice !== "";
         const mapConnect = {
             backgroundImage: `url(${this.state.cityMap})`,
-            // background: `linear-gradient(black,black,white)`,
             backgroundSize: `cover`,
             backgroundPosition: `center`,
         };
@@ -513,7 +433,6 @@ class BuildTripForm extends Component {
                             />
                         )}
                     />
-
                 }
                 </div>)
             }              
@@ -524,7 +443,6 @@ class BuildTripForm extends Component {
         )
     }
 }
-
 
 export default BuildTripForm;
 

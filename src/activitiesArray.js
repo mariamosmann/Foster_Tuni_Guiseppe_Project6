@@ -1,12 +1,12 @@
 const activitiesArray = [
-    "leisure",
-    "culture",
-    "nature",
-    "adventure",
-    "romantic",
-    "nightlife",
-    "food",
-    "other"
+    "Leisure",
+    "Culture",
+    "Nature",
+    "Adventure",
+    "Romance",
+    "Nightlife",
+    "Food",
+    "Other"
 ]
 
 export default activitiesArray 
