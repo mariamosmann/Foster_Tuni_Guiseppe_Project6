@@ -198,82 +198,132 @@ img {
 li {
   text-decoration: none; }
 
-.bold {
-  font-weight: bold; }
-
-.non-bold {
-  font-weight: normal; }
+.notBold {
+  font-weight: normal;
+  color: #d7d8d9; }
 
 .mainHeader {
-  font-family: "Raleway", sans-serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin: 0;
-  padding: 0;
-  text-align: left;
   height: 30vh;
-  background: navajowhite; }
+  background: #ffcb00;
+  color: #393e41; }
   .mainHeader__nav {
     height: 100%;
     text-align: center;
     padding-top: 5vh; }
-    .mainHeader__nav__profile {
-      float: left;
-      width: 20%; }
     .mainHeader__nav__logo {
       height: 20vh;
-      width: 60%;
+      width: 100%;
       float: left; }
       .mainHeader__nav__logo--start {
-        font-size: 4rem; }
+        font-family: "Raleway", sans-serif;
+        font-size: 4rem;
+        font-weight: 700;
+        margin: 0;
+        padding: 0;
+        text-align: left; }
       .mainHeader__nav__logo--img {
         height: 75%;
         padding-right: 1rem; }
+        .mainHeader__nav__logo--img .svg-icon path {
+          fill: #393e41; }
       .mainHeader__nav__logo--end {
+        font-family: "Raleway", sans-serif;
         font-size: 10rem;
+        font-weight: 700;
+        margin: 0;
+        padding: 0;
+        text-align: left;
         letter-spacing: 1rem; }
-    .mainHeader__nav__trips {
-      width: 20%;
-      float: right; }
-      .mainHeader__nav__trips__item {
-        cursor: pointer; }
 
-.BuildTripForm .formWrapper {
-  height: 70vh; }
-
-.BuildTripForm .logOut {
-  margin: 2rem 3rem;
-  float: right; }
+.BuildTripForm {
+  position: relative; }
+  .BuildTripForm .formWrapper {
+    height: 70vh; }
+  .BuildTripForm .logOut {
+    position: absolute;
+    right: 10%;
+    top: -22%;
+    padding: 5px 10px;
+    background: #393e41;
+    color: #ffcb00;
+    border: solid 2px #393e41;
+    animation: secondaryToDark 0.5s ease; }
+    .BuildTripForm .logOut:hover {
+      animation: darkToSecondary 0.5s ease;
+      animation-fill-mode: forwards; }
+  .BuildTripForm .profile {
+    position: absolute;
+    left: 5%;
+    top: -30%;
+    text-align: center;
+    width: 15%;
+    font-style: italic; }
+    .BuildTripForm .profile img {
+      width: 35%;
+      border-radius: 50%; }
 
 .tripForm {
-  background: rgba(57, 62, 65, 0.9);
+  background: rgba(57, 62, 65, 0.95);
   color: #ffcb00;
+  font-weight: bold;
   width: 45%;
   height: 60vh;
   float: left;
   padding: 7% 5% 7% 5%;
-  text-align: center; }
+  text-align: center;
+  border: solid 5px #ffcb00;
+  margin-top: 5vh; }
   .tripForm label {
-    font-size: 1.6rem; }
+    font-size: 1.6rem;
+    pointer-events: none; }
   .tripForm input, .tripForm select {
     width: 80%;
     height: 15%;
     margin-left: 10%;
     margin-right: 10%;
     text-align: center; }
+  .tripForm select {
+    animation: darkToSecondary 0.5s ease; }
+  .tripForm input[type="text"]:focus, .tripForm input[type="text/javascript"]:focus, .tripForm input[type="date"]:focus, .tripForm input[type="email"]:focus {
+    background: #393e41;
+    color: #ffcb00; }
   .tripForm__middleInput {
     margin-top: 11vh;
-    margin-bottom: 11vh; }
+    margin-bottom: 11vh;
+    background: #ffcb00;
+    color: #393e41;
+    border: none;
+    border: solid 1px #ffcb00; }
+    .tripForm__middleInput:hover {
+      animation: secondaryToDark 0.5s ease;
+      animation-fill-mode: forwards; }
+  .tripForm input[type="submit"], .tripForm input[type="reset"] {
+    background: #393e41;
+    border: solid 1px #ffcb00;
+    color: #ffcb00;
+    font-weight: bold;
+    animation: secondaryToDark 0.5s ease; }
+    .tripForm input[type="submit"]:hover, .tripForm input[type="reset"]:hover {
+      animation: darkToSecondary 0.5s ease;
+      animation-fill-mode: forwards; }
 
 .noUser {
   text-align: center; }
 
 .tripForm--logIn {
   float: none;
-  margin: 0 auto; }
+  margin: 5% auto; }
   .tripForm--logIn button {
     width: 80%;
-    height: 15%; }
+    height: 15%;
+    background: #ffcb00;
+    border: solid 1px #ffcb00;
+    color: #393e41;
+    font-weight: bold;
+    animation: darkToSecondary 0.5s ease; }
+    .tripForm--logIn button:hover {
+      animation: secondaryToDark 0.5s ease;
+      animation-fill-mode: forwards; }
     .tripForm--logIn button:first-child {
       margin-top: 5vh; }
     .tripForm--logIn button:last-child {
@@ -300,9 +350,12 @@ li {
   .tripForm--public .radioInput--last {
     margin-top: 24vh; }
 
+.tripForm--complete input {
+  margin-top: 19vh; }
+
 .createdTripDetails {
   width: 45%;
-  background: rgba(57, 62, 65, 0.9);
+  background: rgba(57, 62, 65, 0.95);
   color: #ffcb00;
   font-family: "Raleway", sans-serif;
   font-size: 1.6rem;
@@ -314,13 +367,33 @@ li {
   float: right;
   text-align: center;
   padding: 5% 5% 5% 5%;
-  text-transform: capitalize; }
+  text-transform: capitalize;
+  border: solid 5px #ffcb00;
+  margin-top: 5vh; }
+  .createdTripDetails h2 {
+    text-decoration: underline; }
   .createdTripDetails h2, .createdTripDetails h3, .createdTripDetails p {
     margin-bottom: 2rem; }
   .createdTripDetails li {
     margin: 0.5rem 0; }
     .createdTripDetails li:last-child {
       margin: 0.5rem 0 2rem 0; }
+
+@keyframes secondaryToDark {
+  0% {
+    background: #ffcb00;
+    color: #393e41; }
+  100% {
+    color: #ffcb00;
+    background: #393e41; } }
+
+@keyframes darkToSecondary {
+  0% {
+    background: #393e41;
+    color: #ffcb00; }
+  100% {
+    color: #393e41;
+    background: #ffcb00; } }
 
 .header {
   padding-top: 75px; }
@@ -368,6 +441,97 @@ li {
 
 /* Landscape tablet and laptops*/
 /* Portrait tablet and small desktops */
+@media (max-width: 940px) {
+  .BuildTripForm .logOut {
+    right: 5%; }
+  .BuildTripForm .profile {
+    left: 5%;
+    top: -28%; }
+    .BuildTripForm .profile p {
+      font-size: 1.4rem;
+      max-width: 100px;
+      margin: 0 auto; } }
+
 /* Landscape phone to portrait tablet */
+@media (max-width: 768px) {
+  .BuildTripForm .logOut {
+    left: calc(50% - 45px);
+    top: -6.5%; }
+  .BuildTripForm .profile {
+    left: 0%;
+    top: -20%; }
+    .BuildTripForm .profile img {
+      min-width: 40px; }
+    .BuildTripForm .profile p {
+      display: none; }
+  .BuildTripForm .tripForm {
+    width: 100%; }
+  .BuildTripForm .createdTripDetails {
+    width: 100%; }
+  .mainHeader__nav {
+    padding-top: 2vh; } }
+
+@media (max-width: 580px) {
+  .mainHeader__nav__logo {
+    padding-top: 15%; }
+    .mainHeader__nav__logo--start {
+      font-family: "Raleway", sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+      text-align: left; }
+    .mainHeader__nav__logo--img {
+      height: 50%; }
+    .mainHeader__nav__logo--end {
+      font-family: "Raleway", sans-serif;
+      font-size: 6rem;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+      text-align: left; } }
+
 /* Landscape phones */
+@media (max-width: 480px) {
+  .BuildTripForm .profile {
+    left: 0%;
+    top: -22%; }
+    .BuildTripForm .profile img {
+      min-width: 40px; }
+    .BuildTripForm .profile p {
+      display: none; }
+  .mainHeader__nav__logo {
+    padding-top: 20%; }
+    .mainHeader__nav__logo--start {
+      font-family: "Raleway", sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+      text-align: left; }
+    .mainHeader__nav__logo--img {
+      height: 45%; }
+    .mainHeader__nav__logo--end {
+      font-family: "Raleway", sans-serif;
+      font-size: 5rem;
+      font-weight: 700;
+      margin: 0;
+      padding: 0;
+      text-align: left; } }
+
 /* portrait phones to landscape phones  */
+@media (max-width: 340px) {
+  .mainHeader__nav__logo--start {
+    font-family: "Raleway", sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    text-align: left; }
+  .mainHeader__nav__logo--end {
+    font-family: "Raleway", sans-serif;
+    font-size: 4.5rem;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    text-align: left; } }

@@ -60,10 +60,7 @@ li {
     text-decoration: none;
 }
 
-.bold {
-    font-weight: bold;
-}
-
-.non-bold {
+.notBold {
     font-weight: normal;
+    color: $background;
 }

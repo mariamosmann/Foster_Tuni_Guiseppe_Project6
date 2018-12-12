@@ -1,45 +1,34 @@
 .mainHeader {
-    @include heading(18);
     height: 30vh;
-    background: navajowhite;
+    background: $colorSecondary;
+    color: $text;
 
     &__nav {
         height: 100%;
         text-align: center;
         padding-top: 5vh;
-
-
-        &__profile {
-            float: left;
-            width: 20%;
-        }
-
+        
         &__logo {
             height: 20vh;
-            width: 60%;
+            width: 100%;
             float: left;
 
             &--start {
-                font-size: 4rem;
+                @include heading(40);
             }
 
             &--img {                
                 height: 75%;
                 padding-right: 1rem;
+
+                 .svg-icon path {
+                    fill: $text;
+                }
             }
 
             &--end {
-                font-size: 10rem;
+                @include heading(100);
                 letter-spacing: 1rem;
-            }
-        }
-
-        &__trips {
-            width: 20%;
-            float: right;
-
-            &__item {
-                cursor: pointer;
             }
         }
     }
