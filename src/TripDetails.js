@@ -275,7 +275,6 @@ class TripDetails extends Component {
             })
         }
     }
-
     addTourism = event => {
         event.preventDefault();
 
@@ -302,7 +301,6 @@ class TripDetails extends Component {
             tourismType: ""
         })
     }
-
     addVoteTourism = (event) => {
         //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
@@ -317,7 +315,6 @@ class TripDetails extends Component {
             tourism: addingVote
         })
     }
-
     subtractVoteTourism = (event) => {
 
         //creating a variable for how many votes it has
@@ -337,7 +334,6 @@ class TripDetails extends Component {
             })
         }
     }
-
     addShopping = event => {
         event.preventDefault();
 
@@ -364,7 +360,6 @@ class TripDetails extends Component {
             shoppingType: ""
         })
     }
-
     addVoteShopping = (event) => {
         //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
@@ -379,7 +374,6 @@ class TripDetails extends Component {
             shopping: addingVote
         })
     }
-
     subtractVoteShopping = (event) => {
 
         //creating a variable for how many votes it has
@@ -399,7 +393,6 @@ class TripDetails extends Component {
             })
         }
     }
-
     addNightlife = event => {
         event.preventDefault();
 
@@ -426,7 +419,6 @@ class TripDetails extends Component {
             nightlifeType: ""
         })
     }
-
     addVoteNightlife = (event) => {
         //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
@@ -476,20 +468,17 @@ class TripDetails extends Component {
             <div className="tripDetails">
                 <header className="tripDetails__header header">
                     {/* displaying the country and the type of trip that the user chose */}
-                    <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
+                    <h2 className="header__heading header__heading--h2">You're going to {this.props.country}!</h2>
 
                     <h4 className="header__heading header__heading--h4">From {this.props.startDate} - {this.props.endDate}</h4>
 
-                    <h4 className="header__heading header__heading--h4">{this.props.type}</h4>
+                    <h4 className="header__heading header__heading--h4">To experience {this.props.type}</h4>
                 </header>
-
                 <div className="boards">
-
                     <div className="boards__container clearfix">
                         {/* CITIES START */}
                         <div className="boards__board board">
                             <h4 className="board__heading board__heading--h4">Where are we going?</h4>
-
                             <div className="board__voting">
                                 {//display every city/type inside cities array in state so users can vote
                                     this.state.cities.map((item, i) => {
@@ -684,7 +673,6 @@ class TripDetails extends Component {
 
                         </div>
                         {/* HOTEL END */}
-
 
                         {/* FOOD START */}
                         <div className="boards__board board">
@@ -1139,38 +1127,6 @@ class TripDetails extends Component {
             </div>
         )
     }
-
-    // componentDidMount() {
-    //     this.setState({
-    //         // adding the initial group members to this component array
-    //         groupMembers: this.props.groupMembers,
-    //         //adding the city that the group creator chose in the first form, it has to be an array
-    //         cities: [
-    //             {
-    //                 city: this.props.city,
-    //                 type: this.props.type,
-    //                 votes: 0,
-    //                 whoVoted: []
-    //             }
-    //         ]
-    //     })
-    // }
 }
 
 export default TripDetails;
-
-
-
-
-
-//////////////////////////////////////////
-//ON APP RENDER
-
-/* <TripDetails
-    country={this.state.userChoice.country}
-    city={this.state.userChoice.city}
-    type={this.state.userChoice.type}
-    startingDate={this.state.userChoice.startingDate}
-    endingDate={this.state.userChoice.endingDate}
-    groupMembers={this.state.groupMembers}
-/> */

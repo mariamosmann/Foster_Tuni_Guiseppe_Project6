@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-
 import './App.css';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import BuildTripForm from './BuildTripForm.js';
 import MainNav from './MainNav.js';
-
 
 class App extends Component {
   constructor() {
@@ -17,9 +15,7 @@ class App extends Component {
     this.setState({
 
     })
-  }
-
-    
+  }  
   
   render() {
     return (
@@ -34,7 +30,6 @@ class App extends Component {
 }
 
 export default App;
-
 
 // building by Rudez Studio from the Noun Project
 // https://thenounproject.com/rudezstudio/collection/building-and-manufacturing/
