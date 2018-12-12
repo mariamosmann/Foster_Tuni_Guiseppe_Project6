@@ -38,8 +38,8 @@ class MainNav extends Component {
                     <nav className="mainHeader__nav wrapper clearfix">
                     {/* OPERATOR TO CALL THIS IF THE USER IS NOT GUEST IF THEY ARE GUEST JUST SAY HELLO */}
                         <div className="mainHeader__nav__profile">
-                            <img src={this.state.user.photo} alt={this.state.user.name}/>
-                            <p>Hello {this.state.user.name}!</p>
+                            <img src={this.state.user.photoURL} alt={this.state.user.displayName}/>
+                            <p>Hello {this.state.user.displayName}!</p>
                         </div>
                         {/* ADD IN ON CLICK DROP DOWN INFO WITH THEIR WHOLE USER, EASIER TO BUILD WITH THE INFO PASSING */}
                         <p className="mainHeader__nav__logo">

@@ -4,23 +4,33 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import TripDetails from './TripDetails.js';
+import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 const dbRef = firebase.database();
+
   
 class BuildTripForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+
             //COUNTRY STATES
             selectedCountry: "",
             userInput: "",
-            country: "",
+            country: '',
             city: "",
             //TYPE STATES
             typeChoices: activitiesArray,
-            selectedType: "",
+            selectedType: {
+                country: {
+                    country: '',
+                    users: ''
+                }
+            },
             typeInput: "",
             //DATE STATES
             selectedStartDate: "",
@@ -37,7 +47,11 @@ class BuildTripForm extends Component {
             //MAP STATE
             cityMap: "",
             //USER STATES
-            user: null
+            user: null,
+            // groupMembers: null
+            currentTrip: '',
+            otherUsers: [],
+            showForm:true
         }
     }
     componentDidMount() {
@@ -49,13 +63,18 @@ class BuildTripForm extends Component {
                         user: user
                     },
                     () => {
-                        this.dbRef = firebase.database().ref(`/${this.state.user.uid}`);
+                        this.dbRef = firebase.database().ref(`/Users/${this.state.user.uid}`);
                         this.dbRef.on("value", snapshot => {
+                            console.log(snapshot.val(), 'looking for snapshot')
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
-                                selectedType: snapshot.val() || {}
+                                selectedType: snapshot.val() || {},
+                                // user: snapshot.val() || {},
+                                
+
                             });
                         });
+                        
                     }
                 );
             }
@@ -252,7 +271,7 @@ class BuildTripForm extends Component {
            
             
             if (result){
-                console.log("First")
+                console.log("First", result)
                 this.setState({
                 user: result.user
             });
@@ -306,13 +325,27 @@ class BuildTripForm extends Component {
             public: this.state.publicChoice,
         }
 
-        dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
-            trip //SHOULD THIS BE GOING TO JUST USER OR SOMETHING SO THAT GUEST DOESNT BREAK?
+        const currentTripID = dbRef.ref(`/Users/${this.state.user.uid}/trips`).push(
+            trip
         );
 
-        // this.duplicateTripsToCollab(trip);
+        this.setState({
+            currentTrip: currentTripID.path.pieces_[3]
+        }, () =>{
+            const otherUsersRef = dbRef.ref(`/Users/${this.state.user.uid}/trips/${this.state.currentTrip}/users`)
+            otherUsersRef.on('value', snapshot =>{
+                const userArray = snapshot.val()
+                this.setState({
+                    otherUsers:userArray,
+                    showForm:false
+                }, ()=>{
+                    this.props.history.push('/details')
+                })
+            })
+        })
 
     }
+    
     render() {
         //FORM CONDITIONS FOR RENDERING OPERATORS
         const logInOrGuest = this.state.user === null;
@@ -382,6 +415,27 @@ class BuildTripForm extends Component {
                             <input type="submit" value="Continue" onClick={this.chooseStartDate} />
                         </form>
                         : <form className="visuallyhidden"></form>
+                    }         
+                    
+                    {
+                    
+                    this.state.showForm === false 
+                    
+                    && 
+                    
+                    <Route path="/details"
+                        render={() => (
+                        <TripDetails
+                            country={this.state.country}
+                            city={this.state.city}
+                            type={this.state.typeInput}
+                            groupMembers={this.state.otherUsers}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
+                            />
+                        )} 
+                        /> 
+                    
                     }
                     {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
                     {submitStartDate
@@ -452,7 +506,7 @@ class BuildTripForm extends Component {
                     </aside>
                 </div>
             </div>
-        );
+        )
     }
 }
 

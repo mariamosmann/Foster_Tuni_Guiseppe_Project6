@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import "./styles/style.scss";
+import './App.css';
 import arrowUp from "./assets/arrowUp.svg";
 import arrowDown from "./assets/arrowDown.svg";
 import activitiesArray from './activitiesArray.js';
@@ -43,6 +43,22 @@ class TripDetails extends Component {
             selectedEmail: "",
             emailChoice: [],
         }
+    }
+    componentDidMount() {
+        console.log(this.props.groupMembers, 'its')
+        this.setState({
+            // adding the initial group members to this component array
+            groupMembers: this.props.groupMembers,
+            //adding the city that the group creator chose in the first form, it has to be an array
+            cities: [
+                {
+                    city: this.props.city,
+                    type: this.props.type,
+                    votes: 0,
+                    whoVoted: []
+                }
+            ]
+        })
     }
 
     //handle change
@@ -462,7 +478,7 @@ class TripDetails extends Component {
                     {/* displaying the country and the type of trip that the user chose */}
                     <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
 
-                    <h4 className="header__heading header__heading--h4">From {this.props.startingDate} - {this.props.endingDate}</h4>
+                    <h4 className="header__heading header__heading--h4">From {this.props.startDate} - {this.props.endDate}</h4>
 
                     <h4 className="header__heading header__heading--h4">{this.props.type}</h4>
                 </header>
@@ -1107,20 +1123,21 @@ class TripDetails extends Component {
         )
     }
 
-    componentDidMount() {
-        this.setState({
-            // adding the initial group members to this component array
-            groupMembers: this.props.groupMembers,
-            //adding the city that the group creator chose in the first form, it has to be an array
-            cities: [
-                {
-                    city: this.props.city,
-                    type: this.props.type,
-                    votes: 0,
-                }
-            ]
-        })
-    }
+    // componentDidMount() {
+    //     this.setState({
+    //         // adding the initial group members to this component array
+    //         groupMembers: this.props.groupMembers,
+    //         //adding the city that the group creator chose in the first form, it has to be an array
+    //         cities: [
+    //             {
+    //                 city: this.props.city,
+    //                 type: this.props.type,
+    //                 votes: 0,
+    //                 whoVoted: []
+    //             }
+    //         ]
+    //     })
+    // }
 }
 
 export default TripDetails;
