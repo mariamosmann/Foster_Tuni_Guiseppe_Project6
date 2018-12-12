@@ -1,5 +1,5 @@
 .header {
-    padding: 75px 0;
+    padding-top: 75px;
     &__heading {
         @include heading(40);
         margin-bottom: 30px;
@@ -9,10 +9,31 @@
         }
     }
 }
-
+.boards {
+    padding: 75px 0;
+}
 .board {
     width: calc((100% - 60px) / 3);
     float: left;
-    margin: 0 30px 30px 0;
-    border: 2px solid blue;
+    margin-right: 30px;
+    &__heading {
+        @include heading(20);
+    }
+    &__voting {
+        margin: 0 auto;
+    }
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.option {
+    &__addVote,
+    &__subtractVote {
+        width: 10%;
+    }
+}
+
+.tripForm {
+    clear: both;
 }

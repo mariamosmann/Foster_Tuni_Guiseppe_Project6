@@ -484,641 +484,658 @@ class TripDetails extends Component {
                 </header>
 
                 <div className="boards">
-                    {/* CITIES START */}
-                    <div className="boards__board board">
-                        <h4 className="board__heading board__heading--h4">Where are we going?</h4>
 
-                        <div className="board__voting">
-                            {//display every city/type inside cities array in state so users can vote
-                                this.state.cities.map((item, i) => {
+                    <div className="boards__container clearfix">
+                        {/* CITIES START */}
+                        <div className="boards__board board">
+                            <h4 className="board__heading board__heading--h4">Where are we going?</h4>
 
-                                    //creating a variable to determine majority of votes
-                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+                            <div className="board__voting">
+                                {//display every city/type inside cities array in state so users can vote
+                                    this.state.cities.map((item, i) => {
 
-                                    if (this.state.cities[i].votes === stopVotes) {
+                                        //creating a variable to determine majority of votes
+                                        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title option__title--selected">{item.city}</p>
+                                        if (this.state.cities[i].votes === stopVotes) {
 
-                                                <p className="option__type option__type--selected">{item.type}</p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title">{item.city}</p>
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title option__title--selected">{item.city}</p>
 
-                                                <p className="option__type">{item.type}</p>
-
-                                                {/* +1 voting button */}
-                                                <div className="option__addVote">
-                                                    <img onClick={this.addVote} src={arrowUp} alt="" className={i}
-                                                        key={i} id="option__addIcon"
-                                                    />
+                                                    <p className="option__type option__type--selected">{item.type}</p>
                                                 </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title">{item.city}</p>
 
-                                                {/* -1 voting button */}
-                                                <div className="option__subtractVote">
-                                                    <img onClick={this.subtractVote} src={arrowDown} alt="" alt="" className={i}
-                                                        key={i} id="option__subtractIcon"
-                                                    />
+                                                    <p className="option__type">{item.type}</p>
+
+                                                    <div className="option__voteContainer">
+                                                        {/* +1 voting button */}
+                                                        <div className="option__addVote">
+                                                            <img onClick={this.addVote} src={arrowUp} alt="" className={i}
+                                                                key={i} id="option__addIcon"
+                                                            />
+                                                        </div>
+
+                                                        {/* -1 voting button */}
+                                                        <div className="option__subtractVote">
+                                                            <img onClick={this.subtractVote} src={arrowDown} alt="" alt="" className={i}
+                                                                key={i} id="option__subtractIcon"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="option__votes">Votes: {item.votes}</p>
                                                 </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
 
-                                                <p className="option__votes">{item.votes}</p>
-                                            </div>
-                                        )
-                                    }
-                                })
-                            }
+                            {/* ADD OPTION START */}
+                            <div className="board__add add">
+                                <p className="add__text">Add city to be voted:</p>
+
+                                <form onSubmit={this.addCity} action="" className="add__form">
+                                    <label htmlFor="citySuggestion" className="add__label visuallyhidden">Suggest a city:</label>
+                                    <input
+                                        type="text"
+                                        id="citySuggestion"
+                                        className="add__city"
+                                        placeholder="City"
+                                        onChange={this.handleChange}
+                                        value={this.state.citySuggestion}
+                                    />
+
+                                    <label htmlFor="typeSuggestion">Type of trip:</label>
+                                    <select
+                                        defaultValue="typeSuggestion"
+                                        name="typeSuggestion"
+                                        id="typeSuggestion"
+                                        className="add__type"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="typeSuggestion">--Type of trip--</option>
+                                        {this.state.typeChoices.map((type) => {
+                                            return (
+                                                <option key={type} value={type}>{type}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <input type="submit" value="Add" className="add__submit" />
+                                </form>
+                            </div>
+                            {/* ADD OPTION END */}
                         </div>
+                        {/* CITIES END */}
 
-                        {/* ADD OPTION START */}
-                        <div className="board__add add">
-                            <p className="add__text">Add city to be voted:</p>
+                        {/* HOTEL START */}
+                        <div className="boards__board board">
+                            <h4 className="board__heading board__heading--h4">Suggest hotel:</h4>
 
-                            <form onSubmit={this.addCity} action="" className="add__form">
-                                <label htmlFor="citySuggestion" className="add__label visuallyhidden">Suggest a city:</label>
-                                <input
-                                    type="text"
-                                    id="citySuggestion"
-                                    className="add__city"
-                                    placeholder="City"
-                                    onChange={this.handleChange}
-                                    value={this.state.citySuggestion}
-                                />
+                            <div className="board__voting">
+                                {//display every city/type inside cities array in state so users can vote
+                                    this.state.hotel.map((item, i) => {
 
-                                <label htmlFor="typeSuggestion">Type of trip:</label>
-                                <select
-                                    defaultValue="typeSuggestion"
-                                    name="typeSuggestion"
-                                    id="typeSuggestion"
-                                    className="add__type"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="typeSuggestion">--Type of trip--</option>
-                                    {this.state.typeChoices.map((type) => {
-                                        return (
-                                            <option key={type} value={type}>{type}</option>
-                                        )
-                                    })}
-                                </select>
+                                        //creating a variable to determine majority of votes
+                                        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
-                                <input type="submit" value="Add" className="add__submit" />
-                            </form>
+                                        if (this.state.hotel[i].votes === stopVotes) {
+
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title option__title--selected">{item.city}</p>
+
+                                                    <p className="option__title option__title--selected">{item.suggestion}</p>
+
+                                                    <p className="option__type option__type--selected">{item.type}</p>
+                                                </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title">{item.city}</p>
+
+                                                    <p className="option__suggestion">{item.suggestion}</p>
+
+                                                    <p className="option__type">{item.type}</p>
+
+                                                    <div className="option__voteContainer">
+                                                        {/* +1 voting button */}
+                                                        <div className="option__addVote">
+                                                            <img onClick={this.addVoteHotel} src={arrowUp} alt="" className={i}
+                                                                key={i} id="option__addIcon"
+                                                            />
+                                                        </div>
+
+                                                        {/* -1 voting button */}
+                                                        <div className="option__subtractVote">
+                                                            <img onClick={this.subtractVoteHotel} src={arrowDown} alt="" alt="" className={i}
+                                                                key={i} id="option__subtractIcon"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="option__votes">Votes: {item.votes}</p>
+                                                </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
+
+                            {/* ADD OPTION START */}
+                            <div className="board__add add">
+                                <p className="add__text">Add hotel to be voted:</p>
+
+                                <form onSubmit={this.addHotel} action="" className="add__form">
+                                    <label htmlFor="hotelCity">City:</label>
+                                    <select
+                                        defaultValue="hotelCity"
+                                        name="hotelCity"
+                                        id="hotelCity"
+                                        className="add__city"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="hotelCity">--City--</option>
+                                        {this.state.selectedCities.map((item) => {
+                                            return (
+                                                <option key={item.city} value={item.city}>{item.city}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <label htmlFor="hotelSuggestion" className="add__label visuallyhidden">Suggest a hotel:</label>
+                                    <input
+                                        type="text"
+                                        id="hotelSuggestion"
+                                        className="add__suggestion"
+                                        placeholder="Hotel"
+                                        onChange={this.handleChange}
+                                        value={this.state.hotelSuggestion}
+                                    />
+
+                                    <label htmlFor="hotelType">Type:</label>
+                                    <select
+                                        defaultValue="hotelType"
+                                        name="hotelType"
+                                        id="hotelType"
+                                        className="add__type"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="hotelType">--Type--</option>
+                                        {this.state.typeChoices.map((type) => {
+                                            return (
+                                                <option key={type} value={type}>{type}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <input type="submit" value="Add" className="add__submit" />
+                                </form>
+                            </div>
+                            {/* ADD OPTION END */}
+
                         </div>
-                        {/* ADD OPTION END */}
+                        {/* HOTEL END */}
+
+
+                        {/* FOOD START */}
+                        <div className="boards__board board">
+                            <h4 className="board__heading board__heading--h4">Suggest restaurant:</h4>
+
+                            <div className="board__voting">
+                                {//display every city/type inside cities array in state so users can vote
+                                    this.state.food.map((item, i) => {
+
+                                        //creating a variable to determine majority of votes
+                                        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+
+                                        if (this.state.food[i].votes === stopVotes) {
+
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title option__title--selected">{item.city}</p>
+
+                                                    <p className="option__title option__title--selected">{item.suggestion}</p>
+
+                                                    <p className="option__type option__type--selected">{item.type}</p>
+                                                </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title">{item.city}</p>
+
+                                                    <p className="option__suggestion">{item.suggestion}</p>
+
+                                                    <p className="option__type">{item.type}</p>
+
+                                                    <div className="option__voteContainer">
+                                                        {/* +1 voting button */}
+                                                        <div className="option__addVote">
+                                                            <img onClick={this.addVoteFood} src={arrowUp} alt="" className={i}
+                                                                key={i} id="option__addIcon"
+                                                            />
+                                                        </div>
+
+                                                        {/* -1 voting button */}
+                                                        <div className="option__subtractVote">
+                                                            <img onClick={this.subtractVoteFood} src={arrowDown} alt="" alt="" className={i}
+                                                                key={i} id="option__subtractIcon"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="option__votes">Votes: {item.votes}</p>
+                                                </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
+
+                            {/* ADD OPTION START */}
+                            <div className="board__add add">
+                                <p className="add__text">Add restaurant to be voted:</p>
+
+                                <form onSubmit={this.addFood} action="" className="add__form">
+                                    <label htmlFor="foodCity">City:</label>
+                                    <select
+                                        defaultValue="foodCity"
+                                        name="foodCity"
+                                        id="foodCity"
+                                        className="add__city"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="foodCity">--City--</option>
+                                        {this.state.selectedCities.map((item) => {
+                                            return (
+                                                <option key={item.city} value={item.city}>{item.city}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <label htmlFor="foodSuggestion" className="add__label visuallyhidden">Suggest a restaurant:</label>
+                                    <input
+                                        type="text"
+                                        id="foodSuggestion"
+                                        className="add__suggestion"
+                                        placeholder="Restaurant"
+                                        onChange={this.handleChange}
+                                        value={this.state.foodSuggestion}
+                                    />
+
+                                    <label htmlFor="foodType">Type:</label>
+                                    <select
+                                        defaultValue="foodType"
+                                        name="foodType"
+                                        id="foodType"
+                                        className="add__type"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="foodType">--Type--</option>
+                                        {this.state.typeChoices.map((type) => {
+                                            return (
+                                                <option key={type} value={type}>{type}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <input type="submit" value="Add" className="add__submit" />
+                                </form>
+                            </div>
+                            {/* ADD OPTION END */}
+
+                        </div>
+                        {/* FOOD END */}
                     </div>
-                    {/* CITIES END */}
 
-                    {/* HOTEL START */}
-                    <div className="boards__board board">
-                        <h4 className="board__heading board__heading--h4">Suggest hotel:</h4>
+                    <div className="boards__container clearfix">
+                        {/* TOURISM START */}
+                        <div className="boards__board board">
+                            <h4 className="board__heading board__heading--h4">Suggest place to visit:</h4>
 
-                        <div className="board__voting">
-                            {//display every city/type inside cities array in state so users can vote
-                                this.state.hotel.map((item, i) => {
+                            <div className="board__voting">
+                                {//display every city/type inside cities array in state so users can vote
+                                    this.state.tourism.map((item, i) => {
 
-                                    //creating a variable to determine majority of votes
-                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
+                                        //creating a variable to determine majority of votes
+                                        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
-                                    if (this.state.hotel[i].votes === stopVotes) {
+                                        if (this.state.tourism[i].votes === stopVotes) {
 
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title option__title--selected">{item.city}</p>
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title option__title--selected">{item.city}</p>
 
-                                                <p className="option__title option__title--selected">{item.suggestion}</p>
+                                                    <p className="option__title option__title--selected">{item.suggestion}</p>
 
-                                                <p className="option__type option__type--selected">{item.type}</p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title">{item.city}</p>
-
-                                                <p className="option__suggestion">{item.suggestion}</p>
-
-                                                <p className="option__type">{item.type}</p>
-
-                                                {/* +1 voting button */}
-                                                <div className="option__addVote">
-                                                    <img onClick={this.addVoteHotel} src={arrowUp} alt="" className={i}
-                                                        key={i} id="option__addIcon"
-                                                    />
+                                                    <p className="option__type option__type--selected">{item.type}</p>
                                                 </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title">{item.city}</p>
 
-                                                {/* -1 voting button */}
-                                                <div className="option__subtractVote">
-                                                    <img onClick={this.subtractVoteHotel} src={arrowDown} alt="" alt="" className={i}
-                                                        key={i} id="option__subtractIcon"
-                                                    />
+                                                    <p className="option__suggestion">{item.suggestion}</p>
+
+                                                    <p className="option__type">{item.type}</p>
+
+                                                    <div className="option__voteContainer">
+                                                        {/* +1 voting button */}
+                                                        <div className="option__addVote">
+                                                            <img onClick={this.addVoteTourism} src={arrowUp} alt="" className={i}
+                                                                key={i} id="option__addIcon"
+                                                            />
+                                                        </div>
+
+                                                        {/* -1 voting button */}
+                                                        <div className="option__subtractVote">
+                                                            <img onClick={this.subtractVoteTourism} src={arrowDown} alt="" alt="" className={i}
+                                                                key={i} id="option__subtractIcon"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="option__votes"> Votes: {item.votes}</p>
                                                 </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
 
-                                                <p className="option__votes">{item.votes}</p>
-                                            </div>
-                                        )
-                                    }
-                                })
-                            }
+                            {/* ADD OPTION START */}
+                            <div className="board__add add">
+                                <p className="add__text">Add place to be voted:</p>
+
+                                <form onSubmit={this.addTourism} action="" className="add__form">
+                                    <label htmlFor="tourismCity">City:</label>
+                                    <select
+                                        defaultValue="tourismCity"
+                                        name="tourismCity"
+                                        id="tourismCity"
+                                        className="add__city"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="tourismCity">--City--</option>
+                                        {this.state.selectedCities.map((item) => {
+                                            return (
+                                                <option key={item.city} value={item.city}>{item.city}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <label htmlFor="tourismSuggestion" className="add__label visuallyhidden">Suggest a place to visit:</label>
+                                    <input
+                                        type="text"
+                                        id="tourismSuggestion"
+                                        className="add__suggestion"
+                                        placeholder="Place"
+                                        onChange={this.handleChange}
+                                        value={this.state.tourismSuggestion}
+                                    />
+
+                                    <label htmlFor="tourismType">Type:</label>
+                                    <select
+                                        defaultValue="tourismType"
+                                        name="tourismType"
+                                        id="tourismType"
+                                        className="add__type"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="tourismType">--Type--</option>
+                                        {this.state.typeChoices.map((type) => {
+                                            return (
+                                                <option key={type} value={type}>{type}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <input type="submit" value="Add" className="add__submit" />
+                                </form>
+                            </div>
+                            {/* ADD OPTION END */}
+
                         </div>
+                        {/* TOURISM END */}
 
-                        {/* ADD OPTION START */}
-                        <div className="board__add add">
-                            <p className="add__text">Add hotel to be voted:</p>
+                        {/* SHOPPING START */}
+                        <div className="boards__board board">
+                            <h4 className="board__heading board__heading--h4">Suggest place to go shopping:</h4>
 
-                            <form onSubmit={this.addHotel} action="" className="add__form">
-                                <label htmlFor="hotelCity">City:</label>
-                                <select
-                                    defaultValue="hotelCity"
-                                    name="hotelCity"
-                                    id="hotelCity"
-                                    className="add__city"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="hotelCity">--City--</option>
-                                    {this.state.selectedCities.map((item) => {
-                                        return (
-                                            <option key={item.city} value={item.city}>{item.city}</option>
-                                        )
-                                    })}
-                                </select>
+                            <div className="board__voting">
+                                {//display every city/type inside cities array in state so users can vote
+                                    this.state.shopping.map((item, i) => {
 
-                                <label htmlFor="hotelSuggestion" className="add__label visuallyhidden">Suggest a hotel:</label>
-                                <input
-                                    type="text"
-                                    id="hotelSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Hotel"
-                                    onChange={this.handleChange}
-                                    value={this.state.hotelSuggestion}
-                                />
+                                        //creating a variable to determine majority of votes
+                                        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
-                                <label htmlFor="hotelType">Type:</label>
-                                <select
-                                    defaultValue="hotelType"
-                                    name="hotelType"
-                                    id="hotelType"
-                                    className="add__type"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="hotelType">--Type--</option>
-                                    {this.state.typeChoices.map((type) => {
-                                        return (
-                                            <option key={type} value={type}>{type}</option>
-                                        )
-                                    })}
-                                </select>
+                                        if (this.state.shopping[i].votes === stopVotes) {
 
-                                <input type="submit" value="Add" className="add__submit" />
-                            </form>
-                        </div>
-                        {/* ADD OPTION END */}
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title option__title--selected">{item.city}</p>
 
-                    </div>
-                    {/* HOTEL END */}
+                                                    <p className="option__title option__title--selected">{item.suggestion}</p>
 
-
-                    {/* FOOD START */}
-                    <div className="boards__board board">
-                        <h4 className="board__heading board__heading--h4">Suggest restaurant:</h4>
-
-                        <div className="board__voting">
-                            {//display every city/type inside cities array in state so users can vote
-                                this.state.food.map((item, i) => {
-
-                                    //creating a variable to determine majority of votes
-                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-                                    if (this.state.food[i].votes === stopVotes) {
-
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title option__title--selected">{item.city}</p>
-
-                                                <p className="option__title option__title--selected">{item.suggestion}</p>
-
-                                                <p className="option__type option__type--selected">{item.type}</p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title">{item.city}</p>
-
-                                                <p className="option__suggestion">{item.suggestion}</p>
-
-                                                <p className="option__type">{item.type}</p>
-
-                                                {/* +1 voting button */}
-                                                <div className="option__addVote">
-                                                    <img onClick={this.addVoteFood} src={arrowUp} alt="" className={i}
-                                                        key={i} id="option__addIcon"
-                                                    />
+                                                    <p className="option__type option__type--selected">{item.type}</p>
                                                 </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title">{item.city}</p>
 
-                                                {/* -1 voting button */}
-                                                <div className="option__subtractVote">
-                                                    <img onClick={this.subtractVoteFood} src={arrowDown} alt="" alt="" className={i}
-                                                        key={i} id="option__subtractIcon"
-                                                    />
+                                                    <p className="option__suggestion">{item.suggestion}</p>
+
+                                                    <p className="option__type">{item.type}</p>
+
+                                                    <div className="option__voteContainer">
+                                                        {/* +1 voting button */}
+                                                        <div className="option__addVote">
+                                                            <img onClick={this.addVoteShopping} src={arrowUp} alt="" className={i}
+                                                                key={i} id="option__addIcon"
+                                                            />
+                                                        </div>
+
+                                                        {/* -1 voting button */}
+                                                        <div className="option__subtractVote">
+                                                            <img onClick={this.subtractVoteShopping} src={arrowDown} alt="" alt="" className={i}
+                                                                key={i} id="option__subtractIcon"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="option__votes">Votes: {item.votes}</p>
                                                 </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
 
-                                                <p className="option__votes">{item.votes}</p>
-                                            </div>
-                                        )
-                                    }
-                                })
-                            }
+                            {/* ADD OPTION START */}
+                            <div className="board__add add">
+                                <p className="add__text">Add place to be voted:</p>
+
+                                <form onSubmit={this.addShopping} action="" className="add__form">
+                                    <label htmlFor="shoppingCity">City:</label>
+                                    <select
+                                        defaultValue="shoppingCity"
+                                        name="shoppingCity"
+                                        id="shoppingCity"
+                                        className="add__city"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="shoppingCity">--City--</option>
+                                        {this.state.selectedCities.map((item) => {
+                                            return (
+                                                <option key={item.city} value={item.city}>{item.city}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <label htmlFor="shoppingSuggestion" className="add__label visuallyhidden">Suggest a place to go shopping:</label>
+                                    <input
+                                        type="text"
+                                        id="shoppingSuggestion"
+                                        className="add__suggestion"
+                                        placeholder="Place"
+                                        onChange={this.handleChange}
+                                        value={this.state.shoppingSuggestion}
+                                    />
+
+                                    <label htmlFor="shoppingType">Type:</label>
+                                    <select
+                                        defaultValue="shoppingType"
+                                        name="shoppingType"
+                                        id="shoppingType"
+                                        className="add__type"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="shoppingType">--Type--</option>
+                                        {this.state.typeChoices.map((type) => {
+                                            return (
+                                                <option key={type} value={type}>{type}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <input type="submit" value="Add" className="add__submit" />
+                                </form>
+                            </div>
+                            {/* ADD OPTION END */}
+
                         </div>
+                        {/* SHOPPING END */}
 
-                        {/* ADD OPTION START */}
-                        <div className="board__add add">
-                            <p className="add__text">Add restaurant to be voted:</p>
+                        {/* NIGHTLIFE START */}
+                        <div className="boards__board board">
+                            <h4 className="board__heading board__heading--h4">Suggest place to party:</h4>
 
-                            <form onSubmit={this.addFood} action="" className="add__form">
-                                <label htmlFor="foodCity">City:</label>
-                                <select
-                                    defaultValue="foodCity"
-                                    name="foodCity"
-                                    id="foodCity"
-                                    className="add__city"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="foodCity">--City--</option>
-                                    {this.state.selectedCities.map((item) => {
-                                        return (
-                                            <option key={item.city} value={item.city}>{item.city}</option>
-                                        )
-                                    })}
-                                </select>
+                            <div className="board__voting">
+                                {//display every city/type inside cities array in state so users can vote
+                                    this.state.nightlife.map((item, i) => {
 
-                                <label htmlFor="foodSuggestion" className="add__label visuallyhidden">Suggest a restaurant:</label>
-                                <input
-                                    type="text"
-                                    id="foodSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Restaurant"
-                                    onChange={this.handleChange}
-                                    value={this.state.foodSuggestion}
-                                />
+                                        //creating a variable to determine majority of votes
+                                        const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
-                                <label htmlFor="foodType">Type:</label>
-                                <select
-                                    defaultValue="foodType"
-                                    name="foodType"
-                                    id="foodType"
-                                    className="add__type"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="foodType">--Type--</option>
-                                    {this.state.typeChoices.map((type) => {
-                                        return (
-                                            <option key={type} value={type}>{type}</option>
-                                        )
-                                    })}
-                                </select>
+                                        if (this.state.nightlife[i].votes === stopVotes) {
 
-                                <input type="submit" value="Add" className="add__submit" />
-                            </form>
-                        </div>
-                        {/* ADD OPTION END */}
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title option__title--selected">{item.city}</p>
 
-                    </div>
-                    {/* FOOD END */}
+                                                    <p className="option__title option__title--selected">{item.suggestion}</p>
 
-                    {/* TOURISM START */}
-                    <div className="boards__board board">
-                        <h4 className="board__heading board__heading--h4">Suggest place to visit:</h4>
-
-                        <div className="board__voting">
-                            {//display every city/type inside cities array in state so users can vote
-                                this.state.tourism.map((item, i) => {
-
-                                    //creating a variable to determine majority of votes
-                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-                                    if (this.state.tourism[i].votes === stopVotes) {
-
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title option__title--selected">{item.city}</p>
-
-                                                <p className="option__title option__title--selected">{item.suggestion}</p>
-
-                                                <p className="option__type option__type--selected">{item.type}</p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title">{item.city}</p>
-
-                                                <p className="option__suggestion">{item.suggestion}</p>
-
-                                                <p className="option__type">{item.type}</p>
-
-                                                {/* +1 voting button */}
-                                                <div className="option__addVote">
-                                                    <img onClick={this.addVoteTourism} src={arrowUp} alt="" className={i}
-                                                        key={i} id="option__addIcon"
-                                                    />
+                                                    <p className="option__type option__type--selected">{item.type}</p>
                                                 </div>
+                                            )
+                                        } else {
+                                            return (
+                                                <div className="board__option option">
+                                                    <p className="option__title">{item.city}</p>
 
-                                                {/* -1 voting button */}
-                                                <div className="option__subtractVote">
-                                                    <img onClick={this.subtractVoteTourism} src={arrowDown} alt="" alt="" className={i}
-                                                        key={i} id="option__subtractIcon"
-                                                    />
+                                                    <p className="option__suggestion">{item.suggestion}</p>
+
+                                                    <p className="option__type">{item.type}</p>
+
+                                                    <div className="option__voteContainer">
+                                                        {/* +1 voting button */}
+                                                        <div className="option__addVote">
+                                                            <img onClick={this.addVoteNightlife} src={arrowUp} alt="" className={i}
+                                                                key={i} id="option__addIcon"
+                                                            />
+                                                        </div>
+
+                                                        {/* -1 voting button */}
+                                                        <div className="option__subtractVote">
+                                                            <img onClick={this.subtractVoteNightlife} src={arrowDown} alt="" alt="" className={i}
+                                                                key={i} id="option__subtractIcon"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <p className="option__votes">Votes: {item.votes}</p>
                                                 </div>
+                                            )
+                                        }
+                                    })
+                                }
+                            </div>
 
-                                                <p className="option__votes">{item.votes}</p>
-                                            </div>
-                                        )
-                                    }
-                                })
-                            }
+                            {/* ADD OPTION START */}
+                            <div className="board__add add">
+                                <p className="add__text">Add place to be voted:</p>
+
+                                <form onSubmit={this.addNightlife} action="" className="add__form">
+                                    <label htmlFor="nightlifeCity">City:</label>
+                                    <select
+                                        defaultValue="nightlifeCity"
+                                        name="nightlifeCity"
+                                        id="nightlifeCity"
+                                        className="add__city"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="nightlifeCity">--City--</option>
+                                        {this.state.selectedCities.map((item) => {
+                                            return (
+                                                <option key={item.city} value={item.city}>{item.city}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <label htmlFor="nightlifeSuggestion" className="add__label visuallyhidden">Suggest a place to party:</label>
+                                    <input
+                                        type="text"
+                                        id="nightlifeSuggestion"
+                                        className="add__suggestion"
+                                        placeholder="Place"
+                                        onChange={this.handleChange}
+                                        value={this.state.nightlifeSuggestion}
+                                    />
+
+                                    <label htmlFor="nightlifeType">Type:</label>
+                                    <select
+                                        defaultValue="nightlifeType"
+                                        name="nightlifeType"
+                                        id="nightlifeType"
+                                        className="add__type"
+                                        onChange={this.handleChange}
+                                        required>
+                                        <option disabled="disabled" selected="selected" value="nightlifeType">--Type--</option>
+                                        {this.state.typeChoices.map((type) => {
+                                            return (
+                                                <option key={type} value={type}>{type}</option>
+                                            )
+                                        })}
+                                    </select>
+
+                                    <input type="submit" value="Add" className="add__submit" />
+                                </form>
+                            </div>
+                            {/* ADD OPTION END */}
+
                         </div>
-
-                        {/* ADD OPTION START */}
-                        <div className="board__add add">
-                            <p className="add__text">Add place to be voted:</p>
-
-                            <form onSubmit={this.addTourism} action="" className="add__form">
-                                <label htmlFor="tourismCity">City:</label>
-                                <select
-                                    defaultValue="tourismCity"
-                                    name="tourismCity"
-                                    id="tourismCity"
-                                    className="add__city"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="tourismCity">--City--</option>
-                                    {this.state.selectedCities.map((item) => {
-                                        return (
-                                            <option key={item.city} value={item.city}>{item.city}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <label htmlFor="tourismSuggestion" className="add__label visuallyhidden">Suggest a place to visit:</label>
-                                <input
-                                    type="text"
-                                    id="tourismSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Place"
-                                    onChange={this.handleChange}
-                                    value={this.state.tourismSuggestion}
-                                />
-
-                                <label htmlFor="tourismType">Type:</label>
-                                <select
-                                    defaultValue="tourismType"
-                                    name="tourismType"
-                                    id="tourismType"
-                                    className="add__type"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="tourismType">--Type--</option>
-                                    {this.state.typeChoices.map((type) => {
-                                        return (
-                                            <option key={type} value={type}>{type}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <input type="submit" value="Add" className="add__submit" />
-                            </form>
-                        </div>
-                        {/* ADD OPTION END */}
-
-                    </div>
-                    {/* TOURISM END */}
-
-                    {/* SHOPPING START */}
-                    <div className="boards__board board">
-                        <h4 className="board__heading board__heading--h4">Suggest place to go shopping:</h4>
-
-                        <div className="board__voting">
-                            {//display every city/type inside cities array in state so users can vote
-                                this.state.shopping.map((item, i) => {
-
-                                    //creating a variable to determine majority of votes
-                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-                                    if (this.state.shopping[i].votes === stopVotes) {
-
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title option__title--selected">{item.city}</p>
-
-                                                <p className="option__title option__title--selected">{item.suggestion}</p>
-
-                                                <p className="option__type option__type--selected">{item.type}</p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title">{item.city}</p>
-
-                                                <p className="option__suggestion">{item.suggestion}</p>
-
-                                                <p className="option__type">{item.type}</p>
-
-                                                {/* +1 voting button */}
-                                                <div className="option__addVote">
-                                                    <img onClick={this.addVoteShopping} src={arrowUp} alt="" className={i}
-                                                        key={i} id="option__addIcon"
-                                                    />
-                                                </div>
-
-                                                {/* -1 voting button */}
-                                                <div className="option__subtractVote">
-                                                    <img onClick={this.subtractVoteShopping} src={arrowDown} alt="" alt="" className={i}
-                                                        key={i} id="option__subtractIcon"
-                                                    />
-                                                </div>
-
-                                                <p className="option__votes">{item.votes}</p>
-                                            </div>
-                                        )
-                                    }
-                                })
-                            }
-                        </div>
-
-                        {/* ADD OPTION START */}
-                        <div className="board__add add">
-                            <p className="add__text">Add place to be voted:</p>
-
-                            <form onSubmit={this.addShopping} action="" className="add__form">
-                                <label htmlFor="shoppingCity">City:</label>
-                                <select
-                                    defaultValue="shoppingCity"
-                                    name="shoppingCity"
-                                    id="shoppingCity"
-                                    className="add__city"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="shoppingCity">--City--</option>
-                                    {this.state.selectedCities.map((item) => {
-                                        return (
-                                            <option key={item.city} value={item.city}>{item.city}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <label htmlFor="shoppingSuggestion" className="add__label visuallyhidden">Suggest a place to go shopping:</label>
-                                <input
-                                    type="text"
-                                    id="shoppingSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Place"
-                                    onChange={this.handleChange}
-                                    value={this.state.shoppingSuggestion}
-                                />
-
-                                <label htmlFor="shoppingType">Type:</label>
-                                <select
-                                    defaultValue="shoppingType"
-                                    name="shoppingType"
-                                    id="shoppingType"
-                                    className="add__type"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="shoppingType">--Type--</option>
-                                    {this.state.typeChoices.map((type) => {
-                                        return (
-                                            <option key={type} value={type}>{type}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <input type="submit" value="Add" className="add__submit" />
-                            </form>
-                        </div>
-                        {/* ADD OPTION END */}
-
-                    </div>
-                    {/* SHOPPING END */}
-
-                    {/* NIGHTLIFE START */}
-                    <div className="boards__board board">
-                        <h4 className="board__heading board__heading--h4">Suggest place to party:</h4>
-
-                        <div className="board__voting">
-                            {//display every city/type inside cities array in state so users can vote
-                                this.state.nightlife.map((item, i) => {
-
-                                    //creating a variable to determine majority of votes
-                                    const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
-
-                                    if (this.state.nightlife[i].votes === stopVotes) {
-
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title option__title--selected">{item.city}</p>
-
-                                                <p className="option__title option__title--selected">{item.suggestion}</p>
-
-                                                <p className="option__type option__type--selected">{item.type}</p>
-                                            </div>
-                                        )
-                                    } else {
-                                        return (
-                                            <div className="board__option option">
-                                                <p className="option__title">{item.city}</p>
-
-                                                <p className="option__suggestion">{item.suggestion}</p>
-
-                                                <p className="option__type">{item.type}</p>
-
-                                                {/* +1 voting button */}
-                                                <div className="option__addVote">
-                                                    <img onClick={this.addVoteNightlife} src={arrowUp} alt="" className={i}
-                                                        key={i} id="option__addIcon"
-                                                    />
-                                                </div>
-
-                                                {/* -1 voting button */}
-                                                <div className="option__subtractVote">
-                                                    <img onClick={this.subtractVoteNightlife} src={arrowDown} alt="" alt="" className={i}
-                                                        key={i} id="option__subtractIcon"
-                                                    />
-                                                </div>
-
-                                                <p className="option__votes">{item.votes}</p>
-                                            </div>
-                                        )
-                                    }
-                                })
-                            }
-                        </div>
-
-                        {/* ADD OPTION START */}
-                        <div className="board__add add">
-                            <p className="add__text">Add place to be voted:</p>
-
-                            <form onSubmit={this.addNightlife} action="" className="add__form">
-                                <label htmlFor="nightlifeCity">City:</label>
-                                <select
-                                    defaultValue="nightlifeCity"
-                                    name="nightlifeCity"
-                                    id="nightlifeCity"
-                                    className="add__city"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="nightlifeCity">--City--</option>
-                                    {this.state.selectedCities.map((item) => {
-                                        return (
-                                            <option key={item.city} value={item.city}>{item.city}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <label htmlFor="nightlifeSuggestion" className="add__label visuallyhidden">Suggest a place to party:</label>
-                                <input
-                                    type="text"
-                                    id="nightlifeSuggestion"
-                                    className="add__suggestion"
-                                    placeholder="Place"
-                                    onChange={this.handleChange}
-                                    value={this.state.nightlifeSuggestion}
-                                />
-
-                                <label htmlFor="nightlifeType">Type:</label>
-                                <select
-                                    defaultValue="nightlifeType"
-                                    name="nightlifeType"
-                                    id="nightlifeType"
-                                    className="add__type"
-                                    onChange={this.handleChange}
-                                    required>
-                                    <option disabled="disabled" selected="selected" value="nightlifeType">--Type--</option>
-                                    {this.state.typeChoices.map((type) => {
-                                        return (
-                                            <option key={type} value={type}>{type}</option>
-                                        )
-                                    })}
-                                </select>
-
-                                <input type="submit" value="Add" className="add__submit" />
-                            </form>
-                        </div>
-                        {/* ADD OPTION END */}
-
-                    </div>
-                    {/* SHOPPING END */}
-
-                    {/* ADD FRIEND FORM START */}
-                    <form className="tripForm tripForm--friends" action="submit">
-                        <input type="email" name="selectedEmail" onChange={this.handleChange} />
-                        <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another" />
-                    </form>
-                    {/* ADD FRIEND FORM ENDS */}
+                        {/* NIGHTLIFE END */}
+                    </div>                    
                 </div>
+
+                {/* ADD FRIEND FORM START */}
+                <form className="tripForm tripForm--friends" action="submit">
+                    <input type="email" name="selectedEmail" onChange={this.handleChange} />
+                    <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another" />
+                </form>
+                {/* ADD FRIEND FORM ENDS */}
             </div>
         )
     }
