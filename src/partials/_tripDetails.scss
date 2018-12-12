@@ -1,0 +1,39 @@
+.header {
+    padding-top: 75px;
+    &__heading {
+        @include heading(40);
+        margin-bottom: 30px;
+        &--h4 {
+            @include heading(24);
+            margin-bottom: 30px;
+        }
+    }
+}
+.boards {
+    padding: 75px 0;
+}
+.board {
+    width: calc((100% - 60px) / 3);
+    float: left;
+    margin-right: 30px;
+    &__heading {
+        @include heading(20);
+    }
+    &__voting {
+        margin: 0 auto;
+    }
+    &:last-child {
+        margin-right: 0;
+    }
+}
+
+.option {
+    &__addVote,
+    &__subtractVote {
+        width: 10%;
+    }
+}
+
+.tripForm {
+    clear: both;
+}
