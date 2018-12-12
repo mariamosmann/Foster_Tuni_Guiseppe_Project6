@@ -6,7 +6,7 @@ import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import TripDetails from './TripDetails.js';
-import MainNav from './MainNav.js'
+// import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();

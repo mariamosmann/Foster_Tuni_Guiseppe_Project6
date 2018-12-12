@@ -3,8 +3,8 @@ html {
 }
 
 body {
+    @include fontSizeHeading(20);    
     background: $background;
-    font-size: ($fontSize / 10) * 1rem;    
     font-family: $fontFamily;
     color: $text;  
     font-weight: 400;

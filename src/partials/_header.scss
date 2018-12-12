@@ -1,4 +1,5 @@
 .mainHeader {
+    @include fontSizeHeading(18);
     height: 30vh;
     background: navajowhite;
 
