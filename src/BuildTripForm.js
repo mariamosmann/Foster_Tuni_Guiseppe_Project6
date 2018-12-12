@@ -4,9 +4,8 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Route } from 'react-router-dom';
 import TripDetails from './TripDetails.js';
-import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
@@ -69,9 +68,6 @@ class BuildTripForm extends Component {
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
                                 selectedType: snapshot.val() || {},
-                                // user: snapshot.val() || {},
-                                
-
                             });
                         });
                         
@@ -417,26 +413,6 @@ class BuildTripForm extends Component {
                         : <form className="visuallyhidden"></form>
                     }         
                     
-                    {
-                    
-                    this.state.showForm === false 
-                    
-                    && 
-                    
-                    <Route path="/details"
-                        render={() => (
-                        <TripDetails
-                            country={this.state.country}
-                            city={this.state.city}
-                            type={this.state.typeInput}
-                            groupMembers={this.state.otherUsers}
-                            startDate={this.state.startDate}
-                            endDate={this.state.endDate}
-                            />
-                        )} 
-                        /> 
-                    
-                    }
                     {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
                     {submitStartDate
                     ? <form className="tripForm tripForm--endDate" action="submit">
@@ -473,6 +449,25 @@ class BuildTripForm extends Component {
                     </form>
                     : <form className="visuallyhidden"></form>
                     }
+                    {
+                        this.state.showForm === false
+
+                        &&
+
+                        <Route path="/details"
+                            render={() => (
+                                <TripDetails
+                                    country={this.state.country}
+                                    city={this.state.city}
+                                    type={this.state.typeInput}
+                                    groupMembers={this.state.otherUsers}
+                                    startDate={this.state.startDate}
+                                    endDate={this.state.endDate}
+                                />
+                            )}
+                        />
+
+                    }
                     <aside className="tripDetails" >
                         <h2>Trip details</h2>
                         {addCountryDetails
@@ -503,8 +498,28 @@ class BuildTripForm extends Component {
                         </div>
                         : <div className="visuallyhidden"></div>
                         }  
+                {/* {
+                this.state.showForm === false
+
+                &&
+
+                <Route path="/details"
+                    render={() => (
+                        <TripDetails
+                            country={this.state.country}
+                            city={this.state.city}
+                            type={this.state.typeInput}
+                            groupMembers={this.state.otherUsers}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
+                        />
+                    )}
+                />
+
+            } */}
                     </aside>
                 </div>
+
             </div>
         )
     }
