@@ -5,20 +5,149 @@
 
 /* Portrait tablet and small desktops */
 @media (max-width: 940px) {
+    .BuildTripForm {
 
+        & .logOut {
+            right: 5%;
+        }
+
+        & .profile {
+            left: 5%;
+            top: -28%;
+
+            p {
+                font-size: 1.4rem;
+                max-width: 100px;
+                margin: 0 auto;
+            }
+        }
+    }
 }
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 768px) {
+    .BuildTripForm {
 
+        & .logOut {
+            left: calc(50% - 45px);
+            top: -6.5%;
+        }
+
+        & .profile {
+            left: 0%;
+            top: -20%;
+
+            & img {
+                min-width: 40px;
+            }
+
+            & p {
+                display: none;
+            }
+        }
+
+        & .tripForm {
+            width: 100%;
+        }
+
+        & .createdTripDetails {
+            width: 100%;
+        }
+    }
+
+    .mainHeader {
+
+        &__nav {
+            padding-top: 2vh;
+        }
+    }
+}
+
+// FORM STYLE BREAK FIX HERE
+@media (max-width: 580px){
+    .mainHeader {
+
+        &__nav {
+
+            &__logo {
+                padding-top: 15%;
+
+                &--start {
+                    @include heading(25);
+                }
+
+                &--img {
+                    height: 50%;
+                }
+    
+                &--end {
+                    @include heading(60);
+                }
+            }
+
+        }
+    }
 }
 
 /* Landscape phones */
 @media (max-width: 480px) {
+    .BuildTripForm {
 
+        & .profile {
+            left: 0%;
+            top: -22%;
+
+            & img {
+                min-width: 40px;
+            }
+
+            & p {
+                display: none;
+            }
+        }
+    }
+    
+    .mainHeader {
+
+        &__nav {
+
+            &__logo {
+                padding-top: 20%;
+
+                &--start {
+                    @include heading(20);
+                }
+
+                &--img {
+                    height:45%;
+                }
+    
+                &--end {
+                    @include heading(50);
+                }
+            }
+
+        }
+    }
 }
 
 /* portrait phones to landscape phones  */
-@media (max-width: 320px) {
+@media (max-width: 340px) {
+    .mainHeader {
+
+        &__nav {
+
+            &__logo {
+
+                &--start {
+                    @include heading(20);
+                }
     
+                &--end {
+                    @include heading(45);
+                }
+            }
+
+        }
+    }
 }
