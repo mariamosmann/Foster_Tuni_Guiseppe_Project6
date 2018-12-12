@@ -45,17 +45,15 @@ class TripDetails extends Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.groupMembers, 'its')
         this.setState({
             // adding the initial group members to this component array
             groupMembers: this.props.groupMembers,
-            //adding the city that the group creator chose in the first form, it has to be an array
+            //adding the city that the group creator chose in the first form
             cities: [
                 {
                     city: this.props.city,
                     type: this.props.type,
                     votes: 0,
-                    whoVoted: []
                 }
             ]
         })
@@ -98,7 +96,7 @@ class TripDetails extends Component {
     //add vote
     //adding votes until it reaches the majority of votes
     addVote = (event) => {
-        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
+        //conditions on what's rendering before a city reaches majority of votes and after is already set on render      
 
         //cloning the array
         const addingVote = Array.from(this.state.cities)
@@ -132,7 +130,7 @@ class TripDetails extends Component {
     }
 
     //subtract vote
-    //subtract votes until it reaches the majority of votes
+    //let votes to be subtracted until it reaches 0
     subtractVote = (event) => {
 
         //creating a variable for how many votes it has
@@ -153,10 +151,11 @@ class TripDetails extends Component {
         }
     }
 
+    //From this point down all functions work in the same way, but they are connected to their respective board
+
     addHotel = event => {
         event.preventDefault();
 
-        //cloning the array
         const newHotel = Array.from(this.state.hotel)
 
         //adding the new city
@@ -167,12 +166,10 @@ class TripDetails extends Component {
             votes: 0,
         });
 
-        //updating the array
         this.setState({
             hotel: newHotel
         })
 
-        //reseting
         this.setState({
             hotelCity: "",
             hotelSuggestion: "",
@@ -181,15 +178,11 @@ class TripDetails extends Component {
     }
 
     addVoteHotel = (event) => {
-        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
-
-        //cloning the array
+      
         const addingVote = Array.from(this.state.hotel)
 
-        //adding a vote to the array
         addingVote[event.target.className].votes++
 
-        //updating the array
         this.setState({
             hotel: addingVote
         })
@@ -197,18 +190,14 @@ class TripDetails extends Component {
 
     subtractVoteHotel = (event) => {
 
-        //creating a variable for how many votes it has
         const totalVotes = this.state.hotel[event.target.className].votes;
 
-        //not allowing votes do go below 0
         if (totalVotes > 0) {
-            //cloning the array
+
             const subtractingVote = Array.from(this.state.hotel)
 
-            //subtracting a vote from the array
             subtractingVote[event.target.className].votes--
 
-            //updating the array
             this.setState({
                 hotel: subtractingVote
             })
@@ -217,10 +206,8 @@ class TripDetails extends Component {
     addFood = event => {
         event.preventDefault();
 
-        //cloning the array
         const newFood = Array.from(this.state.food)
 
-        //adding the new city
         newFood.push({
             city: this.state.foodCity,
             suggestion: this.state.foodSuggestion,
@@ -228,12 +215,10 @@ class TripDetails extends Component {
             votes: 0,
         });
 
-        //updating the array
         this.setState({
             food: newFood
         })
 
-        //reseting
         this.setState({
             foodCity: "",
             foodSuggestion: "",
@@ -242,15 +227,11 @@ class TripDetails extends Component {
     }
 
     addVoteFood = (event) => {
-        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
-        //cloning the array
         const addingVote = Array.from(this.state.food)
 
-        //adding a vote to the array
         addingVote[event.target.className].votes++
 
-        //updating the array
         this.setState({
             food: addingVote
         })
@@ -258,18 +239,14 @@ class TripDetails extends Component {
 
     subtractVoteFood = (event) => {
 
-        //creating a variable for how many votes it has
         const totalVotes = this.state.food[event.target.className].votes;
 
-        //not allowing votes do go below 0
         if (totalVotes > 0) {
-            //cloning the array
+
             const subtractingVote = Array.from(this.state.food)
 
-            //subtracting a vote from the array
             subtractingVote[event.target.className].votes--
 
-            //updating the array
             this.setState({
                 food: subtractingVote
             })
@@ -279,10 +256,8 @@ class TripDetails extends Component {
     addTourism = event => {
         event.preventDefault();
 
-        //cloning the array
         const newTourism = Array.from(this.state.tourism)
 
-        //adding the new city
         newTourism.push({
             city: this.state.tourismCity,
             suggestion: this.state.tourismSuggestion,
@@ -290,12 +265,10 @@ class TripDetails extends Component {
             votes: 0,
         });
 
-        //updating the array
         this.setState({
             tourism: newTourism
         })
 
-        //reseting
         this.setState({
             tourismCity: "",
             tourismSuggestion: "",
@@ -304,15 +277,11 @@ class TripDetails extends Component {
     }
 
     addVoteTourism = (event) => {
-        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
-        //cloning the array
         const addingVote = Array.from(this.state.tourism)
 
-        //adding a vote to the array
         addingVote[event.target.className].votes++
 
-        //updating the array
         this.setState({
             tourism: addingVote
         })
@@ -320,18 +289,14 @@ class TripDetails extends Component {
 
     subtractVoteTourism = (event) => {
 
-        //creating a variable for how many votes it has
         const totalVotes = this.state.tourism[event.target.className].votes;
 
-        //not allowing votes do go below 0
         if (totalVotes > 0) {
-            //cloning the array
+
             const subtractingVote = Array.from(this.state.tourism)
 
-            //subtracting a vote from the array
             subtractingVote[event.target.className].votes--
 
-            //updating the array
             this.setState({
                 tourism: subtractingVote
             })
@@ -341,10 +306,8 @@ class TripDetails extends Component {
     addShopping = event => {
         event.preventDefault();
 
-        //cloning the array
         const newShopping = Array.from(this.state.shopping)
 
-        //adding the new city
         newShopping.push({
             city: this.state.shoppingCity,
             suggestion: this.state.shoppingSuggestion,
@@ -352,12 +315,10 @@ class TripDetails extends Component {
             votes: 0,
         });
 
-        //updating the array
         this.setState({
             shopping: newShopping
         })
 
-        //reseting
         this.setState({
             shoppingCity: "",
             shoppingSuggestion: "",
@@ -366,15 +327,11 @@ class TripDetails extends Component {
     }
 
     addVoteShopping = (event) => {
-        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
-        //cloning the array
         const addingVote = Array.from(this.state.shopping)
 
-        //adding a vote to the array
         addingVote[event.target.className].votes++
 
-        //updating the array
         this.setState({
             shopping: addingVote
         })
@@ -382,18 +339,14 @@ class TripDetails extends Component {
 
     subtractVoteShopping = (event) => {
 
-        //creating a variable for how many votes it has
         const totalVotes = this.state.shopping[event.target.className].votes;
 
-        //not allowing votes do go below 0
         if (totalVotes > 0) {
-            //cloning the array
+
             const subtractingVote = Array.from(this.state.shopping)
 
-            //subtracting a vote from the array
             subtractingVote[event.target.className].votes--
 
-            //updating the array
             this.setState({
                 shopping: subtractingVote
             })
@@ -403,10 +356,8 @@ class TripDetails extends Component {
     addNightlife = event => {
         event.preventDefault();
 
-        //cloning the array
         const newNightlife = Array.from(this.state.nightlife)
 
-        //adding the new city
         newNightlife.push({
             city: this.state.nightlifeCity,
             suggestion: this.state.nightlifeSuggestion,
@@ -414,12 +365,10 @@ class TripDetails extends Component {
             votes: 0,
         });
 
-        //updating the array
         this.setState({
             nightlife: newNightlife
         })
 
-        //reseting
         this.setState({
             nightlifeCity: "",
             nightlifeSuggestion: "",
@@ -428,15 +377,11 @@ class TripDetails extends Component {
     }
 
     addVoteNightlife = (event) => {
-        //conditions on what's rendering before a city reaches majority of votes and after is already set on render       
 
-        //cloning the array
         const addingVote = Array.from(this.state.nightlife)
 
-        //adding a vote to the array
         addingVote[event.target.className].votes++
 
-        //updating the array
         this.setState({
             nightlife: addingVote
         })
@@ -444,24 +389,21 @@ class TripDetails extends Component {
 
     subtractVoteNightlife = (event) => {
 
-        //creating a variable for how many votes it has
         const totalVotes = this.state.nightlife[event.target.className].votes;
 
-        //not allowing votes do go below 0
         if (totalVotes > 0) {
-            //cloning the array
+
             const subtractingVote = Array.from(this.state.nightlife)
 
-            //subtracting a vote from the array
             subtractingVote[event.target.className].votes--
 
-            //updating the array
             this.setState({
                 nightlife: subtractingVote
             })
         }
     }
-    chooseEmail = (e) => {
+
+    chooseEmail = () => {
         const emailChoice = this.state.selectedEmail
 
         if (emailChoice !== "") {
@@ -471,34 +413,40 @@ class TripDetails extends Component {
             })
         }
     }
+
     render() {
         return (
             <div className="tripDetails">
+                {/* TRIP DETAILS HEADER START */}
                 <header className="tripDetails__header header">
-                    {/* displaying the country and the type of trip that the user chose */}
+                    {/* displaying the country and the dates of that trip */}
                     <h2 className="header__heading header__heading--h2">Trip to {this.props.country}</h2>
 
-                    <h4 className="header__heading header__heading--h4">From {this.props.startDate} - {this.props.endDate}</h4>
+                    <h4 className="header__heading header__heading--h4">From {this.props.startDate}</h4>
 
-                    <h4 className="header__heading header__heading--h4">{this.props.type}</h4>
+                    <h4 className="header__heading header__heading--h4">To {this.props.endDate}</h4>
                 </header>
-
+                {/* TRIP DETAILS HEADER END */}
+                
+                {/* BOARDS START */}
                 <div className="boards">
 
+                    {/* BOARDS CONTAINER START */}
                     <div className="boards__container clearfix">
+                        {/* This is the main board, the group needs to pick at least one city before being able to add suggestions on the other boards */}
                         {/* CITIES START */}
                         <div className="boards__board board">
                             <h4 className="board__heading board__heading--h4">Where are we going?</h4>
 
                             <div className="board__voting">
-                                {//display every city/type inside cities array in state so users can vote
+                                {//display every city inside cities array so users can vote
                                     this.state.cities.map((item, i) => {
 
                                         //creating a variable to determine majority of votes
                                         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
+                                        //if it reached majority of votes, just show the city info
                                         if (this.state.cities[i].votes === stopVotes) {
-
                                             return (
                                                 <div className="board__option option">
                                                     <p className="option__title option__title--selected">{item.city}</p>
@@ -506,29 +454,32 @@ class TripDetails extends Component {
                                                     <p className="option__type option__type--selected">{item.type}</p>
                                                 </div>
                                             )
-                                        } else {
+                                        } else { //if it didn't reached majority of votes, show city info and render the voting buttons
                                             return (
                                                 <div className="board__option option">
                                                     <p className="option__title">{item.city}</p>
 
                                                     <p className="option__type">{item.type}</p>
 
+                                                    {/* VOTING BUTTONS START */}
                                                     <div className="option__voteContainer">
                                                         {/* +1 voting button */}
                                                         <div className="option__addVote">
-                                                            <img onClick={this.addVote} src={arrowUp} alt="" className={i}
+                                                            <img onClick={this.addVote} src={arrowUp} alt="arrow pointing up" className={i}
                                                                 key={i} id="option__addIcon"
                                                             />
                                                         </div>
 
                                                         {/* -1 voting button */}
                                                         <div className="option__subtractVote">
-                                                            <img onClick={this.subtractVote} src={arrowDown} alt="" alt="" className={i}
+                                                            <img onClick={this.subtractVote} src={arrowDown} alt="arrow pointing down" className={i}
                                                                 key={i} id="option__subtractIcon"
                                                             />
                                                         </div>
                                                     </div>
+                                                    {/* VOTING BUTTONS END */}
 
+                                                    {/* Votes total */}
                                                     <p className="option__votes">Votes: {item.votes}</p>
                                                 </div>
                                             )
@@ -538,9 +489,12 @@ class TripDetails extends Component {
                             </div>
 
                             {/* ADD OPTION START */}
+
+                            {/* Form for adding user suggestion and letting the group vote */}
                             <div className="board__add add">
                                 <p className="add__text">Add city to be voted:</p>
-
+                                
+                                {/* Entering suggestion */}
                                 <form onSubmit={this.addCity} action="" className="add__form">
                                     <label htmlFor="citySuggestion" className="add__label visuallyhidden">Suggest a city:</label>
                                     <input
@@ -552,6 +506,7 @@ class TripDetails extends Component {
                                         value={this.state.citySuggestion}
                                     />
 
+                                    {/* Picking a type */}
                                     <label htmlFor="typeSuggestion">Type of trip:</label>
                                     <select
                                         defaultValue="typeSuggestion"
@@ -568,6 +523,7 @@ class TripDetails extends Component {
                                         })}
                                     </select>
 
+                                    {/* Submitting */}
                                     <input type="submit" value="Add" className="add__submit" />
                                 </form>
                             </div>
@@ -575,17 +531,20 @@ class TripDetails extends Component {
                         </div>
                         {/* CITIES END */}
 
+                        {/* From this point on all boards have the same structure as city, with the expection of needing to choose a city in order to make a suggestion. So the user can tell where that activity is happening. The city dropdown is populated with cities that were already chosen (had enough votes).  */}
+
                         {/* HOTEL START */}
                         <div className="boards__board board">
                             <h4 className="board__heading board__heading--h4">Suggest hotel:</h4>
 
                             <div className="board__voting">
-                                {//display every city/type inside cities array in state so users can vote
+                                {//display every hotel inside hotels array so users can vote
                                     this.state.hotel.map((item, i) => {
 
                                         //creating a variable to determine majority of votes
                                         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
+                                        //if it reached majority of votes, just show the hotel info
                                         if (this.state.hotel[i].votes === stopVotes) {
 
                                             return (
@@ -597,7 +556,7 @@ class TripDetails extends Component {
                                                     <p className="option__type option__type--selected">{item.type}</p>
                                                 </div>
                                             )
-                                        } else {
+                                        } else { //if it didn't reached majority of votes, show hotel info and render the voting buttons
                                             return (
                                                 <div className="board__option option">
                                                     <p className="option__title">{item.city}</p>
@@ -606,22 +565,25 @@ class TripDetails extends Component {
 
                                                     <p className="option__type">{item.type}</p>
 
+                                                    {/* VOTING BUTTONS START */}
                                                     <div className="option__voteContainer">
                                                         {/* +1 voting button */}
                                                         <div className="option__addVote">
-                                                            <img onClick={this.addVoteHotel} src={arrowUp} alt="" className={i}
+                                                            <img onClick={this.addVoteHotel} src={arrowUp} alt="arrow pointing up" className={i}
                                                                 key={i} id="option__addIcon"
                                                             />
                                                         </div>
 
                                                         {/* -1 voting button */}
                                                         <div className="option__subtractVote">
-                                                            <img onClick={this.subtractVoteHotel} src={arrowDown} alt="" alt="" className={i}
+                                                            <img onClick={this.subtractVoteHotel} src={arrowDown} alt="arrow pointing down" className={i}
                                                                 key={i} id="option__subtractIcon"
                                                             />
                                                         </div>
                                                     </div>
+                                                    {/* VOTING BUTTONS END */}
 
+                                                    {/* Total votes */}
                                                     <p className="option__votes">Votes: {item.votes}</p>
                                                 </div>
                                             )
@@ -631,10 +593,14 @@ class TripDetails extends Component {
                             </div>
 
                             {/* ADD OPTION START */}
+                            {/* Form for adding user suggestion and letting the group vote */}
                             <div className="board__add add">
                                 <p className="add__text">Add hotel to be voted:</p>
 
                                 <form onSubmit={this.addHotel} action="" className="add__form">
+
+                                    {/* Picking a city */}
+                                    {/* This drop down contains the cities that had enough votes to be picked */}
                                     <label htmlFor="hotelCity">City:</label>
                                     <select
                                         defaultValue="hotelCity"
@@ -651,6 +617,7 @@ class TripDetails extends Component {
                                         })}
                                     </select>
 
+                                    {/* Entering suggestion */}
                                     <label htmlFor="hotelSuggestion" className="add__label visuallyhidden">Suggest a hotel:</label>
                                     <input
                                         type="text"
@@ -661,6 +628,7 @@ class TripDetails extends Component {
                                         value={this.state.hotelSuggestion}
                                     />
 
+                                    {/* Pick type */}
                                     <label htmlFor="hotelType">Type:</label>
                                     <select
                                         defaultValue="hotelType"
@@ -677,6 +645,7 @@ class TripDetails extends Component {
                                         })}
                                     </select>
 
+                                    {/* Submitting */}
                                     <input type="submit" value="Add" className="add__submit" />
                                 </form>
                             </div>
@@ -685,16 +654,14 @@ class TripDetails extends Component {
                         </div>
                         {/* HOTEL END */}
 
-
                         {/* FOOD START */}
                         <div className="boards__board board">
                             <h4 className="board__heading board__heading--h4">Suggest restaurant:</h4>
 
                             <div className="board__voting">
-                                {//display every city/type inside cities array in state so users can vote
+                                {
                                     this.state.food.map((item, i) => {
 
-                                        //creating a variable to determine majority of votes
                                         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
                                         if (this.state.food[i].votes === stopVotes) {
@@ -720,14 +687,14 @@ class TripDetails extends Component {
                                                     <div className="option__voteContainer">
                                                         {/* +1 voting button */}
                                                         <div className="option__addVote">
-                                                            <img onClick={this.addVoteFood} src={arrowUp} alt="" className={i}
+                                                            <img onClick={this.addVoteFood} src={arrowUp} alt="arrow pointing up" className={i}
                                                                 key={i} id="option__addIcon"
                                                             />
                                                         </div>
 
                                                         {/* -1 voting button */}
                                                         <div className="option__subtractVote">
-                                                            <img onClick={this.subtractVoteFood} src={arrowDown} alt="" alt="" className={i}
+                                                            <img onClick={this.subtractVoteFood} src={arrowDown} alt="arrow pointing down" className={i}
                                                                 key={i} id="option__subtractIcon"
                                                             />
                                                         </div>
@@ -796,17 +763,18 @@ class TripDetails extends Component {
                         </div>
                         {/* FOOD END */}
                     </div>
+                    {/* BOARDS CONTAINER END */}
 
+                    {/* BOARDS CONTAINER START */}
                     <div className="boards__container clearfix">
                         {/* TOURISM START */}
                         <div className="boards__board board">
                             <h4 className="board__heading board__heading--h4">Suggest place to visit:</h4>
 
                             <div className="board__voting">
-                                {//display every city/type inside cities array in state so users can vote
+                                {
                                     this.state.tourism.map((item, i) => {
 
-                                        //creating a variable to determine majority of votes
                                         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
                                         if (this.state.tourism[i].votes === stopVotes) {
@@ -832,14 +800,14 @@ class TripDetails extends Component {
                                                     <div className="option__voteContainer">
                                                         {/* +1 voting button */}
                                                         <div className="option__addVote">
-                                                            <img onClick={this.addVoteTourism} src={arrowUp} alt="" className={i}
+                                                            <img onClick={this.addVoteTourism} src={arrowUp} alt="arrow pointing up" className={i}
                                                                 key={i} id="option__addIcon"
                                                             />
                                                         </div>
 
                                                         {/* -1 voting button */}
                                                         <div className="option__subtractVote">
-                                                            <img onClick={this.subtractVoteTourism} src={arrowDown} alt="" alt="" className={i}
+                                                            <img onClick={this.subtractVoteTourism} src={arrowDown} alt="arrow pointing down" className={i}
                                                                 key={i} id="option__subtractIcon"
                                                             />
                                                         </div>
@@ -913,10 +881,9 @@ class TripDetails extends Component {
                             <h4 className="board__heading board__heading--h4">Suggest place to go shopping:</h4>
 
                             <div className="board__voting">
-                                {//display every city/type inside cities array in state so users can vote
+                                {
                                     this.state.shopping.map((item, i) => {
 
-                                        //creating a variable to determine majority of votes
                                         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
                                         if (this.state.shopping[i].votes === stopVotes) {
@@ -942,14 +909,14 @@ class TripDetails extends Component {
                                                     <div className="option__voteContainer">
                                                         {/* +1 voting button */}
                                                         <div className="option__addVote">
-                                                            <img onClick={this.addVoteShopping} src={arrowUp} alt="" className={i}
+                                                            <img onClick={this.addVoteShopping} src={arrowUp} alt="arrow pointing up" className={i}
                                                                 key={i} id="option__addIcon"
                                                             />
                                                         </div>
 
                                                         {/* -1 voting button */}
                                                         <div className="option__subtractVote">
-                                                            <img onClick={this.subtractVoteShopping} src={arrowDown} alt="" alt="" className={i}
+                                                            <img onClick={this.subtractVoteShopping} src={arrowDown} alt="arrow pointing down" className={i}
                                                                 key={i} id="option__subtractIcon"
                                                             />
                                                         </div>
@@ -1023,10 +990,9 @@ class TripDetails extends Component {
                             <h4 className="board__heading board__heading--h4">Suggest place to party:</h4>
 
                             <div className="board__voting">
-                                {//display every city/type inside cities array in state so users can vote
+                                {
                                     this.state.nightlife.map((item, i) => {
 
-                                        //creating a variable to determine majority of votes
                                         const stopVotes = Math.floor(this.state.groupMembers.length / 2 + 1);
 
                                         if (this.state.nightlife[i].votes === stopVotes) {
@@ -1052,14 +1018,14 @@ class TripDetails extends Component {
                                                     <div className="option__voteContainer">
                                                         {/* +1 voting button */}
                                                         <div className="option__addVote">
-                                                            <img onClick={this.addVoteNightlife} src={arrowUp} alt="" className={i}
+                                                            <img onClick={this.addVoteNightlife} src={arrowUp} alt="arrow pointing up" className={i}
                                                                 key={i} id="option__addIcon"
                                                             />
                                                         </div>
 
                                                         {/* -1 voting button */}
                                                         <div className="option__subtractVote">
-                                                            <img onClick={this.subtractVoteNightlife} src={arrowDown} alt="" alt="" className={i}
+                                                            <img onClick={this.subtractVoteNightlife} src={arrowDown} alt="arrow pointing down" className={i}
                                                                 key={i} id="option__subtractIcon"
                                                             />
                                                         </div>
@@ -1127,8 +1093,11 @@ class TripDetails extends Component {
 
                         </div>
                         {/* NIGHTLIFE END */}
-                    </div>                    
+                    </div>
+                    {/* BOARDS CONTAINER END */} 
+
                 </div>
+                {/* BOARDS END */}
 
                 {/* ADD FRIEND FORM START */}
                 <form className="tripForm tripForm--friends" action="submit">
@@ -1139,38 +1108,6 @@ class TripDetails extends Component {
             </div>
         )
     }
-
-    // componentDidMount() {
-    //     this.setState({
-    //         // adding the initial group members to this component array
-    //         groupMembers: this.props.groupMembers,
-    //         //adding the city that the group creator chose in the first form, it has to be an array
-    //         cities: [
-    //             {
-    //                 city: this.props.city,
-    //                 type: this.props.type,
-    //                 votes: 0,
-    //                 whoVoted: []
-    //             }
-    //         ]
-    //     })
-    // }
 }
 
 export default TripDetails;
-
-
-
-
-
-//////////////////////////////////////////
-//ON APP RENDER
-
-/* <TripDetails
-    country={this.state.userChoice.country}
-    city={this.state.userChoice.city}
-    type={this.state.userChoice.type}
-    startingDate={this.state.userChoice.startingDate}
-    endingDate={this.state.userChoice.endingDate}
-    groupMembers={this.state.groupMembers}
-/> */

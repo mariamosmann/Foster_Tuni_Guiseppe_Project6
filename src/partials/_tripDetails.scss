@@ -4,20 +4,23 @@
         @include heading(40);
         margin-bottom: 30px;
         &--h4 {
-            @include heading(24);
+            @include heading(30);
             margin-bottom: 30px;
         }
     }
 }
 .boards {
     padding: 75px 0;
+
 }
 .board {
     width: calc((100% - 60px) / 3);
     float: left;
     margin-right: 30px;
+    padding: 30px;
     &__heading {
-        @include heading(20);
+        @include heading(24);
+        margin-bottom: 15px;
     }
     &__voting {
         margin: 0 auto;
@@ -28,9 +31,21 @@
 }
 
 .option {
+    &__title,
+    &__type,
+    &__suggestion {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+        &--selected {
+            color: green;
+        }    
+    }
     &__addVote,
     &__subtractVote {
         width: 10%;
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
 
