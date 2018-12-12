@@ -147,8 +147,13 @@ html {
   font-size: 62.5%; }
 
 body {
-  background: #d7d8d9;
+  font-family: "Raleway", sans-serif;
   font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background: #d7d8d9;
   font-family: "Raleway", sans-serif;
   color: #393e41;
   font-weight: 400; }
@@ -179,14 +184,9 @@ img {
   padding: 0; }
 
 .wrapper {
-  width: 80%;
-  margin: 0 auto;
-  font-size: 62.5%; }
-
-.wrapper {
   margin: 0 auto;
   width: 80%;
-  max-width: 1200px; }
+  max-width: 1100px; }
 
 h1, h2, h3 {
   margin: 0;
@@ -205,6 +205,12 @@ li {
   font-weight: normal; }
 
 .mainHeader {
+  font-family: "Raleway", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+  text-align: left;
   height: 30vh;
   background: navajowhite; }
   .mainHeader__nav {
@@ -294,7 +300,7 @@ li {
   height: 60vh;
   float: right;
   text-align: center;
-  padding: 7% 5% 7% 5%;
+  padding: 5% 5% 5% 5%;
   text-transform: capitalize; }
   .tripDetails h2, .tripDetails h3, .tripDetails p {
     margin-bottom: 2rem; }
