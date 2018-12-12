@@ -5,7 +5,8 @@ import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import TripDetails from './TripDetails.js'
+import TripDetails from './TripDetails.js';
+import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
@@ -455,6 +456,8 @@ class BuildTripForm extends Component {
                             city={this.state.city}
                             type={this.state.typeInput}
                             groupMembers={this.state.otherUsers}
+                            startDate={this.state.startDate}
+                            endDate={this.state.endDate}
                             />
                         )} 
                         /> 
