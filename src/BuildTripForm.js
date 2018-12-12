@@ -4,13 +4,15 @@ import axios from 'axios';
 import Qs from 'qs';
 import activitiesArray from './activitiesArray.js'
 import firebase from './firebase.js';
-import { BrowserRouter as Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import TripDetails from './TripDetails.js';
+// import MainNav from './MainNav.js'
 
 const provider = new firebase.auth.GoogleAuthProvider();
 const auth = firebase.auth();
 const dbRef = firebase.database();
-  
+
+
 class BuildTripForm extends Component {
     constructor(props) {
         super(props);
@@ -49,7 +51,7 @@ class BuildTripForm extends Component {
             // groupMembers: null
             currentTrip: '',
             otherUsers: [],
-            showForm:true,
+            showForm: true,
         }
     }
     componentDidMount() {
@@ -63,11 +65,16 @@ class BuildTripForm extends Component {
                     () => {
                         this.dbRef = firebase.database().ref(`/Users/${this.state.user.uid}`);
                         this.dbRef.on("value", snapshot => {
+                            console.log(snapshot.val(), 'looking for snapshot')
                             this.setState({
                                 selectedCountry: snapshot.val() || {},
                                 selectedType: snapshot.val() || {},
+                                // user: snapshot.val() || {},
+
+
                             });
-                        });    
+                        });
+
                     }
                 );
             }
@@ -81,48 +88,97 @@ class BuildTripForm extends Component {
     }
     selectInput = (e) => {
 
-            e.preventDefault();
+        e.preventDefault();
 
-            const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
-            const userInput = this.state.selectedCountry;
-            // let globalID = new Date().getTime();
-            if (userInput !== '') {
-                this.setState({
-                    userInput,
-                    selectedCountry: '',
-                })
+        const apiKey = `YwiudiYi5fC5MKG0gh9W52CLVdfxeGhP`
+        const userInput = this.state.selectedCountry;
+        // let globalID = new Date().getTime();
+        if (userInput !== '') {
+            this.setState({
+                userInput,
+                selectedCountry: '',
+            })
 
-                axios({
-                    method: 'GET',
-                    url: "http://proxy.hackeryou.com",
-                    dataResponse: JSON,
-                    paramsSerializer: function (params) {
-                        return Qs.stringify(params, { arrayFormat: 'brackets' })
-                    },
+            axios({
+                method: 'GET',
+                url: "http://proxy.hackeryou.com",
+                dataResponse: JSON,
+                paramsSerializer: function (params) {
+                    return Qs.stringify(params, { arrayFormat: 'brackets' })
+                },
+                params: {
+                    reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
                     params: {
-                        reqUrl: 'http://www.mapquestapi.com/geocoding/v1/address',
-                        params: {
-                            key: apiKey,
-                            location: userInput,
-                            outFormat: JSON,
-                            thumbMaps: true,
-                        },
-                        xmlToJSON: false
-                    }
-                }).then((response) => {
-                    const country = response.data.results[0].locations[0].adminArea1
-                    const city = response.data.results[0].locations[0].adminArea5
-                    const cityMap = response.data.results[0].locations[0].mapUrl
+                        key: apiKey,
+                        location: userInput,
+                        outFormat: JSON,
+                        thumbMaps: true,
+                    },
+                    xmlToJSON: false
+                }
+            }).then((response) => {
+                const country = response.data.results[0].locations[0].adminArea1
+                const city = response.data.results[0].locations[0].adminArea5
+                const cityMap = response.data.results[0].locations[0].mapUrl
 
-                    this.setState({
-                            country,
-                            city,
-                            cityMap,
-                            userInput: "",
-                        })
+                this.setState({
+                    country,
+                    city,
+                    cityMap,
+                    userInput: "",
                 })
-            }
+            })
+
+            // axios({
+            //     method: 'GET',
+            //     url: "http://proxy.hackeryou.com",
+            //     dataResponse: JSON,
+            //     paramsSerializer: function (params) {
+            //         return Qs.stringify(params, { arrayFormat: 'brackets' })
+            //     },
+            //     params: {
+            //         reqUrl: "https://maps.googleapis.com/maps/api/place/autocomplete/json",
+            //         params: {
+            //             input: userInput,
+            //             key: apiKey,
+            //             sessiontoken: globalID
+            //         },
+            //         xmlToJSON: false
+            //     }
+            // }).then((response) => {
+            //     const placeID = response.data.predictions[0].place_id
+            //     //SPECIFIES OUR DATA TO THE AREA WE NEED
+
+            //     axios({
+            //         method: 'GET',
+            //         url: "http://proxy.hackeryou.com",
+            //         dataResponse: JSON,
+            //         paramsSerializer: function (params) {
+            //             return Qs.stringify(params, { arrayFormat: 'brackets' })
+            //         },
+            //         params: {
+            //             reqUrl: "https://maps.googleapis.com/maps/api/place/details/json",
+            //             params: {
+            //                 place_id: placeID,
+            //                 key: apiKey,
+            //                 inputtype: "textquery",
+            //                 fields: "address_components,formatted_address,types,name"
+            //             },
+            //             xmlToJSON: false
+            //         }
+            //     }).then((response) => {
+            //         const city = response.data.result.address_components[0].long_name;
+            //         const country = response.data.result.address_components[3].long_name;
+
+            //         this.setState({
+            //             country,
+            //             city,
+            //             userInput: "",
+            //         })
+            //     })
+            // })
         }
+    }
     chooseType = (e) => {
         e.preventDefault();
         // const countryChoice = this.state.country
@@ -132,7 +188,7 @@ class BuildTripForm extends Component {
             this.setState({
                 typeInput,
                 selectedType: ""
-            })            
+            })
         };
     }
     chooseStartDate = (e) => {
@@ -145,7 +201,7 @@ class BuildTripForm extends Component {
                 startDate,
                 selectedStartDate: "",
             })
-        } 
+        }
     }
     chooseEndDate = (e) => {
         e.preventDefault();
@@ -159,22 +215,30 @@ class BuildTripForm extends Component {
             })
         }
     }
-    chooseEmail = () => {
-        
+    chooseEmail = (e) => {
+
         const emailChoice = this.state.selectedEmail
-        
+
         if (emailChoice !== "") {
             this.setState({
                 emailChoice: [...this.state.emailChoice, emailChoice],
                 selectedEmail: "",
             })
 
-        }   
+        }
+        // firebase.database().ref().child("Other").orderByChild("email").equalTo(emailChoice).once("value", function (snapshot) {
+        //             snapshot.forEach(function (child) {
+        //                 child.firebase.database().ref().update(updateData);
+        //             });
+        //         });
+
+
     }
     setEmails = (e) => {
         e.preventDefault();
 
         const emailChoice = this.state.selectedEmail
+
 
         if (emailChoice !== "") {
             this.setState({
@@ -187,6 +251,7 @@ class BuildTripForm extends Component {
                 submitEmail: "yes"
             })
         }
+
     }
     choosePublic = (e) => {
         e.preventDefault();
@@ -194,21 +259,24 @@ class BuildTripForm extends Component {
         const publicChoice = this.state.selectedPublic
 
         if (publicChoice !== "") {
-            this.setState ({
+            this.setState({
                 publicChoice,
                 selectedPublic: "",
             })
-           }
+        }
+
     }
     logIn = () => {
         auth.signInWithPopup(provider).then(result => {
-                  
-            if (result){
-                this.setState({
-                user: result.user
-            });
 
-                if (result.additionalUserInfo.isNewUser){
+
+            if (result) {
+                console.log("First", result)
+                this.setState({
+                    user: result.user
+                });
+
+                if (result.additionalUserInfo.isNewUser) {
                     dbRef.ref(`/Users/${result.user.uid}`).set({
                         displayName: result.user.displayName,
                         email: result.user.email,
@@ -224,8 +292,18 @@ class BuildTripForm extends Component {
             });
         });
     };
+    // duplicateTripsToCollab = (trip) => {
+    //     trip.users.forEach(function(email) {
+    //         dbRef.ref().child("Users").orderByChild("email").equalTo(email).once("value", function (snapshot) {
+    //             snapshot.forEach(function (child) {
+    //                 dbRef.ref(`/Users/${child.ref_.path.pieces_[1]}/trips`).push(trip);
+    //                 console.log(child, "child")
+    //             });
+    //         });
+    //     })
+    // }
     guest = () => {
-       
+
         this.setState({
             user: {
                 uid: "Guest",
@@ -253,20 +331,21 @@ class BuildTripForm extends Component {
 
         this.setState({
             currentTrip: currentTripID.path.pieces_[3]
-        }, () =>{
+        }, () => {
             const otherUsersRef = dbRef.ref(`/Users/${this.state.user.uid}/trips/${this.state.currentTrip}/users`)
-            otherUsersRef.on('value', snapshot =>{
+            otherUsersRef.on('value', snapshot => {
                 const userArray = snapshot.val()
                 this.setState({
-                    otherUsers:userArray,
-                    showForm:false
-                }, ()=>{
+                    otherUsers: userArray,
+                    showForm: false
+                }, () => {
                     this.props.history.push('/details')
                 })
             })
         })
+
     }
-    
+
     render() {
         const nextPage = this.state.showForm === true;
         //FORM CONDITIONS FOR RENDERING OPERATORS
@@ -276,7 +355,7 @@ class BuildTripForm extends Component {
         const submitType = (this.state.typeInput !== "") && (this.state.startDate === "");
         const submitStartDate = (this.state.startDate !== "") && (this.state.endDate === "");
         const submitEndDate = (this.state.endDate !== "") && (this.state.submitEmail === "");
-        const submitEmail = (this.state.submitEmail === "yes") && (this.state.publicChoice === "") ;
+        const submitEmail = (this.state.submitEmail === "yes") && (this.state.publicChoice === "");
         const submitPublic = this.state.publicChoice !== "";
 
         const addCountryDetails = this.state.country !== "";
@@ -286,6 +365,7 @@ class BuildTripForm extends Component {
         const addPublicDetails = this.state.publicChoice !== "";
         const mapConnect = {
             backgroundImage: `url(${this.state.cityMap})`,
+            // background: `linear-gradient(black,black,white)`,
             backgroundSize: `cover`,
             backgroundPosition: `center`,
         };
@@ -293,30 +373,22 @@ class BuildTripForm extends Component {
         return (
             <div className="BuildTripForm clearfix" style={mapConnect}>
                 {logInOrGuest
-                ? <div className="visuallyhidden"></div>
-                : <div>
-                    <button onClick={this.logOut} className="logOut">Logout</button>
-                    <div className="profile">
-                        <img src={this.state.user.photoURL} alt={this.state.user.displayName} />
-                        <p>Hello {this.state.user.displayName}!</p>
-                    </div>
-                </div>
+                    ? <div className="visuallyhidden"></div>
+                    : <button onClick={this.logOut} className="logOut">Logout</button>
                 }
                 {logInOrGuest
-                ?<div className="wrapper noUser">
-                    <div className="tripForm tripForm--logIn">
+                    ? <div className="tripForm tripForm--logIn">
                         <button onClick={this.logIn}>Login</button>
                         <button onClick={this.guest}>Use As Guest</button>
                     </div>
-                </div> 
-                : <button className="visuallyhidden"></button>
-                }  
+                    : <button className="visuallyhidden"></button>
+                }
                 {nextPage && this.state.showForm
-                    ? (<div className="wrapper clearfix formWrapper">
+                    ? (<div className="wrapper clearfix">
                         {startForm && this.state.showForm
                             ? <form className="tripForm tripForm--country" action="submit" autocomplete="off">
-                                <label htmlFor="selectedCountry">Choose a starting city for your trip:</label>
-                                <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter city" onChange={this.handleChange} spellcheck="true" className="tripForm__middleInput" required />
+                                <label htmlFor="selectedCountry">Enter the starting city in the country you wish to travel to.</label>
+                                <input type="text/javascript" name="selectedCountry" id="selectedCountry" placeholder="Enter starting city" onChange={this.handleChange} spellcheck="true" className="tripForm__middleInput" required />
                                 <input type="submit" value="Continue" onClick={this.selectInput} />
                             </form>
                             : <form className="visuallyhidden"></form>
@@ -338,7 +410,8 @@ class BuildTripForm extends Component {
                         {/* THESE FORMS WILL LET YOU SELECT DATES */}
                         {submitType && this.state.showForm
                             ? <form className="tripForm tripForm--startDate" action="submit">
-                                <label htmlFor="selectedStartDate">Choose a start date for your trip:</label>
+                                <label htmlFor="selectedStartDate">Choose the starting date of the trip you wish to plan</label>
+                                {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
                                 <input type="date" id="selectedStartDate" name="selectedStartDate" onChange={this.handleChange} className="tripForm__middleInput" />
                                 <input type="submit" value="Continue" onClick={this.chooseStartDate} />
                             </form>
@@ -347,7 +420,7 @@ class BuildTripForm extends Component {
                         {/* SHOULD THIS BE REQUIRED OR CAN THEY SET UP A TRIP WITHOUT A DATE? RIGHT NOW IT WILL LET THEM NOT CHOOSE AN END DATE BUT THEY DO NEED TO CHOOSE A START DATE*/}
                         {submitStartDate && this.state.showForm
                             ? <form className="tripForm tripForm--endDate" action="submit">
-                                <label htmlFor="selectedEndDate">Choose an end date for your trip:</label>
+                                <label htmlFor="selectedEndDate">Choose the ending date of the trip you wish to take.</label>
                                 <input type="date" id="selectedEndDate" name="selectedEndDate" onChange={this.handleChange} min={this.state.selectedStartDate} className="tripForm__middleInput" />
                                 <input type="submit" value="Continue" onClick={this.chooseEndDate} />
                             </form>
@@ -355,7 +428,7 @@ class BuildTripForm extends Component {
                         }
                         {submitEndDate && this.state.showForm
                             ? <form className="tripForm tripForm--friends" action="submit">
-                                <label htmlFor="selectedEndDate">Type in the emails you wish to invite:</label>
+                                <label htmlFor="selectedEndDate">Type in the emails of the friends you wish to invite.</label>
                                 <input type="email" name="selectedEmail" onChange={this.handleChange} className="tripForm__middleInput" />
                                 <input type="reset" name="addAnotherEmail" onClick={this.chooseEmail} value="Add another" className="tripForm--friends--bottom" />
                                 <input type="submit" value="Continue" onClick={this.setEmails} />
@@ -363,7 +436,7 @@ class BuildTripForm extends Component {
                             : <form className="visuallyhidden"></form>
                         }
                         {/* ADD INTO THE NUMBER OF PEOPLE YOU WOULD LIKE TO ADD IN BEFORE YOU ADD THEM IN */}
-                        {/* {submitEmail && this.state.showForm
+                        {submitEmail && this.state.showForm
                             ? <form className="tripForm tripForm--public" action="submit">
                                 <label htmlFor="publicYes">Public</label>
                                 <input type="radio" name="selectedPublic" value="public" onChange={this.handleChange} className="radioInput radioInput--first" />
@@ -372,83 +445,82 @@ class BuildTripForm extends Component {
                                 <input type="submit" value="Continue" onClick={this.choosePublic} />
                             </form>
                             : <form className="visuallyhidden"></form>
-                        } */}
+                        }
                         {/* FORM TO SEND THE DATA TO FIREBASE*/}
-                        {submitEmail && this.state.showForm
+                        {submitPublic && this.state.showForm
                             ? <form className="tripForm tripForm--complete" action="submit">
                                 <label htmlFor="complete" className="visuallyhidden">Create trip</label>
                                 <input type="submit" name="complete" value="Create trip" onClick={this.sendToFirebase} className="tripForm__middleInput" />
                             </form>
                             : <form className="visuallyhidden"></form>
                         }
+
                         {/* FORM THAT WILL DISPLAY THE TRIP DETAILS AFTER ENTERING THEM */}
-                        {logInOrGuest === false
-                            ? (<aside className="createdTripDetails" >
-                                <h2>Trip details</h2>
-                                {addCountryDetails
-                                    ? <div className="createdTripDetails__title">
-                                        <h3>Destination country: <span className="notBold">{this.state.country}</span></h3>
-                                        <h3>Starting location: <span className="notBold">{this.state.city}</span></h3>
-                                    </div>
-                                    : <div className="visuallyhidden"></div>
-                                }
-                                {addTypeDetails
-                                    ? <p>Type of trip: <span className="notBold">{this.state.typeInput}</span></p>
-                                    : <p className="visuallyhidden"></p>
-                                }
-                                {addEndDateDetails
-                                    ? <ul>Dates:
-                                        <li>From - <span className="notBold">{this.state.startDate}</span></li>
-                                        <li>To - <span className="notBold">{this.state.endDate}</span></li>
-                                    </ul>
-                                    : <ul className="visuallyhidden"></ul>
-                                }
-                                {addEmailDetails
-                                    ? <ul>Friends:<span className="notBold">{this.state.emailChoice.map((email) => <li>{email}</li>)}</span></ul>
-                                    : <ul className="visuallyhidden"></ul>
-                                }
-                                {/* {addPublicDetails
-                                    ? <div>
-                                        <p>Public/Private: <span className="notBold">{this.state.publicChoice}</span> </p>
-                                    </div>
-                                    : <div className="visuallyhidden"></div>
-                                } */}
-                            </aside>)
-                        : <aside className="visuallyhidden"></aside>
-                        }
-                        
+                        <aside className="tripDetails" >
+                            <h2>Trip details</h2>
+                            {addCountryDetails
+                                ? <div className="tripDetails__title">
+                                    <h3>Destination country: <span className="non-bold">{this.state.country}</span></h3>
+                                    <h3>Starting cocation: <span className="non-bold">{this.state.city}</span></h3>
+                                </div>
+                                : <div className="visuallyhidden"></div>
+                            }
+                            {addTypeDetails
+                                ? <p><span className="bold">Type of trip:</span> {this.state.typeInput}</p>
+                                : <p className="visuallyhidden"></p>
+                            }
+                            {addEndDateDetails
+                                ? <ul><span className="bold">Dates:</span>
+                                    <li><span className="bold">From -</span> {this.state.startDate}</li>
+                                    <li><span className="bold">To -</span> {this.state.endDate}</li>
+                                </ul>
+                                : <ul className="visuallyhidden"></ul>
+                            }
+                            {addEmailDetails
+                                ? <ul><span className="bold">Friends:</span> {this.state.emailChoice.map((email) => <li>{email}</li>)}</ul>
+                                : <ul className="visuallyhidden"></ul>
+                            }
+                            {addPublicDetails
+                                ? <div>
+                                    <p><span className="bold">Public/Private:</span> {this.state.publicChoice}</p>
+                                </div>
+                                : <div className="visuallyhidden"></div>
+                            }
+                        </aside>
                     </div>
-                    
-                )
-                :(<div>
-                {
 
-                    this.state.showForm === false
+                    )
+                    : (<div>
+                        {
 
-                    &&
+                            this.state.showForm === false
 
-                    <Route path="/details"
-                        render={() => (
-                            <TripDetails
-                                country={this.state.country}
-                                city={this.state.city}
-                                type={this.state.typeInput}
-                                groupMembers={this.state.otherUsers}
-                                startDate={this.state.startDate}
-                                endDate={this.state.endDate}
+                            &&
+
+                            <Route path="/details"
+                                render={() => (
+                                    <TripDetails
+                                        country={this.state.country}
+                                        city={this.state.city}
+                                        type={this.state.typeInput}
+                                        groupMembers={this.state.otherUsers}
+                                        startDate={this.state.startDate}
+                                        endDate={this.state.endDate}
+                                    />
+                                )}
                             />
-                        )}
-                    />
+
+                        }
+                    </div>)
                 }
-                </div>)
-            }              
-                    
-                    
-                
+                {/* THIS FORM WILL BE FOR THE COUNTRY, SEARCH THE DATA BASE AND RETURN THE COUNTRY CODE */}
+
+
             </div>
         )
     }
 }
+
 
 export default BuildTripForm;
 

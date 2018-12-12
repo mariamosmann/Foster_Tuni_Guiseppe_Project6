@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import BuildTripForm from './BuildTripForm.js';
 import MainNav from './MainNav.js';
+import TripDetails from './TripDetails';
 
 class App extends Component {
   constructor() {
@@ -23,6 +24,7 @@ class App extends Component {
       <div className="App">
         <MainNav />
         <Route path='/' component={BuildTripForm} />
+        {/* <Route path="/details" component={TripDetails} /> */}
       </div>
       </Router>
     );
