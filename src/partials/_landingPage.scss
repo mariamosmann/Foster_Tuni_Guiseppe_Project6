@@ -1,27 +1,60 @@
 .BuildTripForm {
     // backdrop-filter: blur(2px) grayscale(100%);
+    position: relative;
 
-    & .wrapper {
+    & .formWrapper {
         height: 70vh;
-        padding: 5vh 0;
+        // padding: 5vh 0;
+        float: left;
+        width: 45%;
     }
 
     & .logOut {
-        margin: 2rem 3rem;
-        float: right;
+        position: absolute;
+        right: 10%;
+        top: -22%;
+        padding:5px 10px;
+        background: $text;
+        color: $colorSecondary;
+        border: solid 2px $text;
+        animation: secondaryToDark 0.5s ease;
+
+        &:hover {
+            animation: darkToSecondary 0.5s ease;
+            animation-fill-mode: forwards;
+        }
+    }
+
+    & .profile {
+        position: absolute;
+        left: 5%;
+        top: -30%;
+        text-align: center;
+        width: 15%;
+        font-style: italic;
+
+        & img {
+            width: 35%;
+            border-radius: 50%;
+        }
     }
 }
 
+
 .tripForm {
-    background: rgba(255, 222, 173, 0.8);
-    width: 45%;
+    background: $formBackground;
+    color: $colorSecondary;
+    font-weight: bold;
+    width: 100%;
     height: 60vh;
-    float: left;
     padding: 7% 5% 7% 5%;
     text-align: center;
+    border: solid 5px $colorSecondary;
+    margin-top: 5vh;
 
     & label {
         font-size: 1.6rem;
+        pointer-events: none;
     }
 
     & input, & select {
@@ -32,18 +65,69 @@
         text-align: center;
     }
 
+    & select {
+        animation: darkToSecondary 0.5s ease;
+        appearance: none;
+    }
+
+    & input[type="text"], & input[type="text/javascript"], & input[type="date"], & input[type="email"] {
+        &:focus {
+            background: $text;
+            color: $colorSecondary;
+        }
+    }
+
     &__middleInput { 
         margin-top: 11vh;
         margin-bottom: 11vh;
+        background: $colorSecondary;
+        color: $text;
+        border: none;
+        border: solid 1px $colorSecondary;
+
+        &:hover {
+            animation: secondaryToDark 0.5s ease;
+            animation-fill-mode: forwards;
+        }
+    }
+
+    & input[type="submit"], & input[type="reset"] {
+        background: $text;
+        border: solid 1px $colorSecondary;
+        color: $colorSecondary;
+        font-weight: bold;
+        animation: secondaryToDark 0.5s ease;
+
+        &:hover {
+            animation: darkToSecondary 0.5s ease;
+            animation-fill-mode: forwards;
+        }
     }
 }
 
+.noUser {
+    text-align: center;
+    height: 65vh;
+}
+
 .tripForm--logIn {
-    
+    float: none;
+    margin: 5vh auto;
+    width: 45%;
 
     & button {
         width: 80%;
         height: 15%;
+        background: $colorSecondary;
+        border: solid 1px $colorSecondary;
+        color: $text;
+        font-weight: bold;
+        animation: darkToSecondary 0.5s ease;
+
+        &:hover {
+            animation: secondaryToDark 0.5s ease;
+            animation-fill-mode: forwards;
+        }
 
         &:first-child {
             margin-top: 5vh;
@@ -94,17 +178,31 @@
     }
 }
 
-//FIX THE RADIO INPUTS
-//FIX THE EMAIL SUBMIT BUTTONS
+.tripForm--complete {
 
-.tripDetails {
+    input {
+        margin-top: 19vh; 
+    }
+}
+
+//FIX THE RADIO INPUTS
+
+.createdTripDetails {
     width: 45%;
-    background: rgba(255, 222, 173, 0.8);
+    background: $formBackground;
+    color: $colorSecondary;
+    @include heading(16);
     height: 60vh;
     float: right;
     text-align: center;
     padding: 5% 5% 5% 5%;
     text-transform: capitalize;
+    border: solid 5px $colorSecondary;
+    margin-top: 5vh;
+
+    & h2 {
+        text-decoration: underline;
+    }
 
     & h2, & h3, & p {
         margin-bottom: 2rem;
@@ -116,7 +214,29 @@
         &:last-child {
             margin: 0.5rem 0 2rem 0;
         }
-    }
-    
+    }    
 }
 
+@keyframes secondaryToDark {
+    0% {
+      background: $colorSecondary;
+      color: $text;
+    } 
+
+    100%{
+      color: $colorSecondary;
+      background: $text;
+    }
+}
+
+@keyframes darkToSecondary {
+    0% {
+      background: $text;
+      color: $colorSecondary;
+    } 
+
+    100%{
+      color: $text;
+      background: $colorSecondary;
+    }
+}
